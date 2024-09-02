@@ -148,8 +148,8 @@
     "stream-events": "^1.0.5",
     "stream-shift": "^1.0.3",
     "streamsearch": "^1.1.0",
-    "string-width": "^4.2.3",
     "string_decoder": "^1.1.1",
+    "string-width": "^4.2.3",
     "strip-ansi": "^6.0.1",
     "strnum": "^1.0.5",
     "stubs": "^3.0.0",
@@ -178,9 +178,12 @@
     "yargs-parser": "^21.1.1",
     "yocto-queue": "^0.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
