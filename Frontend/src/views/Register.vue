@@ -11,6 +11,7 @@
         <p>
           <Button label="Register" icon="pi pi-check" class="p-button-rounded" @click="register" />
         </p>
+        <p v-if="errMsg" class="error-message">{{ errMsg }}</p>
       </div>
     </div>
   </template>
@@ -26,6 +27,7 @@
   const email = ref("");
   const password = ref("");
   const router = useRouter();
+  const errMsg = ref();
   
   const register = () => {
     createUserWithEmailAndPassword(getAuth(), email.value, password.value)
@@ -35,7 +37,7 @@
       })
       .catch((error) => {
         console.log(error.code);
-        alert(error.message);
+        errMsg.value = "Error creating account"
       });
   };
   </script>
@@ -66,6 +68,11 @@
   
   .register-form p {
     margin-bottom: 1rem;
+  }
+
+  .error-message {
+    color: red;
+    text-align: center;
   }
   </style>
   
