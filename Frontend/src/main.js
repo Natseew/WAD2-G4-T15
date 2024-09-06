@@ -9,13 +9,13 @@ import Aura from '@primevue/themes/lara';
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDjFeBjJy7sKz9FNff-4whDQVNM-4NCBDQ",
-  authDomain: "wad2-g4-t15.firebaseapp.com",
-  projectId: "wad2-g4-t15",
-  storageBucket: "wad2-g4-t15.appspot.com",
-  messagingSenderId: "163643103363",
-  appId: "1:163643103363:web:6217522d7fb853acb5e3b6",
-  measurementId: "G-Z92QP38VPB"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 initializeApp(firebaseConfig);
