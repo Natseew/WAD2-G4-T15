@@ -1,12 +1,17 @@
 <template>
-    <h1>Landing Page</h1>
-  </template>
+  <Features />
+</template>
     
-  <script>
-  
-  </script>
-  
-  <style scoped>
-  
-  </style>
-  
+<script>
+import Features from '../components/Features.vue';
+
+  export default {
+    components: {
+      Features,
+    }
+  };
+</script>
+
+<style scoped>
+
+</style>

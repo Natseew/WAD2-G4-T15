@@ -8,6 +8,7 @@ import './style.css'
 import Aura from '@primevue/themes/aura';
 import { definePreset } from '@primevue/themes';
 import { initializeApp } from "firebase/app";
+import "primeflex/primeflex.css";
 
 const MyPreset = definePreset(Aura, {
   semantic: {
