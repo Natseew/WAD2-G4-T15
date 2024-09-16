@@ -33,7 +33,7 @@
     signInWithEmailAndPassword(getAuth(), email.value, password.value)
       .then((data) => {
         console.log("Successfully Signed in!");
-        router.push('/home');
+        router.push('/');
       })
       .catch((error) => {
         console.log(error.code);
