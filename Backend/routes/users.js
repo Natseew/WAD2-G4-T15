@@ -24,11 +24,11 @@ router.get('/:uid', async (req,res) => {
   try{
     const  doc = await ref.doc(req.params.uid).get();
     if (!doc.exists) {
-      console.log('No such document!');
+      res.status(400).send('No such document!');
     } else {
-      console.log('Document data:', doc.data());
+      // console.log('Document data:', doc.data());
+      res.send(doc.data());
     }
-    res.send(doc.data());
   }catch{
     res.sendStatus(500);
   }
@@ -37,7 +37,7 @@ router.get('/:uid', async (req,res) => {
 
 //Create and Edit User
 router.post('/:uid', async (req, res) => {
-  
+
   await ref.doc(req.params.uid).set({
     name: req.body.name,
     age: req.body.age,

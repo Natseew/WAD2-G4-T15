@@ -9,6 +9,7 @@ import Aura from '@primevue/themes/aura';
 import { definePreset } from '@primevue/themes';
 import { initializeApp } from "firebase/app";
 import "primeflex/primeflex.css";
+import axios from 'axios'
 
 const MyPreset = definePreset(Aura, {
   semantic: {
@@ -36,6 +37,10 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
+
+axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.headers.post['Content-Type'] ='text/plain';
+axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 
 initializeApp(firebaseConfig);
 
