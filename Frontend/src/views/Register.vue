@@ -1,6 +1,6 @@
 <template>
     <div class="register-container">
-      <h1>Create an Account</h1>
+      <h1 class=text-3xl>Create an Account</h1>
       <div class="register-form">
         <p>
           <InputText v-model="email" placeholder="Email" />
@@ -11,9 +11,11 @@
         <p>
           <Button label="Register" icon="pi pi-check" class="p-button-rounded" @click="register" />
         </p>
+        <p>Been here before? Login</p>
         <p v-if="errMsg" class="error-message">{{ errMsg }}</p>
       </div>
     </div>
+
   </template>
   
   <script setup>
@@ -55,9 +57,14 @@
     border-radius: 8px;
     background-color: #fff;
   }
+
+  p {
+    color: black;
+  }
   
   h1 {
     text-align: center;
+    color: black;
     margin-bottom: 2rem;
   }
   
@@ -68,6 +75,13 @@
   
   .register-form p {
     margin-bottom: 1rem;
+  }
+
+  ::v-deep .p-inputtext,
+  ::v-deep .p-password,
+  ::v-deep .p-button
+  {
+    width: 100%;
   }
 
   .error-message {
