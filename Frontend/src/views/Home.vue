@@ -1,13 +1,15 @@
 <template>
   <div>
-    <Navbar  />
-    <h1>User signed in</h1>
+    <MatchCard />
+    <!-- <Navbar  />
+    <h1>User signed in</h1> -->
   </div>
 </template>
   
 <script setup>
   import { getAuth, onAuthStateChanged } from "firebase/auth";
   import Navbar from '../components/Navbar.vue';
+  import MatchCard from "../components/MatchCard.vue";
   import { useRouter } from 'vue-router';
 
   const router = useRouter();
