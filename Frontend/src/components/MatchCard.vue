@@ -6,9 +6,13 @@
                   <img alt="user avatar" src="https://primefaces.org/cdn/primevue/images/usercard.png" class="w-full h-full object-cover" />
               </div>
               <div class="flex flex-col justify-center">
-                  <div class="font-bold text-lg">User Name</div>
-                  <div class="text-sm">Title or Position</div>
-                  <div class="text-sm">Location</div>
+                  <div class="font-bold text-lg">Meet Natalie</div>
+                  <div class="text-sm">
+                    <Chip label="Looking for love" style="height: 1rem; background-color: pink; color: red;" />
+                  </div>
+                  <div class="text-sm">
+                    <Chip label="Looking for friends" style="height: 1rem; background-color: lightgreen;" />
+                  </div>
               </div>
           </div>
       </template>
@@ -85,5 +89,6 @@ export default {
 
   .desc_chip {
     color: red;
+    height: 2rem;
   }
 </style>
