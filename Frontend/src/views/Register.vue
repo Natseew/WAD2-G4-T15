@@ -6,12 +6,18 @@
           <InputText v-model="email" placeholder="Email" />
         </p>
         <p>
-          <Password v-model="password" toggleMask placeholder="Password" feedback={false} />
+          <Password v-model="password" :toggleMask="true" placeholder="Password" :feedback="true" />
         </p>
         <p>
-          <Button label="Register" icon="pi pi-check" class="p-button-rounded" @click="register" />
+          <Password v-model="confirmPassword" :toggleMask="true" placeholder="Confirm Password" :feedback="false" />
         </p>
-        <p>Been here before? Login</p>
+        <p v-if="passwordError" class="error-message">{{ passwordError }}</p>
+        <p>
+          <Button label="Register" icon="pi pi-check" class="p-button-rounded w-full sm:wd-3/5" @click="register" />
+        </p>
+        <p>Been here before? 
+          <router-link to="/login">Login</router-link>
+        </p>
         <p v-if="errMsg" class="error-message">{{ errMsg }}</p>
       </div>
     </div>
@@ -30,8 +36,20 @@
   const password = ref("");
   const router = useRouter();
   const errMsg = ref();
+  const confirmPassword = ref("");
+  const passwordError = ref("");
   
   const register = () => {
+
+    //Password and Confirm password Validation
+    if (password.value !== confirmPassword.value){
+      passwordError.value = "Passwords do not match";
+      return;
+    } 
+
+    passwordError.value = "";
+
+    //Firebase Authentication
     createUserWithEmailAndPassword(getAuth(), email.value, password.value)
       .then((data) => {
         console.log("Successfully registered!");
@@ -78,8 +96,7 @@
   }
 
   ::v-deep .p-inputtext,
-  ::v-deep .p-password,
-  ::v-deep .p-button
+  ::v-deep .p-password
   {
     width: 100%;
   }
