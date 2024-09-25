@@ -1,7 +1,13 @@
 <template>
   <v-container class="">
     <Navbar  />
-    <h1>Profile Page</h1>
+    <v-row>
+      <h1>Profile</h1>
+    </v-row>
+    <v-spacer></v-spacer>
+    <v-avatar image="https://2.img-dpreview.com/files/p/E~C1000x0S4000x4000T1200x1200~articles/3925134721/0266554465.jpeg" size="350"></v-avatar>
+    <v-spacer></v-spacer>
+    <h2>{{ data.name }}</h2>
     <v-form disabled>
     <v-container>
       <v-row>
