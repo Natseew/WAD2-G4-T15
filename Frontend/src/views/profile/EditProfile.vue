@@ -1,8 +1,15 @@
 <template>
-<v-container class="">
+  <v-container class="">
     <Navbar  />
-    <h1>Profile Page</h1>
-    <v-form disabled>
+    <v-row>
+      <h1>EditProfile</h1>
+    </v-row>
+    <v-spacer></v-spacer>
+    <v-avatar image="https://2.img-dpreview.com/files/p/E~C1000x0S4000x4000T1200x1200~articles/3925134721/0266554465.jpeg" size="350"></v-avatar>
+    <v-spacer></v-spacer>
+    <h2>{{ data.name }}</h2>
+    <!-- <v-form validate-on="submit lazy" @submit.prevent="submit"> -->
+    <v-form>
     <v-container>
       <v-row>
         <v-col
@@ -63,6 +70,14 @@
           <v-textarea label="Hobbies" variant="outlined"></v-textarea>
         </v-col>
       </v-row>
+
+      <v-btn
+        :loading="loading"
+        class="mt-2"
+        text="Submit"
+        type="submit"
+        block
+      ></v-btn>
     </v-container>
   </v-form>
 
@@ -70,24 +85,39 @@
 </template>
 
 <script setup>
-/*
-  user = {
-  uid: ""
-  Name:
-  Age:
-  Gender:
-  Hobbies:
-  photos: ?
+  import axios from 'axios'
+  import { getAuth, onAuthStateChanged } from "firebase/auth";
+  import Navbar from '../../components/Navbar.vue';
+  import { useRouter } from 'vue-router';
+  import { ref } from 'vue'
 
-  
-  }
+  const router = useRouter();
 
-*/
+  const auth = getAuth();
 
-import { ref } from 'vue'
-import { ChevronDownIcon } from '@heroicons/vue/20/solid'
-import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue'
+  let data = ref({
+    "name": "",
+    "age": "",
+    "gender": "",
+    "hobbies": ""
+  });
 
-const agreed = ref(false)
-
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+    // User is signed in
+    axios.get('/user/'+user.uid)
+      .then(function (response) {
+        // handle success
+        data.value = response.data;
+        data.value.email = user.email;
+      })
+    } else {
+      // User is signed out
+      router.push('/login');
+    }
+  });
 </script>
+
+<style scoped>
+
+</style>
