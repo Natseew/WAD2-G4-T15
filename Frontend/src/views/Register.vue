@@ -1,26 +1,31 @@
 <template>
     <div class="register-container">
       <h1 class=text-3xl>Create an Account</h1>
-      <div class="register-form">
-        <p>
-          <InputText v-model="email" placeholder="Email" />
-        </p>
-        <p>
-          <Password v-model="password" :toggleMask="true" placeholder="Password" :feedback="true" />
-        </p>
-        <p>
-          <Password v-model="confirmPassword" :toggleMask="true" placeholder="Confirm Password" :feedback="false" />
-        </p>
-        <p v-if="passwordError" class="error-message">{{ passwordError }}</p>
-        <p>
-          <Button label="Register" icon="pi pi-check" class="p-button-rounded w-full sm:wd-3/5" @click="register" />
-        </p>
-        <p>Been here before? 
-          <router-link to="/login">Login</router-link>
-        </p>
-        <p v-if="errMsg" class="error-message">{{ errMsg }}</p>
+      <div class="grid grid-cols-2">
+        <div class="register-form">
+          <p>
+            <InputText v-model="email" placeholder="Email" />
+          </p>
+          <p>
+            <Password v-model="password" :toggleMask="true" placeholder="Password" :feedback="true" />
+          </p>
+          <p>
+            <Password v-model="confirmPassword" :toggleMask="true" placeholder="Confirm Password" :feedback="false" />
+          </p>
+          <p v-if="passwordError" class="error-message">{{ passwordError }}</p>
+          <p>
+            <Button label="Register" icon="pi pi-check" class="p-button-rounded w-48 md:w-2/3" @click="register" />
+          </p>
+          <p>Been here before? 
+            <router-link to="/login">Login</router-link>
+          </p>
+          <p v-if="errMsg" class="error-message">{{ errMsg }}</p>
+        </div>
+        <div>
+          <p>HELLO</p>
+        </div>
       </div>
-    </div>
+  </div>
 
   </template>
   
