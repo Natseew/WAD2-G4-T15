@@ -1,8 +1,7 @@
 <template>
     <div class="register-container">
-      <h1 class=text-3xl>Create an Account</h1>
-      <div class="grid grid-cols-2">
         <div class="register-form">
+          <h1 class=text-3xl>Create an Account</h1>
           <p>
             <InputText v-model="email" placeholder="Email" />
           </p>
@@ -21,12 +20,10 @@
           </p>
           <p v-if="errMsg" class="error-message">{{ errMsg }}</p>
         </div>
-        <div>
-          <p>HELLO</p>
+        <div class="logo-container">
+          <h1 class="logo">DATING APP.</h1>
         </div>
-      </div>
-  </div>
-
+    </div>
   </template>
   
   <script setup>
@@ -70,8 +67,8 @@
   <style scoped>
   .register-container {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: right;
     align-items: center;
     height: 100%;
     width: 100%;
@@ -94,14 +91,31 @@
   .register-form {
     width: 100%;
     max-width: 400px;
+    margin-right: 20em;
   }
   
   .register-form p {
     margin-bottom: 1rem;
   }
 
-  ::v-deep .p-inputtext,
-  ::v-deep .p-password
+  .logo-container{
+    display: flex;
+    width: 40%; 
+    height: 100%;
+    background-color: red; 
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+  }
+
+  .logo{
+    font-family: Roboto Flex;
+    color: white;
+  }
+
+  :deep .p-inputtext,
+  :deep .p-password
   {
     width: 100%;
   }
