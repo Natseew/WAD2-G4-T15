@@ -1,5 +1,8 @@
 <template>
     <div class="register-container">
+        <div class="logo"> 
+          Dating App. 
+        </div>
         <div class="register-form">
           <h1 class=text-3xl>Create an Account</h1>
           <p>
@@ -20,9 +23,6 @@
           </p>
           <p v-if="errMsg" class="error-message">{{ errMsg }}</p>
         </div>
-        <div class="logo-container">
-          <h1 class="logo">DATING APP.</h1>
-        </div>
     </div>
   </template>
   
@@ -39,13 +39,12 @@
   const router = useRouter();
   const errMsg = ref();
   const confirmPassword = ref("");
-  const passwordError = ref("");
   
   const register = () => {
 
     //Password and Confirm password Validation
     if (password.value !== confirmPassword.value){
-      passwordError.value = "Passwords do not match";
+      errMsg.value = "Passwords do not match";
       return;
     } 
 
@@ -67,49 +66,42 @@
   <style scoped>
   .register-container {
     display: flex;
-    flex-direction: row;
-    justify-content: right;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
     height: 100%;
     width: 100%;
     padding: 2rem;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    background-color: #fff;
-  }
-
-  p {
-    color: black;
+    background: linear-gradient(180deg, #FF7676 0%, #F54EA2 100%);
   }
   
   h1 {
     text-align: center;
-    color: black;
     margin-bottom: 2rem;
   }
   
   .register-form {
     width: 100%;
     max-width: 400px;
-    margin-right: 20em;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    padding: 70px 30px 40px 30px;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
   }
   
   .register-form p {
     margin-bottom: 1rem;
   }
 
-  .logo-container{
-    display: flex;
-    width: 40%; 
-    height: 100%;
-    background-color: red; 
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    border-radius: 8px;
-  }
-
   .logo{
+    position: absolute;
+    display: flex;
+    top: 20px;
+    left: 20px;
+    font-size: 20px;
     font-family: Roboto Flex;
     color: white;
   }
