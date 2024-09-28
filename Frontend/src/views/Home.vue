@@ -2,6 +2,7 @@
   <div class="background"></div>
   <div class="red-background"></div>
   <div class="relative flex justify-center items-center flex-col h-screen">
+    <Navbar class="navbar" />
     <div class="relative z-10 flex flex-col items-center max-w-sm w-full">
       <MatchCard />
       <ButtonGroup />
@@ -14,6 +15,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from 'vue-router';
 import MatchCard from "../components/MatchCard.vue";
 import ButtonGroup from "../components/ButtonGroup.vue";
+import Navbar from "../components/Navbar.vue";
 
 const router = useRouter();
 
@@ -73,5 +75,9 @@ onAuthStateChanged(auth, (user) => {
 
 .w-full {
   width: 100%;
+}
+
+.navbar {
+  z-index: 10;
 }
 </style>
