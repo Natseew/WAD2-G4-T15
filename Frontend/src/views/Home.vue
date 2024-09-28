@@ -1,4 +1,5 @@
 <template>
+  <div class="background"></div>
   <div class="red-background"></div>
   <div class="relative flex justify-center items-center flex-col h-screen">
     <div class="relative z-10 flex flex-col items-center max-w-sm w-full">
@@ -29,6 +30,16 @@ onAuthStateChanged(auth, (user) => {
 </script>
 
 <style scoped>
+.background {
+  background: linear-gradient(to bottom, rgba(255, 118, 118, 0.1), rgba(245, 78, 162, 0.1));
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
 .red-background {
   background: linear-gradient(to bottom, #FD0E42, #C30F31);
   height: 40vh;
@@ -37,7 +48,7 @@ onAuthStateChanged(auth, (user) => {
   top: 0;
   border-bottom-left-radius: 1.5rem;
   border-bottom-right-radius: 1.5rem;
-  z-index: 0;
+  z-index: 1;
 }
 
 .flex {

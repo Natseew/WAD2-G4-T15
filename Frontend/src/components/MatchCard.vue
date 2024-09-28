@@ -80,8 +80,6 @@
             </div>
           </div>
         </template>
-
-        <!-- Moved Image to Back of the Card -->
         <div class="image-container">
           <img alt="user avatar" src="https://primefaces.org/cdn/primevue/images/usercard.png" class="back-image" />
         </div>
