@@ -40,7 +40,6 @@ onAuthStateChanged(auth, (user) => {
   z-index: 0;
 }
 
-/* Ensure content is positioned centrally */
 .flex {
   display: flex;
 }

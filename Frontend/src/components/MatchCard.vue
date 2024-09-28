@@ -16,7 +16,6 @@
                 </div>
               </div>
             </div>
-            <!-- Updated Flip Button -->
             <i 
               class="pi pi-images flip-icon cursor-pointer" 
               @click="flipCard" 
@@ -58,7 +57,6 @@
                 <img alt="user avatar" src="https://primefaces.org/cdn/primevue/images/usercard.png" class="w-full h-full object-cover" />
               </div>
             </div>
-            <!-- Updated Flip Button -->
             <i 
               class="pi pi-images flip-icon cursor-pointer" 
               @click="flipCard" 
@@ -129,8 +127,8 @@ export default {
 
 .flip-container {
   position: relative;
-  width: 24rem; /* Card width */
-  height: 40rem; /* Card height */
+  width: 24rem;
+  height: 40rem;
   transform-style: preserve-3d;
   transition: transform 0.6s;
   display: flex;
@@ -165,10 +163,10 @@ export default {
 }
 
 .flip-icon {
-  color: red; /* Change icon color */
-  font-size: 2rem; /* Increase icon size */
-  padding: 0.5rem; /* Add padding for better click area */
-  cursor: pointer; /* Show pointer on hover */
+  color: red;
+  font-size: 2rem;
+  padding: 0.5rem;
+  cursor: pointer;
 }
 
 
@@ -180,12 +178,12 @@ export default {
 .image-container {
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Align the image at the top */
+  align-items: flex-start;
   height: 100%;
 }
 
 .back-image {
-  width: 100%; /* Image will take full width */
-  height: auto; /* Maintain aspect ratio */
+  width: 100%;
+  height: auto;
 }
 </style>
