@@ -1,55 +1,97 @@
 <template>
-  <div class="card-wrapper">
-    <Card class="extended-border-card" style="width: 24rem; height: 40rem; overflow: hidden">
-      <template #header>
-        <div class="flex items-center p-4 w-full">
-          <div class="w-16 h-16 rounded-full overflow-hidden mr-4">
-            <img alt="user avatar" src="https://primefaces.org/cdn/primevue/images/usercard.png" class="w-full h-full object-cover" />
-          </div>
-          <div class="flex flex-col justify-center">
-            <div class="font-bold text-lg">Meet Natalie</div>
-            <div class="text-sm">
-              <Chip label="Looking for love" style="height: 1rem; background-color: pink; color: red;" />
+  <div class="card-wrapper mb-4 w-full md:w-auto">
+    <div class="flip-container" :class="{ flipped: isFlipped }">
+      <!-- Front of the card -->
+      <Card class="extended-border-card w-full card-front">
+        <template #title>
+          <div class="flex items-center justify-between p-4 w-full">
+            <div class="flex items-center">
+              <div class="flex flex-col justify-center">
+                <div class="font-bold text-lg">Natalie</div>
+                <div class="text-sm">
+                  <Chip label="Looking for love" style="height: 1.2rem; background-color: pink; color: red;" />
+                </div>
+                <div class="text-sm">
+                  <Chip label="Looking for friends" style="height: 1.2rem; background-color: lightgreen;" />
+                </div>
+              </div>
             </div>
-            <div class="text-sm">
-              <Chip label="Looking for friends" style="height: 1rem; background-color: lightgreen;" />
+            <!-- Updated Flip Button -->
+            <i 
+              class="pi pi-images flip-icon cursor-pointer" 
+              @click="flipCard" 
+              aria-hidden="true" 
+            />
+          </div>
+        </template>
+
+        <template #subtitle>
+          <p class="m-4 text-left">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
+          </p>
+        </template>
+
+        <template #content>
+          <div class="flex flex-col gap-2 p-4 text-left">
+            <div class="flex flex-col">
+              <Chip label="My personality in 5 words" class="desc_chip" />
+              <p class="text-sm text-left">Description for chip 1.</p>
+            </div>
+            <div class="flex flex-col">
+              <Chip label="I love" class="desc_chip" />
+              <p class="text-sm text-left">Description for chip 2.</p>
+            </div>
+            <div class="flex flex-col">
+              <Chip label="I hate" class="desc_chip" />
+              <p class="text-sm text-left">Description for chip 3.</p>
             </div>
           </div>
+        </template>
+      </Card>
+
+      <!-- Back of the card -->
+      <Card class="extended-border-card w-full card-back">
+        <template #title>
+          <div class="flex justify-between p-4">
+            <div class="flex items-center">
+              <div class="w-16 h-16 rounded-full overflow-hidden mr-4">
+                <img alt="user avatar" src="https://primefaces.org/cdn/primevue/images/usercard.png" class="w-full h-full object-cover" />
+              </div>
+            </div>
+            <!-- Updated Flip Button -->
+            <i 
+              class="pi pi-images flip-icon cursor-pointer" 
+              @click="flipCard" 
+              aria-hidden="true" 
+            />
+          </div>
+        </template>
+        <template #content>
+          <div class="flex flex-col gap-2 p-4 text-left">
+            <div class="flex flex-col">
+              <Chip label="Fun Fact" class="desc_chip" />
+              <p class="text-sm text-left">Natalie loves to travel and explore new cultures.</p>
+            </div>
+            <div class="flex flex-col">
+              <Chip label="Favorite Hobby" class="desc_chip" />
+              <p class="text-sm text-left">She enjoys painting in her free time.</p>
+            </div>
+            <div class="flex flex-col">
+              <Chip label="Dream Destination" class="desc_chip" />
+              <p class="text-sm text-left">Natalie's dream is to visit Japan.</p>
+            </div>
+          </div>
+        </template>
+
+        <!-- Moved Image to Back of the Card -->
+        <div class="image-container">
+          <img alt="user avatar" src="https://primefaces.org/cdn/primevue/images/usercard.png" class="back-image" />
         </div>
-      </template>
-
-      <template #content>
-        <p class="m-4 text-left">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
-        </p>
-      </template>
-
-      <template #footer>
-        <div class="flex flex-col gap-2 p-4 text-left">
-          <div class="flex flex-col">
-            <Chip label="My personality in 5 words" class="desc_chip" />
-            <p class="text-sm text-left">Description for chip 1.</p>
-          </div>
-          <div class="flex flex-col">
-            <Chip label="I love" class="desc_chip" />
-            <p class="text-sm text-left">Description for chip 2.</p>
-          </div>
-          <div class="flex flex-col">
-            <Chip label="I hate" class="desc_chip" />
-            <p class="text-sm text-left">Description for chip 3.</p>
-          </div>
-        </div>
-      </template>
-    </Card>
-
-    <div class="flex justify-around p-4 mt-4 buttons-container">
-      <Button icon="pi pi-times" severity="secondary" text raised rounded class="round-button" />
-      <Button icon="pi pi-star" severity="info" text raised rounded />
-      <Button icon="pi pi-thumbs-up" severity="success" text raised rounded />
-      <Button icon="pi pi-heart" severity="danger" text raised rounded />
+      </Card>
     </div>
   </div>
 </template>
+
 
 <script>
 import Button from 'primevue/button';
@@ -63,40 +105,87 @@ export default {
     Card,
     Chip,
   },
+  data() {
+    return {
+      isFlipped: false,
+    };
+  },
+  methods: {
+    flipCard() {
+      this.isFlipped = !this.isFlipped;
+    },
+  },
 };
 </script>
 
 <style scoped>
 .card-wrapper {
+  perspective: 1000px;
+  height: 40rem;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  margin-top: 15rem;
+}
+
+.flip-container {
+  position: relative;
+  width: 24rem; /* Card width */
+  height: 40rem; /* Card height */
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  backface-visibility: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.card-back {
+  transform: rotateY(180deg);
 }
 
 .extended-border-card {
-  position: relative;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1),
-              0 0 0 8px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1), 0 0 0 8px rgba(255, 255, 255, 0.3);
   border-radius: 8px;
+  height: 100%;
+  width: 100%;
+  position: absolute;
 }
 
-.round-button {
-  width: 40px;
-  height: 40px;
+.flip-icon {
+  color: red; /* Change icon color */
+  font-size: 2rem; /* Increase icon size */
+  padding: 0.5rem; /* Add padding for better click area */
+  cursor: pointer; /* Show pointer on hover */
 }
 
-.p-button-white {
-  background-color: white;
-  color: black;
-}
-
-.buttons-container {
-  width: 24rem;
-}
 
 .desc_chip {
   color: red;
   height: 2rem;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align the image at the top */
+  height: 100%;
+}
+
+.back-image {
+  width: 100%; /* Image will take full width */
+  height: auto; /* Maintain aspect ratio */
 }
 </style>
