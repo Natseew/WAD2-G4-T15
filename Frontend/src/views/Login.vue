@@ -65,6 +65,18 @@
   
   <style scoped>
 
+  @keyframes gradient-animation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+	}
+}
+
   @media (max-width: 1023px) {
   .logo {
     position: absolute;
@@ -86,7 +98,11 @@
     padding: 2rem;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    background: linear-gradient(180deg, #FF7676 0%, #F54EA2 100%);
+    
+    background: linear-gradient(90deg, #ff7676, #f54ea2, #ffb3b3);
+
+    background-size: 600% 600%;
+    animation: gradient-animation 25s ease infinite;
   }
 
   .login-form {
@@ -116,7 +132,11 @@
     padding: 2rem;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    background: linear-gradient(180deg, #FF7676 0%, #F54EA2 100%);
+    
+    background: linear-gradient(90deg, #ff7676, #f54ea2, #ffb3b3);
+
+    background-size: 600% 600%;
+    animation: gradient-animation 25s ease infinite;
   }
 
   .login-form {
@@ -136,12 +156,17 @@
     align-items: center;
     height: 97%;
     width: 60%;
-    background: linear-gradient(180deg, #FF7676 0%, #F54EA2 100%);
     font-size: 3rem;
     color: white;
     text-align: center;
     border-radius: 40px;
     font-family: 'Roboto Flex', sans-serif;
+
+    background: linear-gradient(90deg, #ff7676, #f54ea2, #ffb3b3);
+
+    background-size: 600% 600%;
+    animation: gradient-animation 25s ease infinite;
+
   }
 
   .big-screen{
@@ -176,5 +201,6 @@
     width: 100%;
     max-width: 400px;
   }
+
   </style>
   
