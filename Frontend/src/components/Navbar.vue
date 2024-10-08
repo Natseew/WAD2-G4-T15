@@ -35,8 +35,8 @@ const navigateTo = (route) => {
 
 <style scoped>
 .custom-toolbar {
-  border: none; /* Remove the border */
-  background: transparent; /* Set background to transparent */
+  border: none;
+  background: transparent;
 }
 
 .nav-link {
@@ -44,7 +44,7 @@ const navigateTo = (route) => {
   padding: 0.5rem 1rem;
   position: relative;
   text-align: center;
-  color: white; /* Set text color to white */
+  color: white;
 }
 
 .nav-link:hover::after {
@@ -54,7 +54,7 @@ const navigateTo = (route) => {
   right: 0;
   bottom: 0;
   height: 2px;
-  background-color: white; /* Change underline color to white */
+  background-color: white;
   transition: width 0.3s ease;
 }
 </style>

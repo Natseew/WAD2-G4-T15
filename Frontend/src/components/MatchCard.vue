@@ -7,7 +7,7 @@
           <div class="flex items-center justify-between p-4 w-full">
             <div class="flex items-center">
               <div class="flex flex-col justify-center">
-                <div class="font-bold text-lg">Natalie</div>
+                <div class="font-bold text-2xl">Natalie</div>
                 <div class="text-sm">
                   <Chip label="Looking for love" style="height: 1.2rem; background-color: pink; color: red;" />
                 </div>
@@ -64,35 +64,26 @@
             />
           </div>
         </template>
+
         <template #content>
-          <div class="flex flex-col gap-2 p-4 text-left">
-            <div class="flex flex-col">
-              <Chip label="Fun Fact" class="desc_chip" />
-              <p class="text-sm text-left">Natalie loves to travel and explore new cultures.</p>
-            </div>
-            <div class="flex flex-col">
-              <Chip label="Favorite Hobby" class="desc_chip" />
-              <p class="text-sm text-left">She enjoys painting in her free time.</p>
-            </div>
-            <div class="flex flex-col">
-              <Chip label="Dream Destination" class="desc_chip" />
-              <p class="text-sm text-left">Natalie's dream is to visit Japan.</p>
-            </div>
+          <div class="carousel-container">
+            <Carousel :value="images" numVisible="3" numScroll="1">
+              <template #item="{ item }">
+                <img :src="item" class="carousel-image" />
+              </template>
+            </Carousel>
           </div>
         </template>
-        <div class="image-container">
-          <img alt="user avatar" src="https://primefaces.org/cdn/primevue/images/usercard.png" class="back-image" />
-        </div>
       </Card>
     </div>
   </div>
 </template>
 
-
 <script>
 import Button from 'primevue/button';
 import Card from 'primevue/card';
 import Chip from 'primevue/chip';
+import Carousel from 'primevue/carousel';
 
 export default {
   name: "MatchCard",
@@ -100,10 +91,16 @@ export default {
     Button,
     Card,
     Chip,
+    Carousel,
   },
   data() {
     return {
       isFlipped: false,
+      images: [
+        'https://primefaces.org/cdn/primevue/images/usercard.png',
+        'https://primefaces.org/cdn/primevue/images/usercard.png',
+        'https://primefaces.org/cdn/primevue/images/usercard.png',
+      ],
     };
   },
   methods: {
@@ -167,21 +164,22 @@ export default {
   cursor: pointer;
 }
 
-
 .desc_chip {
   color: red;
   height: 2rem;
 }
 
-.image-container {
+.carousel-container {
+  height: 100%;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  height: 100%;
+  align-items: center;
 }
 
-.back-image {
+.carousel-image {
   width: 100%;
   height: auto;
+  object-fit: cover;
+  border-radius: 8px;
 }
 </style>
