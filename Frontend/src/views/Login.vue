@@ -126,7 +126,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10em;
     height: 100%;
     width: 100%;
     padding: 2rem;
@@ -134,20 +133,24 @@
     border-radius: 8px;
     
     background: linear-gradient(90deg, #ff7676, #f54ea2, #ffb3b3);
-
     background-size: 600% 600%;
     animation: gradient-animation 25s ease infinite;
   }
 
   .login-form {
-    display: block;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    width: 100%;
-    max-width: 550px;
-    padding: 70px 30px 40px 30px;
-    border-radius: 25px;
+    padding: 2rem;
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(10px);
+  }
+
+  .login-form > * {
+    width: 100%;
+    max-width: 400px;
   }
 
   .logo {
@@ -155,7 +158,8 @@
     justify-content: center;
     align-items: center;
     height: 97%;
-    width: 60%;
+    width: 50%;
+    max-width: 700px;
     font-size: 3rem;
     color: white;
     text-align: center;
@@ -173,8 +177,9 @@
     display: flex;
     flex-direction: row;
     background: #fff;
-    gap: 5em;
-    justify-content: space-between;
+    gap: 2em;
+    width: 90%;
+    height: 80%;
     align-items: center;
     border-radius: 40px;
     padding-left: 2rem;

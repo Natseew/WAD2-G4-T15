@@ -3,6 +3,10 @@
     <div class="big-screen w-full lg:h-full">
       <div class="register-form">
         <h1 class="text-3xl">Create an Account</h1>
+        <p class="flex flex-row gap-4">
+          <InputText v-model="firstName" placeholder="First Name" />
+          <InputText v-model="lastName" placeholder="Last Name" />
+        </p>
         <p>
           <InputText v-model="email" placeholder="Email" />
         </p>
@@ -36,6 +40,8 @@ import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 import Button from 'primevue/button';
 
+const firstName = ref("");
+const lastName = ref("");
 const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
@@ -44,7 +50,6 @@ const passwordError = ref("");
 const router = useRouter();
 
 const register = () => {
-  // Password and Confirm password validation
   if (password.value !== confirmPassword.value) {
     errMsg.value = "Passwords do not match";
     return;
@@ -52,7 +57,6 @@ const register = () => {
 
   passwordError.value = "";
 
-  // Firebase Authentication
   createUserWithEmailAndPassword(getAuth(), email.value, password.value)
     .then(() => {
       console.log("Successfully registered!");
@@ -66,6 +70,19 @@ const register = () => {
 </script>
 
 <style scoped>
+
+  @keyframes gradient-animation {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+    }
+  }
+
 @media (max-width: 1023px) {
   .logo {
     position: absolute;
@@ -87,7 +104,11 @@ const register = () => {
     padding: 2rem;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    background: linear-gradient(180deg, #FF7676 0%, #F54EA2 100%);
+
+    background: linear-gradient(90deg, #ff7676, #f54ea2, #ffb3b3);
+
+    background-size: 600% 600%;
+    animation: gradient-animation 25s ease infinite;
   }
 
   .register-form {
@@ -111,24 +132,32 @@ const register = () => {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10em;
     height: 100%;
     width: 100%;
     padding: 2rem;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    background: linear-gradient(180deg, #FF7676 0%, #F54EA2 100%);
+
+    background: linear-gradient(90deg, #ff7676, #f54ea2, #ffb3b3);
+
+    background-size: 600% 600%;
+    animation: gradient-animation 25s ease infinite;
   }
 
   .register-form {
-    display: block;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    width: 100%;
-    max-width: 550px;
-    padding: 70px 30px 40px 30px;
-    border-radius: 25px;
+    padding: 2rem;
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(10px);
+  }
+
+  .register-form > * {
+    width: 100%;
+    max-width: 400px;
   }
 
   .logo {
@@ -136,21 +165,27 @@ const register = () => {
     justify-content: center;
     align-items: center;
     height: 97%;
-    width: 60%;
-    background: linear-gradient(180deg, #FF7676 0%, #F54EA2 100%);
+    width: 50%;
+    max-width: 700px;
     font-size: 3rem;
     color: white;
     text-align: center;
     border-radius: 40px;
     font-family: 'Roboto Flex', sans-serif;
+
+    background: linear-gradient(90deg, #ff7676, #f54ea2, #ffb3b3);
+
+    background-size: 600% 600%;
+    animation: gradient-animation 25s ease infinite;
   }
 
   .big-screen{
     display: flex;
     flex-direction: row;
     background: #fff;
-    gap: 5em;
-    justify-content: space-between;
+    gap: 2em;
+    width: 90%;
+    height: 80%;
     align-items: center;
     border-radius: 40px;
     padding-left: 2rem;
@@ -170,7 +205,6 @@ h1 {
 :deep .p-inputtext,
 :deep .p-password {
   width: 100%;
-  max-width: 400px;
 }
 
 .error-message {
