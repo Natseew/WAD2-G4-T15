@@ -18,7 +18,7 @@
           <p v-if="errMsg" class="error-message">{{ errMsg }}</p>
         </div>
         <div class="logo"> 
-          Dating App. 
+          NeverAlone. 
         </div>
       </div>
     </div>
