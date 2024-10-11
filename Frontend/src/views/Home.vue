@@ -11,10 +11,11 @@
           v-bind="match" 
           :ref="getCardRef(index)"
           @swipe-right="handleSwipeRight(index)"
+          @swipe-left="handleSwipeLeft(index)"
           :style="{ zIndex: matches.length - index }"
         />
       </div>
-      <ButtonGroup @heart-clicked="handleHeartClick" />
+      <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" />
     </div>
   </div>
 </template>
@@ -64,6 +65,21 @@ const handleHeartClick = () => {
 const handleSwipeRight = (index) => {
   matches.value.splice(index, 1);
   cardRefs.value.splice(index, 1);
+  cardRefs.value = cardRefs.value.slice();
+};
+
+const handleTimesClick = () => {
+  if (matches.value.length === 0) return;
+  const topCard = cardRefs.value[0];
+  if (topCard) {
+    topCard.swipeLeft();
+  }
+};
+
+const handleSwipeLeft = (index) => {
+  matches.value.splice(index, 1);
+  cardRefs.value.splice(index, 1);
+  cardRefs.value = cardRefs.value.slice();
 };
 </script>
 

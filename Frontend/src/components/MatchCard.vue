@@ -130,11 +130,21 @@ export default {
       swipeClass.value = 'swipe-right';
       setTimeout(() => {
         emit('swipe-right');
+        swipeClass.value = '';
+      }, 600)
+    };
+
+    const swipeLeft = () => {
+      swipeClass.value = 'swipe-left';
+      setTimeout(() => {
+        emit('swipe-left');
+        swipeClass.value = '';
       }, 600)
     };
 
     defineExpose({
       swipeRight,
+      swipeLeft,
     });
 
     const imageLoadError = (item) => {
@@ -145,6 +155,7 @@ export default {
       isFlipped,
       flipCard,
       swipeRight,
+      swipeLeft,
       swipeClass,
       flipContainer,
       imageLoadError,
@@ -227,6 +238,11 @@ export default {
 
 .swipe-right {
   transform: translateX(100%) rotate(20deg);
+  transition: transform 0.6s ease-out;
+}
+
+.swipe-left {
+  transform: translateX(-100%) rotate(-20deg);
   transition: transform 0.6s ease-out;
 }
 </style>
