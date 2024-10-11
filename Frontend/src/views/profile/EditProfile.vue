@@ -5,8 +5,35 @@
       <h1>EditProfile</h1>
     </v-row>
     <v-spacer></v-spacer>
-    <v-avatar image="https://2.img-dpreview.com/files/p/E~C1000x0S4000x4000T1200x1200~articles/3925134721/0266554465.jpeg" size="350"></v-avatar>
+    <v-avatar @click="overlay = !overlay" image="https://2.img-dpreview.com/files/p/E~C1000x0S4000x4000T1200x1200~articles/3925134721/0266554465.jpeg" size="350"></v-avatar>
     <v-spacer></v-spacer>
+    <v-overlay
+      v-model="overlay"
+      class="align-center justify-center"
+    >
+    <v-card height="80" width="450" align-center justify-center>
+      <v-row>
+        <v-col sm="8">
+        <v-file-input
+          label="File input"
+          show-size
+          prepend-icon="mdi-camera"
+          variant="filled"
+          v-model="file"
+          clearable
+        ></v-file-input>
+      </v-col>
+      <v-col sm="4">
+        <v-btn
+          :loading="loading"
+          class="mt-2"
+          text="Submit"
+          v-on:click="uploadTask"
+        ></v-btn>
+      </v-col>
+    </v-row>
+    </v-card>
+    </v-overlay>
     <h2>{{ data.name }}</h2>
     <v-form validate-on="submit lazy" @submit.prevent="submit">
     <!-- <v-form> -->
@@ -90,6 +117,27 @@
   import Navbar from '../../components/Navbar.vue';
   import { useRouter } from 'vue-router';
   import { ref } from 'vue';
+  import { getStorage, uploadBytes } from "firebase/storage";
+  import {ref as firebaseRef} from "firebase/storage";
+
+  const storage = getStorage();
+  
+
+  // Create file metadata including the content type
+  /* @type {any} */
+  const metadata = {
+    contentType: 'image/jpg',
+  };
+  const file = ref()
+  // Upload the file and metadata
+
+  const uploadTask = () => {
+    if(file){
+      console.log(file)
+      const storageRef = firebaseRef(storage, 'gs://wad2-g4-t15.appspot.com/'+file.value.name)
+      uploadBytes(storageRef, file.value, metadata)
+    }
+  };
 
   const router = useRouter();
 
@@ -103,6 +151,8 @@
   });
 
   let loading = ref(false)
+
+  let overlay = ref(false)
 
   let userData = ref()
   onAuthStateChanged(auth, (user) => {
