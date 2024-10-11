@@ -179,6 +179,7 @@
     background: #fff;
     gap: 2em;
     width: 90%;
+    max-width: 1400px;
     height: 80%;
     align-items: center;
     border-radius: 40px;

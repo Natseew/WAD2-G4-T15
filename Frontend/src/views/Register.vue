@@ -151,8 +151,6 @@ const register = () => {
     justify-content: center;
     align-items: center;
     padding: 2rem;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
   }
 
   .register-form > * {
@@ -185,6 +183,7 @@ const register = () => {
     background: #fff;
     gap: 2em;
     width: 90%;
+    max-width: 1400px;
     height: 80%;
     align-items: center;
     border-radius: 40px;
