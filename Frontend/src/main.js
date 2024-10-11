@@ -10,6 +10,10 @@ import { definePreset } from '@primevue/themes';
 import { initializeApp } from "firebase/app";
 import "primeflex/primeflex.css";
 import axios from 'axios'
+import 'vuetify/styles'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+import { createVuetify } from 'vuetify'
 
 const MyPreset = definePreset(Aura, {
   semantic: {
@@ -39,10 +43,12 @@ const firebaseConfig = {
 };
 
 axios.defaults.baseURL = 'http://localhost:3000';
-axios.defaults.headers.post['Content-Type'] ='text/plain';
+axios.defaults.headers.post['Content-Type'] ='application/json';
 axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 
 initializeApp(firebaseConfig);
+
+const vuetify = createVuetify({ components, directives })
 
 createApp(App)
     .use(ToastService)
@@ -52,4 +58,5 @@ createApp(App)
         preset: MyPreset
       }
     })
+    .use(vuetify)
     .mount('#app')
