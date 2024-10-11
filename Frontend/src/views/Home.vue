@@ -4,13 +4,23 @@
   <div class="relative flex justify-center items-center flex-col h-screen">
     <Navbar class="navbar" />
     <div class="relative z-10 flex flex-col items-center max-w-sm w-full">
-      <MatchCard />
-      <ButtonGroup />
+      <div class="cards-stack">
+        <MatchCard 
+          v-for="(match, index) in matches" 
+          :key="match.id" 
+          v-bind="match" 
+          :ref="getCardRef(index)"
+          @swipe-right="handleSwipeRight(index)"
+          :style="{ zIndex: matches.length - index }"
+        />
+      </div>
+      <ButtonGroup @heart-clicked="handleHeartClick" />
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from 'vue-router';
 import MatchCard from "../components/MatchCard.vue";
@@ -18,8 +28,8 @@ import ButtonGroup from "../components/ButtonGroup.vue";
 import Navbar from "../components/Navbar.vue";
 
 const router = useRouter();
-
 const auth = getAuth();
+
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in
@@ -29,6 +39,32 @@ onAuthStateChanged(auth, (user) => {
     router.push('/login');
   }
 });
+
+// Sample matches data for testing 
+const matches = ref([
+  { id: 1, name: 'Natalie', },
+  { id: 2, name: 'John', },
+  { id: 3, name: 'Emma', },
+]);
+
+const cardRefs = ref([]);
+
+const getCardRef = (index) => (el) => {
+  cardRefs.value[index] = el;
+};
+
+const handleHeartClick = () => {
+  if (matches.value.length === 0) return;
+  const topCard = cardRefs.value[0];
+  if (topCard) {
+    topCard.swipeRight();
+  }
+};
+
+const handleSwipeRight = (index) => {
+  matches.value.splice(index, 1);
+  cardRefs.value.splice(index, 1);
+};
 </script>
 
 <style scoped>
@@ -80,4 +116,30 @@ onAuthStateChanged(auth, (user) => {
 .navbar {
   z-index: 10;
 }
+
+.cards-stack {
+  position: relative;
+  width: 24rem;
+  height: 40rem;
+}
+
+.cards-stack {
+  position: relative;
+  width: 24rem;
+  height: 40rem;
+}
+
+.cards-stack > * {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 0.3s ease;
+}
+
+.cards-stack > *:not(:first-child) {
+  top: 10px;
+  left: 10px;
+  transform: scale(0.95);
+}
+
 </style>
