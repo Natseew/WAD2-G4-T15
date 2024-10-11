@@ -2,7 +2,7 @@
   <v-container class="full-screen" fluid>
     <Navbar />
     <v-row justify="center" align="center" class="main-content">
-      <vue-flip ref="flipCard" active-click="false" width="400px" height="80vh">
+      <vue-flip ref="flipCard" active-click="false" width="400px" height="85vh">
         <template v-slot:front>
           <div class="front" @click="handleFrontClick" style="cursor: pointer;">
             <h2>{{ frontData.title }}</h2>
