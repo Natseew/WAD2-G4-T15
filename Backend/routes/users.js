@@ -42,7 +42,8 @@ router.post('/:uid', async (req, res) => {
     name: req.body.name,
     age: req.body.age,
     gender:req.body.gender,
-    hobbies: req.body.hobbies
+    hobbies: req.body.hobbies,
+    images: req.body.images
     // photos: ?
   }); 
 

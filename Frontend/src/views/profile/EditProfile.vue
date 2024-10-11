@@ -117,7 +117,7 @@
   import Navbar from '../../components/Navbar.vue';
   import { useRouter } from 'vue-router';
   import { ref } from 'vue';
-  import { getStorage, uploadBytes } from "firebase/storage";
+  import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
   import {ref as firebaseRef} from "firebase/storage";
 
   const storage = getStorage();
@@ -135,8 +135,14 @@
     if(file){
       console.log(file)
       const storageRef = firebaseRef(storage, 'gs://wad2-g4-t15.appspot.com/'+file.value.name)
-      uploadBytes(storageRef, file.value, metadata)
-    }
+      uploadBytes(storageRef, file.value, metadata).then((snapshot) => {
+        getDownloadURL(snapshot.ref).then((url) => {
+          data.value.images.push(url)
+          console.log(data.value)
+          submit()
+        });
+      });
+    };
   };
 
   const router = useRouter();
@@ -147,7 +153,8 @@
     "name": "",
     "age": "",
     "gender": "",
-    "hobbies": ""
+    "hobbies": "",
+    "images": []
   });
 
   let loading = ref(false)
