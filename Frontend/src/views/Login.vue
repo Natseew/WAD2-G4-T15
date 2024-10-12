@@ -10,7 +10,7 @@
             <Password v-model="password" toggleMask placeholder="Password" feedback={false} />
           </p>
           <p>
-            <Button label="Register" icon="pi pi-check" class="p-button-rounded w-48 md:w-2/3" @click="register" />
+            <Button label="Login" icon="pi pi-check" class="p-button-rounded w-48 md:w-2/3" @click="register" />
           </p>
           <p>Don't have an account? 
           <router-link to="/register">Register Now</router-link>
