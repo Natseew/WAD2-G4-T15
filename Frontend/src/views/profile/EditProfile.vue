@@ -1,99 +1,286 @@
 <template>
-  <div class="isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
-    <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]" aria-hidden="true">
-      <div class="relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-40rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)" />
-    </div>
-    <div class="mx-auto max-w-2xl text-center">
-      <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Contact sales</h2>
-      <p class="mt-2 text-lg leading-8 text-gray-600">Aute magna irure deserunt veniam aliqua magna enim voluptate.</p>
-    </div>
-    <form action="#" method="POST" class="mx-auto mt-16 max-w-xl sm:mt-20">
-      <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-        <div>
-          <label for="first-name" class="block text-sm font-semibold leading-6 text-gray-900">First name</label>
-          <div class="mt-2.5">
-            <input type="text" name="first-name" id="first-name" autocomplete="given-name" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+  <v-container class="full-screen" fluid>
+    <Navbar />
+    <v-row justify="center" align="center" class="main-content">
+      <vue-flip ref="flipCard" active-click="false" width="400px" height="85vh">
+        <template v-slot:front>
+          <div class="front" @click="handleFrontClick" style="cursor: pointer;">
+            <h2>{{ frontData.title }}</h2>
+            <img @click="overlay = !overlay" :src="backData.images[0]" alt="Profile Picture" class="profile-pic" />
+            <p>{{ frontData.description }}</p>
           </div>
-        </div>
-        <div>
-          <label for="last-name" class="block text-sm font-semibold leading-6 text-gray-900">Last name</label>
-          <div class="mt-2.5">
-            <input type="text" name="last-name" id="last-name" autocomplete="family-name" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+            <v-overlay
+            v-model="overlay"
+            class="align-center justify-center"
+          >
+          <v-card width="450" align-center justify-center>
+            <v-row>
+              <v-col sm="8">
+              <v-file-input
+                label="File input"
+                show-size
+                prepend-icon="mdi-camera"
+                variant="filled"
+                v-model="file"
+                clearable
+              ></v-file-input>
+            </v-col>
+            <v-col sm="4">
+              <v-btn
+                :loading="loading"
+                class="mt-2"
+                text="Submit"
+                v-on:click="uploadTask"
+              ></v-btn>
+            </v-col>
+          </v-row>
+          </v-card>
+          </v-overlay>
+        </template>
+        <template v-slot:back>
+          <div class="back" @click="handleBackClick" style="cursor: pointer;">
+            <h2>{{ backData.title }}</h2>
+            <v-form validate-on="submit lazy" @submit.prevent="submit">
+              <v-container>
+                <v-row>
+                  <v-col cols="12" sm="12">
+                    <v-text-field
+                      v-model="backData.name"
+                      label="Full Name"
+                      required
+                      variant="outlined"
+                      @click.stop
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="12">
+                    <v-text-field
+                      v-model="backData.email"
+                      label="E-mail"
+                      required
+                      variant="outlined"
+                      @click.stop
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                      v-model="backData.age"
+                      label="Age"
+                      required
+                      variant="outlined"
+                      @click.stop
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                      v-model="backData.gender"
+                      label="Gender"
+                      required
+                      variant="outlined"
+                      @click.stop
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-textarea
+                      v-model="backData.hobbies"
+                      label="Hobbies"
+                      variant="outlined"
+                      @click.stop
+                    ></v-textarea>
+                  </v-col>
+                </v-row>
+                <v-btn class="mt-2" text="Submit" type="submit" block>Submit</v-btn>
+              </v-container>
+            </v-form>
           </div>
-        </div>
-        <div class="sm:col-span-2">
-          <label for="company" class="block text-sm font-semibold leading-6 text-gray-900">Company</label>
-          <div class="mt-2.5">
-            <input type="text" name="company" id="company" autocomplete="organization" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-          </div>
-        </div>
-        <div class="sm:col-span-2">
-          <label for="email" class="block text-sm font-semibold leading-6 text-gray-900">Email</label>
-          <div class="mt-2.5">
-            <input type="email" name="email" id="email" autocomplete="email" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-          </div>
-        </div>
-        <div class="sm:col-span-2">
-          <label for="phone-number" class="block text-sm font-semibold leading-6 text-gray-900">Phone number</label>
-          <div class="relative mt-2.5">
-            <div class="absolute inset-y-0 left-0 flex items-center">
-              <label for="country" class="sr-only">Country</label>
-              <select id="country" name="country" class="h-full rounded-md border-0 bg-transparent bg-none py-0 pl-4 pr-9 text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
-                <option>US</option>
-                <option>CA</option>
-                <option>EU</option>
-              </select>
-              <ChevronDownIcon class="pointer-events-none absolute right-3 top-0 h-full w-5 text-gray-400" aria-hidden="true" />
-            </div>
-            <input type="tel" name="phone-number" id="phone-number" autocomplete="tel" class="block w-full rounded-md border-0 px-3.5 py-2 pl-20 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-          </div>
-        </div>
-        <div class="sm:col-span-2">
-          <label for="message" class="block text-sm font-semibold leading-6 text-gray-900">Message</label>
-          <div class="mt-2.5">
-            <textarea name="message" id="message" rows="4" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-          </div>
-        </div>
-        <SwitchGroup as="div" class="flex gap-x-4 sm:col-span-2">
-          <div class="flex h-6 items-center">
-            <Switch v-model="agreed" :class="[agreed ? 'bg-indigo-600' : 'bg-gray-200', 'flex w-8 flex-none cursor-pointer rounded-full p-px ring-1 ring-inset ring-gray-900/5 transition-colors duration-200 ease-in-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600']">
-              <span class="sr-only">Agree to policies</span>
-              <span aria-hidden="true" :class="[agreed ? 'translate-x-3.5' : 'translate-x-0', 'h-4 w-4 transform rounded-full bg-white shadow-sm ring-1 ring-gray-900/5 transition duration-200 ease-in-out']" />
-            </Switch>
-          </div>
-          <SwitchLabel class="text-sm leading-6 text-gray-600">
-            By selecting this, you agree to our
-            {{ ' ' }}
-            <a href="#" class="font-semibold text-indigo-600">privacy&nbsp;policy</a>.
-          </SwitchLabel>
-        </SwitchGroup>
-      </div>
-      <div class="mt-10">
-        <button type="submit" class="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Let's talk</button>
-      </div>
-    </form>
-  </div>
+        </template>
+      </vue-flip>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup>
-/*
-  user = {
-  uid: ""
-  Name:
-  Age:
-  Gender:
-  Hobbies:
-  photos: ?
+  import { ref } from 'vue';
+  import axios from 'axios';
+  import { getAuth, onAuthStateChanged } from "firebase/auth";
+  import Navbar from '../../components/Navbar.vue';
+  import { useRouter } from 'vue-router';
+  import { VueFlip } from 'vue-flip';;
+  import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
+  import {ref as firebaseRef} from "firebase/storage";
 
+  const storage = getStorage();
   
+
+  // Create file metadata including the content type
+  /* @type {any} */
+  const metadata = {
+    contentType: 'image/jpg',
+  };
+  const file = ref()
+  // Upload the file and metadata
+
+  const uploadTask = () => {
+    if(file){
+      const storageRef = firebaseRef(storage, 'gs://wad2-g4-t15.appspot.com/'+file.value.name)
+      uploadBytes(storageRef, file.value, metadata).then((snapshot) => {
+        getDownloadURL(snapshot.ref).then((url) => {
+          backData.value.images.push(url)
+          console.log(backData.value)
+          submit()
+        });
+      });
+    };
+  };
+
+const router = useRouter();
+const auth = getAuth();
+
+// Data for the front side of the card
+const frontData = ref({
+  title: "Profile Info",
+  description: "Click to edit your profile."
+});
+
+// Data for the back side of the card
+const backData = ref({
+  title: "Edit Profile",
+  name: "",
+  email: "",
+  age: "",
+  gender: "",
+  hobbies: "",
+  images: []
+});
+
+// Loading state for form submission
+const loading = ref(false);
+
+let overlay = ref(false)
+
+let userData = ref()
+
+const submit =  (() => {
+    if(userData){
+      loading.value = true; 
+      try{
+        axios.post('/user/'+userData.value.uid, backData.value)
+        .then(function (response) {
+          console.log(response)
+        })
+      }catch(error){
+        console.log(error)
+      }
+      loading.value = false; 
+    }
+  });
+
+// Fetch user data upon authentication state change
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    userData.value = user
+    // Fetch user data using the user's UID
+    axios.get(`/user/${user.uid}`).then(response => {
+      backData.value = response.data;
+      backData.value.email = user.email; // Set the email from the Firebase user
+    });
+  } else {
+    router.push('/login'); // Redirect to login if not authenticated
   }
+});
 
-*/
+// Handles the click event on the front card to flip it
+const handleFrontClick = () => {
+  const flipCard = $refs.flipCard; // Reference to the flip card component
+  flipCard.flip(); // Execute the flip method to flip the card
+};
 
-import { ref } from 'vue'
-import { ChevronDownIcon } from '@heroicons/vue/20/solid'
-import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue'
-
-const agreed = ref(false)
-
+// Handles the click event on the back card to flip back
+const handleBackClick = () => {
+  const flipCard = $refs.flipCard; // Reference to the flip card component
+  flipCard.flip(); // Execute the flip method to flip the card back
+};
 </script>
+
+<style scoped>
+.v-container {
+  background: linear-gradient(to top, #fabeff, #ffd6a1);
+  padding: 60px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif; /* Aesthetic font */
+}
+
+.main-content {
+  height: 100vh;
+}
+
+.front, .back {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px; /* Increased padding for aesthetics */
+  border: none; /* Removed default border */
+  border-radius: 20px; /* More rounded corners */
+  box-shadow: 0 6px 12px rgba(139, 33, 74, 0.24); /* Softer shadow for depth */
+  width: 100%;
+  height: 100%;
+}
+
+.front {
+  background: linear-gradient(to top, #ffb8e2, #ffdba9); /* Soft pastel pink */
+  color: #79316a; /* Darker text for readability */
+}
+
+.back {
+  background-color: #ffe8b3; /* Pastel yellow */
+  color: #5d5d5d; /* Darker text for readability */
+  padding: 30px;
+  overflow: hidden;
+  flex-grow: 1;
+  max-height: 100%;
+  border-radius: 20px; /* Consistent corner rounding */
+}
+
+.profile-pic {
+  border-radius: 50%;
+  width: 400px; /* Profile picture size */
+  height: 400px; /* Profile picture size */
+  margin-bottom: 15px; /* Space below the profile picture */
+  box-shadow: 0 4px 8px rgba(137, 73, 36, 0.6); /* Soft shadow */
+}
+
+h2 {
+  font-family: 'Playfair Display', serif; /* Stylish font for headings */
+  font-size: 40px; /* Increased font size for headings */
+  margin-bottom: 15px; /* Space below heading */
+  text-align: center; /* Centered text */
+}
+
+p {
+  font-family: 'Roboto', sans-serif; /* Clean font for body text */
+  font-size: 16px; /* Adjusted font size for readability */
+  text-align: center; /* Centered text */
+  line-height: 1.6; /* Improved readability */
+}
+
+.v-text-field, .v-textarea {
+  background-color: #ffffff; /* White background for input fields */
+  border-radius: 10px; /* Rounded input fields */
+}
+
+.v-btn {
+  background-color: #fff3a4; /* Button color matching front card */
+  color: #5d5d5d; /* Darker text color */
+  font-weight: bold;
+  border-radius: 20px; /* Rounded button */
+}
+
+.v-btn:hover {
+  background-color: #fffce1; /* Slightly darker shade on hover */
+}
+
+* {
+  box-sizing: border-box; /* Universal box-sizing */
+}
+</style>
