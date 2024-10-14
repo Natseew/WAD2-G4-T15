@@ -131,7 +131,7 @@ export default {
       setTimeout(() => {
         emit('swipe-right');
         swipeClass.value = '';
-      }, 600)
+      }, 300)
     };
 
     const swipeLeft = () => {
@@ -139,7 +139,7 @@ export default {
       setTimeout(() => {
         emit('swipe-left');
         swipeClass.value = '';
-      }, 600)
+      }, 300)
     };
 
     defineExpose({

@@ -16,7 +16,7 @@ const db = getFirestore();
 const ref = db.collection('users')
 
 router.get('/', (req,res) => {
-  res.send()
+    res.send("test")
 })
 
 //Get User Data
@@ -48,6 +48,46 @@ router.post('/:uid', async (req, res) => {
   }); 
 
   res.sendStatus(200);
+});
+
+router.post('/populate_homepage', async (req, res) => {
+  try {
+
+    const currentUserDoc = await ref.doc(req.params.uid).get();
+
+    if (!currentUserDoc.exists) {
+      return res.status(400).send('No such document for current user!');
+    }
+
+    const currentUser = currentUserDoc.data();
+    const currentGender = currentUser.gender;
+
+    let oppositeGender;
+    if (currentGender.toLowerCase() === 'male') {
+      oppositeGender = 'female';
+    } else if (currentGender.toLowerCase() === 'female') {
+      oppositeGender = 'male';
+    } else {
+      return res.status(400).send('Unknown gender for current user');
+    }
+
+    const oppositeGenderQuery = await ref.where('gender', '==', oppositeGender).get();
+
+    if (oppositeGenderQuery.empty) {
+      return res.status(404).send('No users of opposite gender found');
+    }
+
+    const users = [];
+    oppositeGenderQuery.forEach(doc => {
+      users.push(doc.data());
+    });
+
+    res.send(users);
+
+  } catch (error) {
+    console.error('Error fetching opposite gender users:', error);
+    res.sendStatus(500);
+  }
 });
 
 module.exports = router
