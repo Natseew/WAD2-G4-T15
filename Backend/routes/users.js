@@ -29,7 +29,8 @@ router.get('/:uid', async (req,res) => {
       // console.log('Document data:', doc.data());
       res.send(doc.data());
     }
-  }catch{
+  }catch (error){
+    console.log(error)
     res.sendStatus(500);
   }
 
