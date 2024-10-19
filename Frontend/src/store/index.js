@@ -37,7 +37,8 @@ const store = createStore({
 
     async populateMatches({ commit }, uid) {
       try {
-        const response = await axios.post(`${base_url}/user/populate_homepage`);
+        const response = await axios.post(`${base_url}/user/populate_homepage/${uid}`);
+        console.log(response)
         commit('setPopulateMatches', response.data);
       } catch (error) {
         console.error("Failed to fetch user profile:", error);

@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
@@ -36,9 +36,7 @@ const store = useStore();
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in
-    // store.dispatch('populateMatches', user.uid);
-    console.log(user);
-    console.log(user.uid);
+    store.dispatch('populateMatches', user.uid);
   } else {
     // User is signed out
     router.push('/login');
@@ -88,15 +86,15 @@ const handleSwipeLeft = (index) => {
   cardRefs.value = cardRefs.value.slice();
 };
 
-// onMounted(() => {
-//   matches.value = store.getters.getPopulateMatches;
-// });
+onMounted(() => {
+  matches.value = store.getters.getPopulateMatches;
+});
 
-// store.subscribe((mutation, state) => {
-//   if (mutation.type === 'setPopulateMatches') {
-//     matches.value = state.populateMatches; // Update matches when populated
-//   }
-// });
+store.subscribe((mutation, state) => {
+  if (mutation.type === 'setPopulateMatches') {
+    matches.value = state.populateMatches; // Update matches when populated
+  }
+});
 
 </script>
 

@@ -51,7 +51,7 @@ router.post('/:uid', async (req, res) => {
   res.sendStatus(200);
 });
 
-router.post('/populate_homepage', async (req, res) => {
+router.post('/populate_homepage/:uid', async (req, res) => {
   try {
 
     const currentUserDoc = await ref.doc(req.params.uid).get();
