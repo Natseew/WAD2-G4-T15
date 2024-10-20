@@ -1,13 +1,9 @@
 <template>
     <div id="chat">
-        <h1>Welcome to the Vue chat app<span v-if="nameRegistered">, {{ name }}</span>!</h1>
+        <h1>Connecting Client to Server!</h1>
         <p>{{ statusString }}</p>
-        <div v-if="!nameRegistered">
-            <input @keyup.enter="registerName" v-model="name" placeholder="Enter your name">
-            <button @click="registerName">Register name</button>
-        </div>
-        <div v-if="nameRegistered && !activeConversation && isConnected">
-        <button @click="createConversation">Join chat</button>
+        <div v-if="!activeConversation && isConnected">
+        <button @click="joinConversation">Join chat</button>
         </div>
         <Conversation v-if="activeConversation" :active-conversation="activeConversation" :name="name" />
     </div>
@@ -17,6 +13,9 @@
 <script>
 import {Client as ConversationsClient} from "@twilio/conversations"
 import Conversation from "./conversation.vue"
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+
 
 export default {
     components: { Conversation },
@@ -27,6 +26,7 @@ export default {
             name: "",
             nameRegistered: false,
             isConnected: false,
+            uid: ""
         }
     },
     methods: {
@@ -39,7 +39,7 @@ export default {
 
         initConversationsClient: async function() {
             window.conversationsClient = ConversationsClient;
-            const token = await this.getToken(this.name) 
+            const token = await this.getToken(this.uid) 
             this.conversationsClient = new ConversationsClient(token)
             this.statusString = "Connecting to Twilio…"
             this.conversationsClient.on("connectionStateChanged", (state) => {
@@ -64,10 +64,10 @@ export default {
             this.nameRegistered = true
             await this.initConversationsClient()
         },
-        createConversation: async function() {
+        createConversation: async function(user2, chatName) {
             // Ensure User1 and User2 have an open client session
             try {
-                await this.conversationsClient.getUser(this.name)
+                await this.conversationsClient.getUser(this.uid)
             } catch {
                 console.error("Waiting for User1 and User2 client sessions")
                 return
@@ -75,14 +75,35 @@ export default {
             // Try to create a new conversation and add User1 and User2
             // If it already exists, join instead
             try {
-                const newConversation = await this.conversationsClient.createConversation({uniqueName: "chat2"})
+                const newConversation = await this.conversationsClient.createConversation({uniqueName: chatName})
                 const joinedConversation = await newConversation.join().catch(err => console.log(err))
-                await joinedConversation.add(this.name).catch(err => console.log("error: ", err))
+                await joinedConversation.add(this.uid).catch(err => console.log("error: ", err))
+                await joinedConversation.add("NeverAlone").catch(err => console.log("error: ", err))
+                await joinedConversation.add(user2).catch(err => console.log("error: ", err))
                 this.activeConversation = joinedConversation
             } catch {
-                this.activeConversation = await (this.conversationsClient.getConversationByUniqueName("chat"))
+               console.log("Conversation Already Exists")
             }
+        },
+        joinConversation: async function(chatName) {
+            this.activeConversation = await (this.conversationsClient.getConversationByUniqueName("chatTest2"))
         }
+    },
+    async mounted() {
+        const auth = getAuth();
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in
+                this.name = user.name
+                this.uid = user.uid
+                this.registerName()
+                console.log(user);
+            } else {
+                // User is signed out
+                router.push('/login');
+            }
+        })
     }
 }
 
