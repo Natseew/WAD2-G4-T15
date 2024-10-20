@@ -23,6 +23,12 @@ const store = createStore({
     },
     setPopulateMatches(state, populateMatchesData) {
       state.populateMatches = populateMatchesData;
+    },
+    addLikeToUser(state, likedUser) {
+      state.user.likes.push({
+        name: likedUser.name,
+        uid: likedUser.id,
+      });
     }
   },
   actions: {    
@@ -43,7 +49,20 @@ const store = createStore({
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
       }
-    }
+    },
+
+    async likeUser({ commit }, { uid, likedUser }) {
+      try {
+        const response = await axios.post(`${base_url}/user/like`, {
+          uid,
+          likedUserId: likedUser.id
+        });
+
+        commit('addLikeToUser', likedUser);
+      } catch (error) {
+        console.error("Failed to like user:", error);
+      }
+    },
   }
 
 });

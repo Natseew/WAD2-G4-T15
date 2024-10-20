@@ -91,4 +91,46 @@ router.post('/populate_homepage/:uid', async (req, res) => {
   }
 });
 
+router.post('/like', async (req, res) => {
+  const { uid, likedUserId } = req.body;
+
+  try {
+
+    const userDoc = await ref.doc(uid).get();
+
+    if (!userDoc.exists) {
+      return res.status(404).send('User not found');
+    }
+
+    const userData = userDoc.data();
+
+    const alreadyLiked = userData.likes?.some(like => like.uid === likedUserId);
+
+    if (alreadyLiked) {
+      return res.status(400).send('User already liked');
+    }
+
+    const likedUserDoc = await ref.doc(likedUserId).get();
+
+    if (!likedUserDoc.exists) {
+      return res.status(404).send('Liked user not found');
+    }
+
+    const likedUserData = likedUserDoc.data();
+
+    await ref.doc(userId).update({
+      likes: FieldValue.arrayUnion({
+        name: likedUserData.name,
+        uid: likedUserId
+      })
+    });
+
+    return res.sendStatus(200);
+
+  } catch (error) {
+    console.error('Error liking user:', error);
+    return res.sendStatus(500);
+  }
+});
+
 module.exports = router

@@ -67,9 +67,17 @@ const handleHeartClick = () => {
 };
 
 const handleSwipeRight = (index) => {
+  const swipedMatch = matches.value[index];
   matches.value.splice(index, 1);
   cardRefs.value.splice(index, 1);
   cardRefs.value = cardRefs.value.slice();
+
+  likeUser(swipedMatch);
+};
+
+const likeUser = (match) => {
+  const uid = store.getters.getUser.uid;
+  store.dispatch('likeUser', { uid, likedUser: match });
 };
 
 const handleTimesClick = () => {
