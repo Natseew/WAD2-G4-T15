@@ -3,7 +3,7 @@
   <div class="red-background"></div>
   <div class="relative flex justify-center items-center flex-col h-screen">
     <Navbar class="navbar" />
-    <div class="relative z-10 flex flex-col items-center max-w-sm w-full">
+    <div class="relative z-10 flex flex-col items-center max-w-sm w-full h-full">
       <div class="cards-stack">
         <MatchCard 
           v-for="(match, index) in matches" 
@@ -21,8 +21,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import MatchCard from "../components/MatchCard.vue";
 import ButtonGroup from "../components/ButtonGroup.vue";
@@ -30,11 +31,12 @@ import Navbar from "../components/Navbar.vue";
 
 const router = useRouter();
 const auth = getAuth();
+const store = useStore();
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in
-    console.log(user);
+    store.dispatch('populateMatches', user.uid);
   } else {
     // User is signed out
     router.push('/login');
@@ -47,6 +49,8 @@ const matches = ref([
   { id: 2, name: 'John', },
   { id: 3, name: 'Emma', },
 ]);
+
+// const matches = ref([]);
 
 const cardRefs = ref([]);
 
@@ -81,6 +85,17 @@ const handleSwipeLeft = (index) => {
   cardRefs.value.splice(index, 1);
   cardRefs.value = cardRefs.value.slice();
 };
+
+onMounted(() => {
+  matches.value = store.getters.getPopulateMatches;
+});
+
+store.subscribe((mutation, state) => {
+  if (mutation.type === 'setPopulateMatches') {
+    matches.value = state.populateMatches; // Update matches when populated
+  }
+});
+
 </script>
 
 <style scoped>
@@ -127,6 +142,10 @@ const handleSwipeLeft = (index) => {
 
 .w-full {
   width: 100%;
+}
+
+.h-full {
+  height: 100%;
 }
 
 .navbar {

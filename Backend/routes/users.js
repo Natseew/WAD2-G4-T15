@@ -29,7 +29,8 @@ router.get('/:uid', async (req,res) => {
       // console.log('Document data:', doc.data());
       res.send(doc.data());
     }
-  }catch{
+  }catch (error){
+    console.log(error)
     res.sendStatus(500);
   }
 
@@ -50,7 +51,7 @@ router.post('/:uid', async (req, res) => {
   res.sendStatus(200);
 });
 
-router.post('/populate_homepage', async (req, res) => {
+router.post('/populate_homepage/:uid', async (req, res) => {
   try {
 
     const currentUserDoc = await ref.doc(req.params.uid).get();
