@@ -1,11 +1,27 @@
 <template>
     <div id="chat">
-        <h1>Connecting Client to Server!</h1>
-        <p>{{ statusString }}</p>
-        <div v-if="!activeConversation && isConnected">
-        <button @click="joinConversation">Join chat</button>
-        </div>
-        <Conversation v-if="activeConversation" :active-conversation="activeConversation" :name="name" />
+        <v-container>
+            <v-row>
+                <v-col cols="2">
+                    <v-navigation-drawer app>
+                        <v-list>
+                            <v-list-item>Chats</v-list-item>
+                            <v-divider></v-divider>
+                            <v-list-item class="border 1px" v-for="item of matches" @click="joinConversation(item.chatName)">{{ item.name }}</v-list-item>
+                        </v-list>
+                    </v-navigation-drawer>
+                </v-col>
+                <v-col cols="10" v-if="activeConversation" class="h-screen flex items-center">
+                    <Conversation :active-conversation="activeConversation" :name="name" />
+                </v-col>  
+                <v-col cols="10" v-else class="h-screen flex items-center">
+                    <div>
+                        <h1>Connecting Client to Server!</h1>
+                        <p>{{ statusString }}</p>
+                    </div>       
+                </v-col>
+            </v-row>
+        </v-container>
     </div>
 
 </template>
@@ -14,11 +30,10 @@
 import {Client as ConversationsClient} from "@twilio/conversations"
 import Conversation from "./conversation.vue"
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-
-
+import axios from 'axios'
 
 export default {
-    components: { Conversation },
+    components: { Conversation},
     data() {
         return {
             statusString: "",
@@ -26,7 +41,8 @@ export default {
             name: "",
             nameRegistered: false,
             isConnected: false,
-            uid: ""
+            uid: "",
+            matches:[]
         }
     },
     methods: {
@@ -86,7 +102,8 @@ export default {
             }
         },
         joinConversation: async function(chatName) {
-            this.activeConversation = await (this.conversationsClient.getConversationByUniqueName("chatTest2"))
+            this.activeConversation = null
+            this.activeConversation = await (this.conversationsClient.getConversationByUniqueName(chatName))
         }
     },
     async mounted() {
@@ -95,9 +112,19 @@ export default {
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 // User is signed in
-                this.name = user.name
+                
                 this.uid = user.uid
+                axios.get('/user/'+user.uid)
+                    .then(response =>{
+                        // handle success
+                        console.log(response.data)
+                        this.value = response.data.name
+                        for(var item of response.data.matches){
+                            this.matches.push(JSON.parse(item))
+                        }
+                    })
                 this.registerName()
+                console.log(this.matches)
                 console.log(user);
             } else {
                 // User is signed out

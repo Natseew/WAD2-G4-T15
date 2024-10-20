@@ -52,8 +52,8 @@ methods: {
 <style scoped>
 .conversation-container {
  margin: 0 auto;
- max-width: 400px;
- height: 600px;
+ max-width: 100%;
+ height: 90vh;
  padding: 0 20px;
  border: 3px solid #f1f1f1;
  overflow: scroll;
