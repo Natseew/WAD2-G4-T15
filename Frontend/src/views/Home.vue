@@ -36,7 +36,7 @@ const store = useStore();
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in
-    store.dispatch('populateMatches', user.uid);
+    // store.dispatch('populateMatches', user.uid);
   } else {
     // User is signed out
     router.push('/login');
@@ -94,15 +94,15 @@ const handleSwipeLeft = (index) => {
   cardRefs.value = cardRefs.value.slice();
 };
 
-onMounted(() => {
-  matches.value = store.getters.getPopulateMatches;
-});
+// onMounted(() => {
+//   matches.value = store.getters.getPopulateMatches;
+// });
 
-store.subscribe((mutation, state) => {
-  if (mutation.type === 'setPopulateMatches') {
-    matches.value = state.populateMatches; // Update matches when populated
-  }
-});
+// store.subscribe((mutation, state) => {
+//   if (mutation.type === 'setPopulateMatches') {
+//     matches.value = state.populateMatches; // Update matches when populated
+//   }
+// });
 
 </script>
 
@@ -183,6 +183,40 @@ store.subscribe((mutation, state) => {
   top: 10px;
   left: 10px;
   transform: scale(0.95);
+}
+
+@keyframes stackAnimation {
+  from {
+    transform: translateY(100%) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.cards-stack > * {
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: stackAnimation 0.8s ease forwards;
+  opacity: 0;
+}
+
+.cards-stack > *:nth-child(1) {
+  animation-delay: 0.2s;
+  z-index: 3;
+}
+
+.cards-stack > *:nth-child(2) {
+  animation-delay: 0.4s;
+  z-index: 2;
+}
+
+.cards-stack > *:nth-child(3) {
+  animation-delay: 0.6s;
+  z-index: 1;
 }
 
 </style>
