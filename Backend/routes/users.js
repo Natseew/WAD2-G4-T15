@@ -16,7 +16,7 @@ const db = getFirestore();
 const ref = db.collection('users')
 
 router.get('/', (req,res) => {
-  res.send()
+    res.send("test")
 })
 
 //Get User Data
@@ -29,7 +29,8 @@ router.get('/:uid', async (req,res) => {
       // console.log('Document data:', doc.data());
       res.send(doc.data());
     }
-  }catch{
+  }catch (error){
+    console.log(error)
     res.sendStatus(500);
   }
 
@@ -48,6 +49,88 @@ router.post('/:uid', async (req, res) => {
   }); 
 
   res.sendStatus(200);
+});
+
+router.post('/populate_homepage/:uid', async (req, res) => {
+  try {
+
+    const currentUserDoc = await ref.doc(req.params.uid).get();
+
+    if (!currentUserDoc.exists) {
+      return res.status(400).send('No such document for current user!');
+    }
+
+    const currentUser = currentUserDoc.data();
+    const currentGender = currentUser.gender;
+
+    let oppositeGender;
+    if (currentGender.toLowerCase() === 'male') {
+      oppositeGender = 'female';
+    } else if (currentGender.toLowerCase() === 'female') {
+      oppositeGender = 'male';
+    } else {
+      return res.status(400).send('Unknown gender for current user');
+    }
+
+    const oppositeGenderQuery = await ref.where('gender', '==', oppositeGender).get();
+
+    if (oppositeGenderQuery.empty) {
+      return res.status(404).send('No users of opposite gender found');
+    }
+
+    const users = [];
+    oppositeGenderQuery.forEach(doc => {
+      users.push(doc.data());
+    });
+
+    res.send(users);
+
+  } catch (error) {
+    console.error('Error fetching opposite gender users:', error);
+    res.sendStatus(500);
+  }
+});
+
+router.post('/like', async (req, res) => {
+  const { uid, likedUserId } = req.body;
+
+  try {
+
+    const userDoc = await ref.doc(uid).get();
+
+    if (!userDoc.exists) {
+      return res.status(404).send('User not found');
+    }
+
+    const userData = userDoc.data();
+
+    const alreadyLiked = userData.likes?.some(like => like.uid === likedUserId);
+
+    if (alreadyLiked) {
+      return res.status(400).send('User already liked');
+    }
+
+    const likedUserDoc = await ref.doc(likedUserId).get();
+
+    if (!likedUserDoc.exists) {
+      return res.status(404).send('Liked user not found');
+    }
+
+    const likedUserData = likedUserDoc.data();
+
+    await ref.doc(userId).update({
+      likes: FieldValue.arrayUnion({
+        name: likedUserData.name,
+        uid: likedUserId
+      })
+    });
+
+    return res.sendStatus(200);
+
+  } catch (error) {
+    console.error('Error liking user:', error);
+    return res.sendStatus(500);
+  }
 });
 
 module.exports = router

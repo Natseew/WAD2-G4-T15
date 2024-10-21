@@ -1,11 +1,16 @@
 <template>
-  <v-container class="">
+  <v-container class="full-screen">
     <Navbar  />
     <v-row>
       <h1>Profile</h1>
     </v-row>
     <v-spacer></v-spacer>
-    <v-avatar image="https://2.img-dpreview.com/files/p/E~C1000x0S4000x4000T1200x1200~articles/3925134721/0266554465.jpeg" size="350"></v-avatar>
+    <v-avatar size="350">
+      <v-img
+        alt="John"
+        v-bind:src="data.images[0]"
+      ></v-img>
+    </v-avatar>
     <v-spacer></v-spacer>
     <h2>{{ data.name }}</h2>
     <v-form disabled>
@@ -13,7 +18,7 @@
       <v-row>
         <v-col
           cols="12"
-          sm="12"
+          sm="6"
         >
           <v-text-field
             v-model="data.name"
@@ -28,7 +33,7 @@
 
         <v-col
           cols="12"
-          sm="12"
+          sm="6"
         >
           <v-text-field
             v-model="data.email"
@@ -64,9 +69,67 @@
         </v-col>
         <v-col
           cols="12"
+          sm="6"
+        >
+          <v-text-field
+            v-model="data.religion"
+            label="Religion"
+            required
+            variant="outlined"
+          ></v-text-field>
+        </v-col>
+        <v-col
+          cols="12"
+          sm="6"
+        >
+          <v-text-field
+            v-model="data.lookingFor"
+            label="Looking For"
+            required
+            variant="outlined"
+          ></v-text-field>
+        </v-col>
+        <v-col
+          cols="12"
           sm="12"
         >
-          <v-textarea label="Hobbies" variant="outlined"></v-textarea>
+          <v-textarea label="Introduction" variant="outlined" v-model="data.introduction"></v-textarea>
+        </v-col>
+        <v-col
+          cols="12"
+          sm="12"
+        >
+          <v-textarea label="Describe My Personality" variant="outlined" v-model="data.personalityDescription"></v-textarea>
+        </v-col>
+        <v-col
+          cols="12"
+          sm="6"
+        >
+          <v-textarea label="What I Love" variant="outlined" v-model="data.loves"></v-textarea>
+        </v-col>
+        <v-col
+          cols="12"
+          sm="6"
+        >
+          <v-textarea label="What I Hate" variant="outlined" v-model="data.hate"></v-textarea>
+        </v-col>
+        <v-col
+          cols="12"
+          sm="6"
+        >
+          <v-textarea label="Goals" variant="outlined" v-model="data.goals"></v-textarea>
+        </v-col>
+        <v-col
+          cols="12"
+          sm="6"
+        >
+          <v-textarea label="Dealbreakers" variant="outlined" v-model="data.dealbreakers"></v-textarea>
+        </v-col>
+        <v-col
+          cols="12"
+          sm="12"
+        >
+          <v-textarea label="Hobbies" variant="outlined" v-model="data.hobbies"></v-textarea>
         </v-col>
       </v-row>
     </v-container>
@@ -90,7 +153,16 @@
     "name": "",
     "age": "",
     "gender": "",
-    "hobbies": ""
+    "hobbies": "",
+    "religion":"",
+    "lookingFor": "",
+    "introduction":"",
+    "personalityDescription":"",
+    "loves":"",
+    "hates":"",
+    "dealbreakers":"",
+    "goals":"",
+    "images":[]
   });
 
   onAuthStateChanged(auth, (user) => {
@@ -110,5 +182,9 @@
 </script>
 
 <style scoped>
+
+.full-screen{
+  height:100vh;
+}
 
 </style>

@@ -1,13 +1,13 @@
 <template>
   <div class="card-wrapper mb-4 w-full md:w-auto">
-    <div class="flip-container" :class="{ flipped: isFlipped }">
+    <div class="flip-container" :class="{ flipped: isFlipped, [swipeClass]: swipeClass }" ref="flipContainer">
       <!-- Front of the card -->
       <Card class="extended-border-card w-full card-front">
         <template #title>
           <div class="flex items-center justify-between p-4 w-full">
             <div class="flex items-center">
               <div class="flex flex-col justify-center">
-                <div class="font-bold text-2xl">Natalie</div>
+                <div class="font-bold text-2xl">{{ name }}</div>
                 <div class="text-sm">
                   <Chip label="Looking for love" style="height: 1.2rem; background-color: pink; color: red;" />
                 </div>
@@ -54,7 +54,7 @@
           <div class="flex justify-between p-4">
             <div class="flex items-center">
               <div class="w-16 h-16 rounded-full overflow-hidden mr-4">
-                <img alt="user avatar" src="https://primefaces.org/cdn/primevue/images/usercard.png" class="w-full h-full object-cover" />
+                <img alt="user avatar" :src="avatar" class="w-full h-full object-cover" />
               </div>
             </div>
             <i 
@@ -67,9 +67,14 @@
 
         <template #content>
           <div class="carousel-container">
-            <Carousel :value="images" numVisible="3" numScroll="1">
+            <Carousel :value="images" :numVisible="1" :numScroll="1">
               <template #item="{ item }">
-                <img :src="item" class="carousel-image" />
+                <img 
+                  :src="item" 
+                  class="carousel-image" 
+                  @error="imageLoadError(item)" 
+                  alt="User Image" 
+                />
               </template>
             </Carousel>
           </div>
@@ -80,7 +85,7 @@
 </template>
 
 <script>
-import Button from 'primevue/button';
+import { ref, defineExpose } from 'vue';
 import Card from 'primevue/card';
 import Chip from 'primevue/chip';
 import Carousel from 'primevue/carousel';
@@ -88,25 +93,73 @@ import Carousel from 'primevue/carousel';
 export default {
   name: "MatchCard",
   components: {
-    Button,
     Card,
     Chip,
     Carousel,
   },
-  data() {
-    return {
-      isFlipped: false,
-      images: [
-        'https://primefaces.org/cdn/primevue/images/usercard.png',
-        'https://primefaces.org/cdn/primevue/images/usercard.png',
-        'https://primefaces.org/cdn/primevue/images/usercard.png',
-      ],
-    };
-  },
-  methods: {
-    flipCard() {
-      this.isFlipped = !this.isFlipped;
+  props: {
+    name: {
+      type: String,
+      required: true
     },
+    avatar: {
+      type: String,
+      required: false,
+      default: 'https://primefaces.org/cdn/primevue/images/usercard.png'
+    },
+    images: {
+      type: Array,
+      required: false,
+      default: () => ([
+        'https://primefaces.org/cdn/primevue/images/usercard.png',
+        'https://primefaces.org/cdn/primevue/images/usercard.png',
+        'https://primefaces.org/cdn/primevue/images/usercard.png',
+      ])
+    },
+  },
+  setup(props, { emit }) {
+    const isFlipped = ref(false);
+    const swipeClass = ref('');
+    const flipContainer = ref(null);
+
+    const flipCard = () => {
+      isFlipped.value = !isFlipped.value;
+    };
+
+    const swipeRight = () => {
+      swipeClass.value = 'swipe-right';
+      setTimeout(() => {
+        emit('swipe-right');
+        swipeClass.value = '';
+      }, 300)
+    };
+
+    const swipeLeft = () => {
+      swipeClass.value = 'swipe-left';
+      setTimeout(() => {
+        emit('swipe-left');
+        swipeClass.value = '';
+      }, 300)
+    };
+
+    defineExpose({
+      swipeRight,
+      swipeLeft,
+    });
+
+    const imageLoadError = (item) => {
+      console.error('Failed to load image:', item);
+    };
+
+    return {
+      isFlipped,
+      flipCard,
+      swipeRight,
+      swipeLeft,
+      swipeClass,
+      flipContainer,
+      imageLoadError,
+    };
   },
 };
 </script>
@@ -181,5 +234,15 @@ export default {
   height: auto;
   object-fit: cover;
   border-radius: 8px;
+}
+
+.swipe-right {
+  transform: translateX(100%) rotate(20deg);
+  transition: transform 0.6s ease-out;
+}
+
+.swipe-left {
+  transform: translateX(-100%) rotate(-20deg);
+  transition: transform 0.6s ease-out;
 }
 </style>

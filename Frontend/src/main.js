@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
+import store from './store';
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
 import 'primeicons/primeicons.css';
@@ -53,6 +54,7 @@ const vuetify = createVuetify({ components, directives })
 createApp(App)
     .use(ToastService)
     .use(router)
+    .use(store)
     .use(PrimeVue, {
       theme: {
         preset: MyPreset

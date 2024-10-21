@@ -2,46 +2,47 @@
   <v-container class="full-screen" fluid>
     <Navbar />
     <v-row justify="center" align="center" class="main-content">
-      <vue-flip ref="flipCard" active-click="false" width="400px" height="85vh">
+      <vue-flip ref="flipCard" active-click="false" width="400px" height="600px">
         <template v-slot:front>
           <div class="front" @click="handleFrontClick" style="cursor: pointer;">
             <h2>{{ frontData.title }}</h2>
             <img @click="overlay = !overlay" :src="backData.images[0]" alt="Profile Picture" class="profile-pic" />
+            <h2>{{ backData.name }}</h2>
             <p>{{ frontData.description }}</p>
-          </div>
             <v-overlay
             v-model="overlay"
             class="align-center justify-center"
-          >
-          <v-card width="450" align-center justify-center>
-            <v-row>
-              <v-col sm="8">
-              <v-file-input
-                label="File input"
-                show-size
-                prepend-icon="mdi-camera"
-                variant="filled"
-                v-model="file"
-                clearable
-              ></v-file-input>
-            </v-col>
-            <v-col sm="4">
-              <v-btn
-                :loading="loading"
-                class="mt-2"
-                text="Submit"
-                v-on:click="uploadTask"
-              ></v-btn>
-            </v-col>
-          </v-row>
-          </v-card>
-          </v-overlay>
+            >
+              <v-card width="450" align-center justify-center>
+                <v-row>
+                  <v-col sm="8">
+                  <v-file-input
+                    label="File input"
+                    show-size
+                    prepend-icon="mdi-camera"
+                    variant="filled"
+                    v-model="file"
+                    clearable
+                  ></v-file-input>
+                </v-col>
+                <v-col sm="4">
+                  <v-btn
+                    :loading="loading"
+                    class="mt-2"
+                    text="Submit"
+                    v-on:click="uploadTask"
+                  ></v-btn>
+                </v-col>
+              </v-row>
+              </v-card>
+            </v-overlay>
+          </div>
         </template>
-        <template v-slot:back>
+        <template v-slot:back >
           <div class="back" @click="handleBackClick" style="cursor: pointer;">
             <h2>{{ backData.title }}</h2>
-            <v-form validate-on="submit lazy" @submit.prevent="submit">
-              <v-container>
+            <v-form validate-on="submit lazy" @submit.prevent="submit" class="relative">
+              <v-container class="align-center justify-center flex-auto w-64">
                 <v-row>
                   <v-col cols="12" sm="12">
                     <v-text-field
@@ -124,7 +125,7 @@
       const storageRef = firebaseRef(storage, 'gs://wad2-g4-t15.appspot.com/'+file.value.name)
       uploadBytes(storageRef, file.value, metadata).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
-          backData.value.images.push(url)
+          backData.value.images.unshift(url)
           console.log(backData.value)
           submit()
         });
@@ -144,12 +145,19 @@ const frontData = ref({
 // Data for the back side of the card
 const backData = ref({
   title: "Edit Profile",
-  name: "",
-  email: "",
-  age: "",
-  gender: "",
-  hobbies: "",
-  images: []
+  "name": "",
+  "age": "",
+  "gender": "",
+  "hobbies": "",
+  "religion":"",
+  "lookingFor": "",
+  "introduction":"",
+  "personalityDescription":"",
+  "loves":"",
+  "hates":"",
+  "dealbreakers":"",
+  "goals":"",
+  "images":[]
 });
 
 // Loading state for form submission
@@ -171,6 +179,7 @@ const submit =  (() => {
         console.log(error)
       }
       loading.value = false; 
+      overlay.value = false;
     }
   });
 
@@ -202,10 +211,9 @@ const handleBackClick = () => {
 </script>
 
 <style scoped>
-.v-container {
+.full-screen {
   background: linear-gradient(to top, #fabeff, #ffd6a1);
   padding: 60px;
-  min-height: 100vh;
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif; /* Aesthetic font */
 }
@@ -244,8 +252,8 @@ const handleBackClick = () => {
 
 .profile-pic {
   border-radius: 50%;
-  width: 400px; /* Profile picture size */
-  height: 400px; /* Profile picture size */
+  width: 80%;
+  height: 50%;
   margin-bottom: 15px; /* Space below the profile picture */
   box-shadow: 0 4px 8px rgba(137, 73, 36, 0.6); /* Soft shadow */
 }
