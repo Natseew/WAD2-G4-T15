@@ -2,19 +2,21 @@
     <div id="chat">
         <v-container>
             <v-row>
-                <v-col cols="2">
-                    <v-navigation-drawer app>
+                <v-col cols="4">
+                    <v-navigation-drawer app class="side-menu">
                         <v-list>
                             <v-list-item>Chats</v-list-item>
-                            <v-divider></v-divider>
-                            <v-list-item class="border 1px" v-for="item of matches" @click="joinConversation(item.chatName)">{{ item.name }}</v-list-item>
+                            <!-- <v-divider></v-divider> !-->
+                            <div class="chat">
+                                <v-list-item v-for="item of matches" @click="joinConversation(item.chatName)">{{ item.name }}</v-list-item>
+                            </div>
                         </v-list>
                     </v-navigation-drawer>
                 </v-col>
-                <v-col cols="10" v-if="activeConversation" class="h-screen flex items-center">
+                <v-col cols="8" v-if="activeConversation" class="h-screen flex items-center">
                     <Conversation :active-conversation="activeConversation" :name="name" />
                 </v-col>  
-                <v-col cols="10" v-else class="h-screen flex items-center">
+                <v-col cols="8" v-else class="h-screen flex items-center">
                     <div>
                         <h1>Connecting Client to Server!</h1>
                         <p>{{ statusString }}</p>
@@ -150,6 +152,20 @@ li {
  
 a {
  color: #42b983;
+}
+
+.chat {
+    margin: 4px 8px;
+    transition: background-color 0.3s ease;
+}
+
+.chat .v-list-item:hover{
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px !important;
+}
+
+.side-menu {
+    background: linear-gradient(to bottom, #FD0E42, #C30F31);
 }
 
 #app {
