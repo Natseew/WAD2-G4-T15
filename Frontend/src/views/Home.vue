@@ -45,12 +45,10 @@ onAuthStateChanged(auth, (user) => {
 
 // Sample matches data for testing 
 const matches = ref([
-  { id: 1, name: 'Natalie', },
-  { id: 2, name: 'John', },
-  { id: 3, name: 'Emma', },
+  { id: 1, name: 'Natalie' },
+  { id: 2, name: 'John' },
+  { id: 3, name: 'Emma' },
 ]);
-
-// const matches = ref([]);
 
 const cardRefs = ref([]);
 
@@ -60,19 +58,27 @@ const getCardRef = (index) => (el) => {
 
 const handleHeartClick = () => {
   if (matches.value.length === 0) return;
-  const topCard = cardRefs.value[0];
-  if (topCard) {
-    topCard.swipeRight();
-  }
+  swipeCard(0, true);
 };
 
-const handleSwipeRight = (index) => {
-  const swipedMatch = matches.value[index];
-  matches.value.splice(index, 1);
-  cardRefs.value.splice(index, 1);
-  cardRefs.value = cardRefs.value.slice();
+const handleTimesClick = () => {
+  if (matches.value.length === 0) return;
+  swipeCard(0, false);
+};
 
-  likeUser(swipedMatch);
+const swipeCard = (index, isRightSwipe) => {
+  const swipedMatch = matches.value[index];
+  if (swipedMatch) {
+    if (isRightSwipe) {
+      likeUser(swipedMatch);
+    }
+
+    matches.value.splice(index, 1);
+    cardRefs.value.splice(index, 1);
+    cardRefs.value = cardRefs.value.slice();
+
+    if (matches.value.length === 0) return;
+  }
 };
 
 const likeUser = (match) => {
@@ -80,20 +86,15 @@ const likeUser = (match) => {
   store.dispatch('likeUser', { uid, likedUser: match });
 };
 
-const handleTimesClick = () => {
-  if (matches.value.length === 0) return;
-  const topCard = cardRefs.value[0];
-  if (topCard) {
-    topCard.swipeLeft();
-  }
-};
-
 const handleSwipeLeft = (index) => {
-  matches.value.splice(index, 1);
-  cardRefs.value.splice(index, 1);
-  cardRefs.value = cardRefs.value.slice();
+  swipeCard(index, false);
 };
 
+const handleSwipeRight = (index) => {
+  swipeCard(index, true);
+};
+
+// Uncomment when ready to use Vuex for fetching matches
 // onMounted(() => {
 //   matches.value = store.getters.getPopulateMatches;
 // });
@@ -103,8 +104,8 @@ const handleSwipeLeft = (index) => {
 //     matches.value = state.populateMatches; // Update matches when populated
 //   }
 // });
-
 </script>
+
 
 <style scoped>
 .background {
