@@ -61,7 +61,8 @@ methods: {
 .conversation-container {
     display: flex;
     flex-direction: column;
-    height: 90vh;
+    height: 100%;
+    max-height: 86vh;
     padding: 20px;
     overflow-y: auto;
 }
@@ -98,6 +99,9 @@ methods: {
 }
 
 .input-container{
+  position: absolute;
+  bottom: 10px;
+  right: 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;

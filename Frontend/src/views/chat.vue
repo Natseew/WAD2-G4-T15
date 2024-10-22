@@ -20,22 +20,38 @@
                     </v-navigation-drawer>
                 </v-col>
 
-                <v-col cols="3">
-                    <v-card class="h-100">
-                        <v-list>
-                            <v-list-item>Chats</v-list-item>
-                            <!-- <v-divider></v-divider> !-->
-                            <div class="chat-list">
-                                <v-list-item v-for="item of matches" @click="joinConversation(item.chatName)" :class="{ 'active-chat': activeConversation && activeConversation.uniqueName === item.chatName }">{{ item.name }}</v-list-item>
-                            </div>
-                        </v-list>
-                    </v-card>
+                 <v-col cols="10" v-if="isConnected" class="h-full">
+                    <div class="chat-container">
+                        <v-row class="h-full">
+                            <v-col cols="4">
+                                <v-list lines="three">
+                                    <div class="chat-list">
+                                        <v-list-item 
+                                            v-for="item of matches" 
+                                            @click="joinConversation(item.chatName)" 
+                                            :class="{ 'active-chat': activeConversation && activeConversation.uniqueName === item.chatName }"
+                                        >
+                                            {{ item.name }}
+                                        </v-list-item>
+                                    </div>
+                                </v-list>
+                            </v-col>
+                            <v-col cols="8" class="conversation-col">
+                                <div v-if="activeConversation">
+                                    <Conversation 
+                                        :active-conversation="activeConversation" 
+                                        :name="name" 
+                                    />
+                                </div>
+                                <div v-else class="no-chat">
+                                    <h3>Select a chat to start messaging</h3>
+                                </div>
+                            </v-col>
+                        </v-row>
+                    </div>
                 </v-col>
-                
-                <v-col cols="7" v-if="activeConversation" class="h-screen flex items-center conversation-wrapper">
-                    <Conversation :active-conversation="activeConversation" :name="name" />
-                </v-col>  
-                <v-col cols="7" v-else class="h-screen w-full flex flex-col items-center justify-center">
+
+                <v-col cols="10" v-else class="h-screen w-full flex flex-col items-center justify-center">
                     <div>
                         <h1>Connecting Client to Server!</h1>
                         <p>{{ statusString }}</p>
@@ -186,13 +202,28 @@ a {
     text-align:center;
 }
 
-.v-card{
+.v-col {
+    height: 100%;
+}
+
+.v-row {
+    height: 100%;
+}
+
+.conversation-col{
+    position: relative;
+}
+
+.chat-container {
+    margin: 16px;
+    background: white;
     border-radius: 20px;
+    overflow: hidden;
+    height: 100%; 
 }
 
 .chat-list {
-    margin: 4px 8px;
-    transition: background-color 0.3s ease;
+    margin: 8px;
 }
 
 .chat-list .v-list-item{
@@ -221,6 +252,14 @@ a {
     justify-content: center;
     height: 100%;
     width: 100%;
+}
+
+.no-chat{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(0, 0, 0, 0.6);
 }
 
 #app {
