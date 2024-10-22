@@ -6,7 +6,7 @@
                     <v-navigation-drawer app class="side-menu">
                         <div class="side-menu-content">
                             <v-list>
-                                <v-list-item @click="$router.push('/')" >NeverAlone.</v-list-item>
+                                <v-list-item @click="$router.push('/')" >Never Alone.</v-list-item>
                                 <v-list-item> 
                                     <Avatar 
                                         @click="$router.push('/profile')" 
@@ -33,7 +33,6 @@
                 </v-col>
                 
                 <v-col cols="7" v-if="activeConversation" class="h-screen flex items-center conversation-wrapper">
-
                     <Conversation :active-conversation="activeConversation" :name="name" />
                 </v-col>  
                 <v-col cols="7" v-else class="h-screen w-full flex flex-col items-center justify-center">

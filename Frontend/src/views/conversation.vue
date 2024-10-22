@@ -14,12 +14,14 @@
       </div>
       <div class="input-container">
         <input @keyup.enter="sendMessage" v-model="messageText" placeholder="Enter your message">
-        <button @click="sendMessage">Send message</button>
+        <button class="pi pi-send" @click="sendMessage"></button>
       </div>
     </div>
 </template>
 
 <script>
+import "primeicons/primeicons.css";
+
 export default {
     props: ["activeConversation", "name"],
     data() {
@@ -93,6 +95,41 @@ methods: {
 .name {
  padding-right: 8px;
  font-size: 11px;
+}
+
+.input-container{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+  margin: auto;
+  padding: 5px;
+  border-radius: 10px;
+  border: 2px solid #FD0E42;
+}
+
+.input-container input {
+  flex-grow: 1; 
+  padding: 10px;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.input-container button {
+  background-color: #FD0E42;
+  border: none !important;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+input:focus{
+  box-shadow: none;
+}
+
+.input-container button:hover {
+  background-color: #c10d36;
 }
  
 ::-webkit-scrollbar {
