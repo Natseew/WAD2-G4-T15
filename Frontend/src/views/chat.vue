@@ -2,21 +2,21 @@
     <div id="chat">
         <v-container>
             <v-row>
-                <v-col cols="4">
+                <v-col cols="2" class="sidebar-wrapper">
                     <v-navigation-drawer app class="side-menu">
                         <v-list>
                             <v-list-item>Chats</v-list-item>
                             <!-- <v-divider></v-divider> !-->
-                            <div class="chat">
+                            <div class="chat-list">
                                 <v-list-item v-for="item of matches" @click="joinConversation(item.chatName)" :class="{ 'active-chat': activeConversation && activeConversation.uniqueName === item.chatName }">{{ item.name }}</v-list-item>
                             </div>
                         </v-list>
                     </v-navigation-drawer>
                 </v-col>
-                <v-col cols="8" v-if="activeConversation" class="h-screen flex items-center">
+                <v-col cols="10" v-if="activeConversation" class="h-screen flex items-center conversation-wrapper">
                     <Conversation :active-conversation="activeConversation" :name="name" />
                 </v-col>  
-                <v-col cols="8" v-else class="h-screen flex items-center">
+                <v-col cols="10" v-else class="h-screen w-full flex flex-col items-center justify-center">
                     <div>
                         <h1>Connecting Client to Server!</h1>
                         <p>{{ statusString }}</p>
@@ -154,28 +154,60 @@ a {
  color: #42b983;
 }
 
-.chat {
+#chat {
+    background: linear-gradient(to bottom, #FD0E42, #C30F31);
+    height: 100vh;
+    width: 100vw;
+}
+
+.v-container {
+    height: 100vh;
+    max-width: 100% !important;
+    text-align:center;
+}
+
+.chat-list {
     margin: 4px 8px;
     transition: background-color 0.3s ease;
 }
 
-.chat .v-list-item{
+.chat-list .v-list-item{
     border-radius: 10px !important;
     margin-bottom: 10px;
 }
 
-.chat .v-list-item:hover {
+.chat-list .v-list-item:hover {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-.chat .v-list-item.active-chat {
+.chat-list .v-list-item.active-chat {
     background-color: rgba(0, 0, 0, 0.3);
 }
 
-.side-menu {
-    background: linear-gradient(to bottom, #FD0E42, #C30F31);
+:deep(.side-menu.v-navigation-drawer) {
+    background: transparent !important;
+    border: none !important;
     color: white;
 }
+
+.conversation-wrapper {
+    height: 10vh;
+    padding: 16px;
+}
+
+#conversation {
+    width: 100% !important;
+    background-color: white;
+    border-radius: 20px;
+}
+
+:deep(.conversation-container) {
+    border-radius: 10px !important;
+    width: 100%;
+    border: none !important;
+    overflow: hidden;
+}
+
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
