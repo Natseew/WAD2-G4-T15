@@ -8,7 +8,7 @@
                             <v-list-item>Chats</v-list-item>
                             <!-- <v-divider></v-divider> !-->
                             <div class="chat">
-                                <v-list-item v-for="item of matches" @click="joinConversation(item.chatName)">{{ item.name }}</v-list-item>
+                                <v-list-item v-for="item of matches" @click="joinConversation(item.chatName)" :class="{ 'active-chat': activeConversation && activeConversation.uniqueName === item.chatName }">{{ item.name }}</v-list-item>
                             </div>
                         </v-list>
                     </v-navigation-drawer>
@@ -159,13 +159,22 @@ a {
     transition: background-color 0.3s ease;
 }
 
-.chat .v-list-item:hover{
-    background-color: rgba(0, 0, 0, 0.2);
+.chat .v-list-item{
     border-radius: 10px !important;
+    margin-bottom: 10px;
+}
+
+.chat .v-list-item:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.chat .v-list-item.active-chat {
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 .side-menu {
     background: linear-gradient(to bottom, #FD0E42, #C30F31);
+    color: white;
 }
 
 #app {
