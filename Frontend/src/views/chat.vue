@@ -2,8 +2,26 @@
     <div id="chat">
         <v-container>
             <v-row>
-                <v-col cols="2" class="sidebar-wrapper">
+                <v-col cols="2">
                     <v-navigation-drawer app class="side-menu">
+                        <div class="side-menu-content">
+                            <v-list>
+                                <v-list-item @click="$router.push('/')" >NeverAlone.</v-list-item>
+                                <v-list-item> 
+                                    <Avatar 
+                                        @click="$router.push('/profile')" 
+                                        image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" 
+                                        class="cursor-pointer"
+                                        :size="'large'" 
+                                    />
+                                </v-list-item>
+                            </v-list>
+                        </div>
+                    </v-navigation-drawer>
+                </v-col>
+
+                <v-col cols="3">
+                    <v-card class="h-100">
                         <v-list>
                             <v-list-item>Chats</v-list-item>
                             <!-- <v-divider></v-divider> !-->
@@ -11,12 +29,14 @@
                                 <v-list-item v-for="item of matches" @click="joinConversation(item.chatName)" :class="{ 'active-chat': activeConversation && activeConversation.uniqueName === item.chatName }">{{ item.name }}</v-list-item>
                             </div>
                         </v-list>
-                    </v-navigation-drawer>
+                    </v-card>
                 </v-col>
-                <v-col cols="10" v-if="activeConversation" class="h-screen flex items-center conversation-wrapper">
+                
+                <v-col cols="7" v-if="activeConversation" class="h-screen flex items-center conversation-wrapper">
+
                     <Conversation :active-conversation="activeConversation" :name="name" />
                 </v-col>  
-                <v-col cols="10" v-else class="h-screen w-full flex flex-col items-center justify-center">
+                <v-col cols="7" v-else class="h-screen w-full flex flex-col items-center justify-center">
                     <div>
                         <h1>Connecting Client to Server!</h1>
                         <p>{{ statusString }}</p>
@@ -32,10 +52,11 @@
 import {Client as ConversationsClient} from "@twilio/conversations"
 import Conversation from "./conversation.vue"
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import Avatar from 'primevue/avatar';
 import axios from 'axios'
 
 export default {
-    components: { Conversation},
+    components: { Conversation, Avatar},
     data() {
         return {
             statusString: "",
@@ -161,9 +182,13 @@ a {
 }
 
 .v-container {
-    height: 100vh;
+    height: 100%;
     max-width: 100% !important;
     text-align:center;
+}
+
+.v-card{
+    border-radius: 20px;
 }
 
 .chat-list {
@@ -190,24 +215,14 @@ a {
     color: white;
 }
 
-.conversation-wrapper {
-    height: 10vh;
-    padding: 16px;
-}
-
-#conversation {
-    width: 100% !important;
-    background-color: white;
-    border-radius: 20px;
-}
-
-:deep(.conversation-container) {
-    border-radius: 10px !important;
+.side-menu-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
     width: 100%;
-    border: none !important;
-    overflow: hidden;
 }
-
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

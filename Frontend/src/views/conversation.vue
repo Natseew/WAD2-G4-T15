@@ -1,5 +1,5 @@
 <template>
-    <div id="conversation">
+    <div id="conversation" class="h-100">
       <div class="conversation-container">
         <div 
           v-for="message in messages" :key="message.index"
@@ -50,19 +50,27 @@ methods: {
 </script>
 
 <style scoped>
+
+#conversation{
+  width: 100%;
+  background-color: white;
+  border-radius: 20px;
+}
 .conversation-container {
- margin: 0 auto;
- max-width: 100%;
- height: 90vh;
- padding: 0 20px;
- border: 3px solid #f1f1f1;
- overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    padding: 20px;
+    overflow-y: auto;
 }
- 
+
 .bubble-container {
- text-align: left;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
- 
+
 .bubble {
  border: 2px solid #f1f1f1;
  background-color: #fdfbfa;
@@ -70,13 +78,16 @@ methods: {
  padding: 10px;
  margin: 10px 0;
  width: 230px;
- float: right;
+ text-align: left;
+}
+
+.bubble-container.myMessage {
+  align-items: flex-start;
 }
  
 .myMessage .bubble {
  background-color: #abf1ea;
  border: 2px solid #87E0D7;
- float: left;
 }
  
 .name {
