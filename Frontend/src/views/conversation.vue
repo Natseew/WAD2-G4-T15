@@ -6,9 +6,19 @@
           class="bubble-container"
           :class="{ myMessage: message?.state?.author === name }"
         >
-          <div class="bubble">
-            <div class="name">{{ message?.state?.author }}:</div>
-            <div class="message">{{ message?.state?.body }}</div>
+          <div class="message-row">
+            <div class="bubble">
+              <div class="name">{{ message?.state?.author }}:</div>
+              <div class="message">{{ message?.state?.body }}</div>
+            </div>
+            <div class="flex items-end chat-profile">
+              <v-avatar color="surface-variant" rounded="1">
+                <v-img
+                  src="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" 
+                >
+                </v-img>
+              </v-avatar>
+            </div>
           </div>
         </div>
       </div>
@@ -65,6 +75,14 @@ methods: {
     max-height: 77vh;
     padding: 20px;
     overflow-y: auto;
+}
+
+.message-row{
+  display: flex;
+}
+
+.chat-profile{
+  margin: 10px;
 }
 
 .bubble-container {
@@ -139,13 +157,12 @@ input:focus{
 ::-webkit-scrollbar {
  width: 10px;
 }
- 
-::-webkit-scrollbar-track {
- background: #f1f1f1;
-}
- 
+
 ::-webkit-scrollbar-thumb {
- background: #888;
+  border-radius: 20px;
+  background: linear-gradient(to bottom, #FD0E42, #C30F31);
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
  
 ::-webkit-scrollbar-thumb:hover {
