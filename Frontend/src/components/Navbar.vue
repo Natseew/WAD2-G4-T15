@@ -6,8 +6,8 @@
           <div class="flex items-center gap-4">
             <span
               class="nav-link"
-              :class="{ active: isActive('') }"
-              @click="navigateTo('')"
+              :class="{ active: isActive('Home') }"
+              @click="navigateTo('Home')"
             >
               Home
             </span>
