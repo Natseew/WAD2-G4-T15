@@ -31,13 +31,22 @@
                                             @click="joinConversation(item.chatName)" 
                                             :class="{ 'active-chat': activeConversation && activeConversation.uniqueName === item.chatName }"
                                         >
-                                            {{ item.name }}
+                                            <div class="d-flex">
+                                                <Avatar 
+                                                    :label="item.name[0].toUpperCase()" 
+                                                    class="mr-5" 
+                                                    size="large" 
+                                                    style="background-color: #FD0E42; color: #fff"
+                                                />
+                                                <span class="font-bold">{{ item.name }}</span>
+                                            </div>
                                         </v-list-item>
                                     </div>
                                 </v-list>
                             </v-col>
                             <v-col cols="8" class="conversation-col">
                                 <div v-if="activeConversation">
+                                    <h2 class=chat-title>{{ activeConversation.uniqueName }}</h2>
                                     <Conversation 
                                         :active-conversation="activeConversation" 
                                         :name="name" 
@@ -198,8 +207,7 @@ a {
 
 .v-container {
     height: 100%;
-    max-width: 100% !important;
-    text-align:center;
+    max-width: 100%;
 }
 
 .v-col {
@@ -220,6 +228,14 @@ a {
     border-radius: 20px;
     overflow: hidden;
     height: 100%; 
+}
+
+.chat-title{
+    margin: 20px 20px 10px 20px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 30px;
+    border-radius: 10px;
 }
 
 .chat-list {

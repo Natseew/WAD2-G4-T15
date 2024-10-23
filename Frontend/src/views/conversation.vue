@@ -62,7 +62,7 @@ methods: {
     display: flex;
     flex-direction: column;
     height: 100%;
-    max-height: 86vh;
+    max-height: 77vh;
     padding: 20px;
     overflow-y: auto;
 }
