@@ -1,46 +1,45 @@
 <template>
   <div>
-    <div class="fixed top-0 left-0 right-0 z-50">
+    <div class="navbar-container">
       <Toolbar class="custom-toolbar">
         <template #start>
           <div class="flex items-center gap-4">
             <span
               class="nav-link"
-              :class="{ active: isActive('') }"
-              @click="navigateTo('')"
+              :class="{ active: isActive('Home') }"
+              @click="navigateTo('Home')"
             >
-              Home
+              <HomeIcon class="nav-icon" style="width: 1.2rem; height: 1.2rem;"/>
+              <span class="ml-0.5 link-text">Home</span>
             </span>
             <span
               class="nav-link"
               :class="{ active: isActive('Profile') }"
               @click="navigateTo('Profile')"
             >
-              Profile
+              <UserIcon class="nav-icon" style="width: 1.2rem; height: 1.2rem;"/>
+              <span class="ml-0.5 link-text">Profile</span>
             </span>
             <span
               class="nav-link"
-              :class="{ active: isActive('view') }"
-              @click="navigateTo('view')"
+              :class="{ active: isActive('chat') }"
+              @click="navigateTo('chat')"
             >
-              View
+              Chat
             </span>
           </div>
         </template>
-
         <template #end>
           <div class="flex items-center gap-2">
-            <Avatar 
-              v-on:click="router.push('/profile')" 
-              image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" 
-              class="avatar" 
+            <Avatar
+              v-on:click="router.push('/profile')"
+              image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
+              class="avatar"
             />
           </div>
         </template>
       </Toolbar>
     </div>
-
-    <!-- Main Content Wrapper -->
     <div class="main-content">
       <!-- Your other components or content go here -->
     </div>
@@ -50,37 +49,44 @@
 <script setup>
 import Toolbar from 'primevue/toolbar';
 import Avatar from 'primevue/avatar';
-import { useRouter, useRoute } from 'vue-router'; // Import useRoute to get current route
+import { useRouter, useRoute } from 'vue-router';
+import { HomeIcon } from '@heroicons/vue/24/solid';
+import { UserIcon } from '@heroicons/vue/24/solid';
+
 const router = useRouter();
-const route = useRoute(); // Access the current route
+const route = useRoute();
 
 const navigateTo = (path) => {
   router.push(`/${path}`);
 };
 
-// Function to check if the current route matches the provided path
 const isActive = (path) => {
-  return route.path === `/${path}`; // Compare the current route with the provided path
+  return route.path === `/${path}`;
 };
 </script>
 
 <style scoped>
-.custom-toolbar {
-  border: none;
-  background: rgba(30, 30, 30, 0.8); /* Semi-transparent dark background */
-  backdrop-filter: blur(5px); /* Blur effect to the background */
-  padding: 0.5rem 1rem; /* Padding */
-  width: 100%; /* Full width */
-  margin: 0; /* No margin */
-  border-radius: 0; /* No border radius */
-  display: flex; /* Use flexbox for layout */
-  justify-content: space-between; /* Spacing between nav links and avatar */
-  align-items: center; /* Center items vertically */
+.navbar-container {
+  position: fixed;
+  width: 100%;
+  z-index: 50;
+  left: 0;
+  right: 0;
+  /* Default top positioning for desktop */
+  top: 0;
 }
 
-/* Apply box-sizing globally */
-*, *::before, *::after {
-  box-sizing: border-box; /* Include padding and borders in total width */
+.custom-toolbar {
+  border: none;
+  background: white;
+  backdrop-filter: blur(5px);
+  padding: 0.5rem 1rem;
+  width: 100%;
+  margin: 0;
+  border-radius: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .nav-link {
@@ -88,17 +94,23 @@ const isActive = (path) => {
   padding: 0.5rem 1rem;
   position: relative;
   text-align: center;
-  color: white;
-  transition: color 0.3s ease; 
+  color: black;
+  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.nav-link .nav-icon {
+  margin-right: 4px;
 }
 
 .nav-link:hover {
-  color: #FFD700; 
+  color: red;
 }
 
 .nav-link.active {
-  color: #FFD700; /* Highlight color for the active link */
-  font-weight: bold; /* Optional: make the active link bold */
+  color: red;
+  font-weight: bold;
 }
 
 .nav-link:hover::after {
@@ -106,53 +118,85 @@ const isActive = (path) => {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -4px; 
+  bottom: -4px;
   height: 2px;
-  background-color: #FFD700; 
+  background-color: red;
   transition: width 0.3s ease;
 }
 
 .avatar {
-  width: 36px; 
-  height: 36px; 
-  border-radius: 50%; /* To ensure profile picture is circular */
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   cursor: pointer;
-  transition: opacity 0.3s ease; /* Blur transition */
+  transition: opacity 0.3s ease;
 }
 
 .avatar:hover {
-  opacity: 0.8; /* Slightly transparent on hover */
+  opacity: 0.8;
 }
 
-/* Main content styling */
 .main-content {
-  margin-top: 80px;
+  padding: 15px;
+  padding-bottom: 15px;
+  /* Default top margin for desktop */
+  margin-top: 60px;
 }
 
-/* Responsive adjustments */
+/* Mobile and Tablet Styles */
 @media (max-width: 768px) {
+  .navbar-container {
+    top: auto; /* Remove top positioning */
+    bottom: 0; /* Position at bottom */
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* Optional: add shadow on top */
+  }
+
   .custom-toolbar {
-    flex-direction: column; 
-    align-items: center; 
+    padding: 0.75rem 1rem;
   }
 
   .nav-link {
     padding: 0.5rem;
+    font-size: 0.9rem;
+    flex-direction: column; /* Stack icon and text vertically */
+    gap: 0.25rem;
+  }
+
+  .nav-link .nav-icon {
+    margin-right: 0; /* Remove horizontal margin */
+    margin-bottom: 2px; /* Add small vertical margin */
+  }
+
+  .link-text {
+    font-size: 0.75rem; /* Smaller text on mobile */
   }
 
   .avatar {
-    width: 32px; 
-    height: 32px; 
+    width: 32px;
+    height: 32px;
   }
 
   .main-content {
-    margin-top: 60px; 
+    margin-top: 15px; /* Reduce top margin */
+    margin-bottom: 80px; /* Add bottom margin to prevent content from being hidden */
+    padding-bottom: 0; /* Remove bottom padding */
+  }
+
+  /* Modify the hover line position for bottom nav */
+  .nav-link:hover::after {
+    bottom: auto;
+    top: -4px;
   }
 }
 
+/* Desktop Styles */
 @media (min-width: 769px) {
   .custom-toolbar {
     flex-direction: row;
+  }
+
+  .nav-link {
+    flex-direction: row; /* Keep icon and text horizontal on desktop */
   }
 }
 </style>

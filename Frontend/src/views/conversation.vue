@@ -1,25 +1,37 @@
 <template>
-    <div id="conversation">
+    <div id="conversation" class="h-100">
       <div class="conversation-container">
         <div 
           v-for="message in messages" :key="message.index"
           class="bubble-container"
           :class="{ myMessage: message?.state?.author === name }"
         >
-          <div class="bubble">
-            <div class="name">{{ message?.state?.author }}:</div>
-            <div class="message">{{ message?.state?.body }}</div>
+          <div class="message-row">
+            <div class="bubble">
+              <div class="name">{{ message?.state?.author }}:</div>
+              <div class="message">{{ message?.state?.body }}</div>
+            </div>
+            <div class="flex items-end chat-profile">
+              <v-avatar color="surface-variant" rounded="1">
+                <v-img
+                  src="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" 
+                >
+                </v-img>
+              </v-avatar>
+            </div>
           </div>
         </div>
       </div>
       <div class="input-container">
         <input @keyup.enter="sendMessage" v-model="messageText" placeholder="Enter your message">
-        <button @click="sendMessage">Send message</button>
+        <button class="pi pi-send" @click="sendMessage"></button>
       </div>
     </div>
 </template>
 
 <script>
+import "primeicons/primeicons.css";
+
 export default {
     props: ["activeConversation", "name"],
     data() {
@@ -50,19 +62,36 @@ methods: {
 </script>
 
 <style scoped>
+
+#conversation{
+  width: 100%;
+  background-color: white;
+  border-radius: 20px;
+}
 .conversation-container {
- margin: 0 auto;
- max-width: 100%;
- height: 90vh;
- padding: 0 20px;
- border: 3px solid #f1f1f1;
- overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 77vh;
+    padding: 20px;
+    overflow-y: auto;
 }
- 
+
+.message-row{
+  display: flex;
+}
+
+.chat-profile{
+  margin: 10px;
+}
+
 .bubble-container {
- text-align: left;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
- 
+
 .bubble {
  border: 2px solid #f1f1f1;
  background-color: #fdfbfa;
@@ -70,30 +99,70 @@ methods: {
  padding: 10px;
  margin: 10px 0;
  width: 230px;
- float: right;
+ text-align: left;
+}
+
+.bubble-container.myMessage {
+  align-items: flex-start;
 }
  
 .myMessage .bubble {
  background-color: #abf1ea;
  border: 2px solid #87E0D7;
- float: left;
 }
  
 .name {
  padding-right: 8px;
  font-size: 11px;
 }
+
+.input-container{
+  position: absolute;
+  bottom: 10px;
+  right: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+  margin: auto;
+  padding: 5px;
+  border-radius: 10px;
+  border: 2px solid #FD0E42;
+}
+
+.input-container input {
+  flex-grow: 1; 
+  padding: 10px;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.input-container button {
+  background-color: #FD0E42;
+  border: none !important;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+input:focus{
+  box-shadow: none;
+}
+
+.input-container button:hover {
+  background-color: #c10d36;
+}
  
 ::-webkit-scrollbar {
  width: 10px;
 }
- 
-::-webkit-scrollbar-track {
- background: #f1f1f1;
-}
- 
+
 ::-webkit-scrollbar-thumb {
- background: #888;
+  border-radius: 20px;
+  background: linear-gradient(to bottom, #FD0E42, #C30F31);
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
  
 ::-webkit-scrollbar-thumb:hover {

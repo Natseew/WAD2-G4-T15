@@ -3,10 +3,6 @@
     <div class="big-screen w-full lg:h-full">
       <div class="register-form">
         <h1 class="text-3xl">Create an Account</h1>
-        <p class="flex flex-row gap-4">
-          <InputText v-model="firstName" placeholder="First Name" />
-          <InputText v-model="lastName" placeholder="Last Name" />
-        </p>
         <p>
           <InputText v-model="email" placeholder="Email" />
         </p>
@@ -39,6 +35,7 @@ import { useRouter } from 'vue-router';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 import Button from 'primevue/button';
+import axios from 'axios';
 
 const firstName = ref("");
 const lastName = ref("");
@@ -58,9 +55,11 @@ const register = () => {
   passwordError.value = "";
 
   createUserWithEmailAndPassword(getAuth(), email.value, password.value)
-    .then(() => {
+    .then((response) => {
+      console.log(response.user.uid)
+      axios.post('/user/'+ response.user.uid, {"name":"newUser"});
       console.log("Successfully registered!");
-      router.push('/login');
+      router.push("/profile")
     })
     .catch((error) => {
       console.log(error.code);

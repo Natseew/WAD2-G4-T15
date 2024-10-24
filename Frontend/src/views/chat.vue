@@ -3,18 +3,64 @@
         <v-container>
             <v-row>
                 <v-col cols="2">
-                    <v-navigation-drawer app>
-                        <v-list>
-                            <v-list-item>Chats</v-list-item>
-                            <v-divider></v-divider>
-                            <v-list-item class="border 1px" v-for="item of matches" @click="joinConversation(item.chatName)">{{ item.name }}</v-list-item>
-                        </v-list>
+                    <v-navigation-drawer app class="side-menu">
+                        <div class="side-menu-content">
+                            <v-list>
+                                <v-list-item @click="$router.push('/')" >Never Alone.</v-list-item>
+                                <v-list-item> 
+                                    <Avatar 
+                                        @click="$router.push('/profile')" 
+                                        image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" 
+                                        class="cursor-pointer"
+                                        :size="'large'" 
+                                    />
+                                </v-list-item>
+                            </v-list>
+                        </div>
                     </v-navigation-drawer>
                 </v-col>
-                <v-col cols="10" v-if="activeConversation" class="h-screen flex items-center">
-                    <Conversation :active-conversation="activeConversation" :name="name" />
-                </v-col>  
-                <v-col cols="10" v-else class="h-screen flex items-center">
+
+                 <v-col cols="10" v-if="isConnected" class="h-full">
+                    <div class="chat-container">
+                        <v-row class="h-full">
+                            <v-col cols="4">
+                                <v-list lines="three">
+                                    <div class="chat-list">
+                                        <v-list-item 
+                                            v-for="item of matches" 
+                                            @click="joinConversation(item.chatName)" 
+                                            :class="{ 'active-chat': activeConversation && activeConversation.uniqueName === item.chatName }"
+                                        >
+                                            <div class="d-flex">
+                                                <Avatar 
+                                                    :label="item.name[0].toUpperCase()" 
+                                                    class="mr-5" 
+                                                    size="large" 
+                                                    style="background-color: #FD0E42; color: #fff"
+                                                />
+                                                <span class="font-bold">{{ item.name }}</span>
+                                            </div>
+                                        </v-list-item>
+                                    </div>
+                                </v-list>
+                            </v-col>
+                            <v-col cols="8" class="conversation-col">
+                                <div v-if="activeConversation">
+                                    <h2 class=chat-title>{{ activeConversation.uniqueName }}</h2>
+                                    <Conversation 
+                                        :active-conversation="activeConversation" 
+                                        :name="name" 
+                                    />
+                                </div>
+                                <div v-else class="no-chat">
+                                    <h3>Select a chat to start messaging</h3>
+                                </div>
+                            </v-col>
+                        </v-row>
+                    </div>
+                </v-col>
+
+                <v-col cols="10" v-else class="h-screen w-full flex flex-col items-center justify-center">
                     <div>
                         <h1>Connecting Client to Server!</h1>
                         <p>{{ statusString }}</p>
@@ -30,10 +76,11 @@
 import {Client as ConversationsClient} from "@twilio/conversations"
 import Conversation from "./conversation.vue"
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import Avatar from 'primevue/avatar';
 import axios from 'axios'
 
 export default {
-    components: { Conversation},
+    components: { Conversation, Avatar},
     data() {
         return {
             statusString: "",
@@ -150,6 +197,85 @@ li {
  
 a {
  color: #42b983;
+}
+
+#chat {
+    background: linear-gradient(to bottom, #FD0E42, #C30F31);
+    height: 100vh;
+    width: 100vw;
+}
+
+.v-container {
+    height: 100%;
+    max-width: 100%;
+}
+
+.v-col {
+    height: 100%;
+}
+
+.v-row {
+    height: 100%;
+}
+
+.conversation-col{
+    position: relative;
+}
+
+.chat-container {
+    margin: 16px;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    height: 100%; 
+}
+
+.chat-title{
+    margin: 20px 20px 10px 20px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 30px;
+    border-radius: 10px;
+}
+
+.chat-list {
+    margin: 8px;
+}
+
+.chat-list .v-list-item{
+    border-radius: 10px !important;
+    margin-bottom: 10px;
+}
+
+.chat-list .v-list-item:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.chat-list .v-list-item.active-chat {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+:deep(.side-menu.v-navigation-drawer) {
+    background: transparent !important;
+    border: none !important;
+    color: white;
+}
+
+.side-menu-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.no-chat{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(0, 0, 0, 0.6);
 }
 
 #app {
