@@ -6,7 +6,7 @@
                     <v-navigation-drawer app class="side-menu">
                         <div class="side-menu-content">
                             <v-list>
-                                <v-list-item @click="$router.push('/')" >Never Alone.</v-list-item>
+                                <v-list-item @click="$router.push('/home')" >Never Alone.</v-list-item>
                                 <v-list-item> 
                                     <Avatar 
                                         @click="$router.push('/profile')" 
