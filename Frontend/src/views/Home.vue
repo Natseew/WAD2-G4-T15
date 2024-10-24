@@ -1,21 +1,23 @@
 <template>
-  <div class="background"></div>
-  <div class="red-background"></div>
-  <div class="relative flex justify-center items-center flex-col h-screen">
+
+  <div class="background">
     <Navbar class="navbar" />
-    <div class="relative z-10 flex flex-col items-center max-w-sm w-full h-full">
-      <div class="cards-stack">
-        <MatchCard 
-          v-for="(match, index) in matches" 
-          :key="match.id" 
-          v-bind="match" 
-          :ref="getCardRef(index)"
-          @swipe-right="handleSwipeRight(index)"
-          @swipe-left="handleSwipeLeft(index)"
-          :style="{ zIndex: matches.length - index }"
-        />
+    <div class="red-background"></div>
+    <div class="flex justify-center items-center flex-col">
+      <div class="flex flex-col items-center w-full">
+        <div class="cards-stack">
+          <MatchCard 
+            v-for="(match, index) in matches" 
+            :key="match.id" 
+            v-bind="match" 
+            :ref="getCardRef(index)"
+            @swipe-right="handleSwipeRight(index)"
+            @swipe-left="handleSwipeLeft(index)"
+            :style="{ zIndex: matches.length - index }"
+          />
+        </div>
+        <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" />
       </div>
-      <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" />
     </div>
   </div>
 </template>
@@ -36,7 +38,7 @@ const store = useStore();
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in
-    // store.dispatch('populateMatches', user.uid);
+    store.dispatch('populateMatches', user.uid);
   } else {
     // User is signed out
     router.push('/login');
@@ -94,16 +96,17 @@ const handleSwipeRight = (index) => {
   swipeCard(index, true);
 };
 
-// Uncomment when ready to use Vuex for fetching matches
-// onMounted(() => {
-//   matches.value = store.getters.getPopulateMatches;
-// });
+//Uncomment when ready to use Vuex for fetching matches
+onMounted(() => {
+  matches.value = store.getters.getPopulateMatches;
+  console.log(matches.value)
+});
 
-// store.subscribe((mutation, state) => {
-//   if (mutation.type === 'setPopulateMatches') {
-//     matches.value = state.populateMatches; // Update matches when populated
-//   }
-// });
+store.subscribe((mutation, state) => {
+  if (mutation.type === 'setPopulateMatches') {
+    matches.value = state.populateMatches; // Update matches when populated
+  }
+});
 </script>
 
 
@@ -115,7 +118,7 @@ const handleSwipeRight = (index) => {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: -1;
+  z-index: 1;
 }
 
 .red-background {
@@ -158,6 +161,7 @@ const handleSwipeRight = (index) => {
 }
 
 .navbar {
+  position:fixed;
   z-index: 10;
 }
 
@@ -174,7 +178,7 @@ const handleSwipeRight = (index) => {
 }
 
 .cards-stack > * {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   transition: transform 0.3s ease;
