@@ -40,12 +40,17 @@ router.get('/:uid', async (req,res) => {
 router.post('/:uid', async (req, res) => {
 
   await ref.doc(req.params.uid).set({
-    name: req.body.name,
-    age: req.body.age,
-    gender:req.body.gender,
-    hobbies: req.body.hobbies,
-    images: req.body.images
-    // photos: ?
+    name: req.body.name || '',
+    age: req.body.age || '',
+    gender:req.body.gender || '',
+    goals:req.body.goals || '',
+    introduction:req.body.introduction || '',
+    lookingFor:req.body.lookingFor || '',
+    hobbies: req.body.hobbies || '',
+    loves: req.body.loves || '',
+    hates: req.body.hates || '',
+    personalityDescription: req.body.personalityDescription || '',
+    images: req.body.images || []
   }); 
 
   res.sendStatus(200);

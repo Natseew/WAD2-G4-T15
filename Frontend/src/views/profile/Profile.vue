@@ -315,7 +315,7 @@ onAuthStateChanged(auth, (user) => {
       .then(function (response) {
         data.value = response.data;
         data.value.email = user.email;
-      })
+    })
   } else {
     router.push('/login');
   }
