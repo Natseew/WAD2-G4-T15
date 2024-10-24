@@ -1,4 +1,68 @@
 <template>
+  <div>
+    <h2>Profile</h2>
+    <div v-for="(match, index) in matches" :key="match.id">
+      <h3>{{ match.name }}</h3>
+      <!-- Other details or information about the match -->
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+
+const props = defineProps(['matches']); // Receiving matches from the parent or Vuex store
+
+</script>
+
+<style scoped>
+/* Your styles */
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <template>
   <v-container class="full-screen">
     <Navbar  />
     <v-row>
@@ -187,4 +251,4 @@
   height:100vh;
 }
 
-</style>
+</style> -->

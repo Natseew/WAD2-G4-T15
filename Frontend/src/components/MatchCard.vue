@@ -7,7 +7,10 @@
           <div class="flex items-center justify-between p-4 w-full">
             <div class="flex items-center">
               <div class="flex flex-col justify-center">
-                <div class="font-bold text-2xl">{{ name }}</div>
+                <div class="font-bold text-2xl">
+                  <input v-if="isEditable" v-model="editableName" @input="updateName" class="name-input" />
+                  <span v-else>{{ name }}</span>
+                </div>
                 <div class="text-sm">
                   <Chip label="Looking for love" style="height: 1.2rem; background-color: pink; color: red;" />
                 </div>
@@ -26,7 +29,8 @@
 
         <template #subtitle>
           <p class="m-4 text-left">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
+            <input v-if="isEditable" v-model="editableSubtitle" @input="updateSubtitle" class="subtitle-input" />
+            <span v-else>{{ editableSubtitle }}</span>
           </p>
         </template>
 
@@ -34,15 +38,24 @@
           <div class="flex flex-col gap-2 p-4 text-left">
             <div class="flex flex-col">
               <Chip label="My personality in 5 words" class="desc_chip" />
-              <p class="text-sm text-left">Description for chip 1.</p>
+              <p class="text-sm text-left">
+                <input v-if="isEditable" v-model="editablePersonality" @input="updatePersonality" class="desc-input" />
+                <span v-else>{{ editablePersonality }}</span>
+              </p>
             </div>
             <div class="flex flex-col">
               <Chip label="I love" class="desc_chip" />
-              <p class="text-sm text-left">Description for chip 2.</p>
+              <p class="text-sm text-left">
+                <input v-if="isEditable" v-model="editableLove" @input="updateLove" class="desc-input" />
+                <span v-else>{{ editableLove }}</span>
+              </p>
             </div>
             <div class="flex flex-col">
               <Chip label="I hate" class="desc_chip" />
-              <p class="text-sm text-left">Description for chip 3.</p>
+              <p class="text-sm text-left">
+                <input v-if="isEditable" v-model="editableHate" @input="updateHate" class="desc-input" />
+                <span v-else>{{ editableHate }}</span>
+              </p>
             </div>
           </div>
         </template>
@@ -116,11 +129,21 @@ export default {
         'https://primefaces.org/cdn/primevue/images/usercard.png',
       ])
     },
+    isEditable: {
+      type: Boolean,
+      default: false
+    }
   },
   setup(props, { emit }) {
     const isFlipped = ref(false);
     const swipeClass = ref('');
     const flipContainer = ref(null);
+
+    const editableName = ref(props.name);
+    const editableSubtitle = ref('Lorem ipsum dolor sit amet, consectetur adipisicing elit.');
+    const editablePersonality = ref('Description for chip 1.');
+    const editableLove = ref('Description for chip 2.');
+    const editableHate = ref('Description for chip 3.');
 
     const flipCard = () => {
       isFlipped.value = !isFlipped.value;
@@ -131,7 +154,7 @@ export default {
       setTimeout(() => {
         emit('swipe-right');
         swipeClass.value = '';
-      }, 300)
+      }, 300);
     };
 
     const swipeLeft = () => {
@@ -139,7 +162,7 @@ export default {
       setTimeout(() => {
         emit('swipe-left');
         swipeClass.value = '';
-      }, 300)
+      }, 300);
     };
 
     defineExpose({
@@ -151,6 +174,27 @@ export default {
       console.error('Failed to load image:', item);
     };
 
+    // Update methods for editable fields
+    const updateName = () => {
+      emit('update:name', editableName.value);
+    };
+
+    const updateSubtitle = () => {
+      emit('update:subtitle', editableSubtitle.value);
+    };
+
+    const updatePersonality = () => {
+      emit('update:personality', editablePersonality.value);
+    };
+
+    const updateLove = () => {
+      emit('update:love', editableLove.value);
+    };
+
+    const updateHate = () => {
+      emit('update:hate', editableHate.value);
+    };
+
     return {
       isFlipped,
       flipCard,
@@ -159,6 +203,16 @@ export default {
       swipeClass,
       flipContainer,
       imageLoadError,
+      editableName,
+      editableSubtitle,
+      editablePersonality,
+      editableLove,
+      editableHate,
+      updateName,
+      updateSubtitle,
+      updatePersonality,
+      updateLove,
+      updateHate,
     };
   },
 };
@@ -202,6 +256,7 @@ export default {
   transform: rotateY(180deg);
 }
 
+
 .extended-border-card {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1), 0 0 0 8px rgba(255, 255, 255, 0.3);
   border-radius: 8px;
@@ -244,5 +299,13 @@ export default {
 .swipe-left {
   transform: translateX(-100%) rotate(-20deg);
   transition: transform 0.6s ease-out;
+}
+
+.name-input, .subtitle-input, .desc-input {
+  border: none;
+  background: transparent;
+  font-size: inherit;
+  padding: 0;
+  width: 100%;
 }
 </style>
