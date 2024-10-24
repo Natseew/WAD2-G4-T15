@@ -36,7 +36,7 @@ const store = useStore();
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in
-    // store.dispatch('populateMatches', user.uid);
+    store.dispatch('populateMatches', user.uid);
   } else {
     // User is signed out
     router.push('/login');
@@ -94,16 +94,17 @@ const handleSwipeRight = (index) => {
   swipeCard(index, true);
 };
 
-// Uncomment when ready to use Vuex for fetching matches
-// onMounted(() => {
-//   matches.value = store.getters.getPopulateMatches;
-// });
+//Uncomment when ready to use Vuex for fetching matches
+onMounted(() => {
+  matches.value = store.getters.getPopulateMatches;
+  console.log(matches.value)
+});
 
-// store.subscribe((mutation, state) => {
-//   if (mutation.type === 'setPopulateMatches') {
-//     matches.value = state.populateMatches; // Update matches when populated
-//   }
-// });
+store.subscribe((mutation, state) => {
+  if (mutation.type === 'setPopulateMatches') {
+    matches.value = state.populateMatches; // Update matches when populated
+  }
+});
 </script>
 
 

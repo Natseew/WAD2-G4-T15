@@ -9,10 +9,10 @@
               <div class="flex flex-col justify-center">
                 <div class="font-bold text-2xl">{{ name }}</div>
                 <div class="text-sm">
-                  <Chip label="Looking for love" style="height: 1.2rem; background-color: pink; color: red;" />
+                  <Chip v-if="lookingFor == 'love'" label="Looking for love" style="height: 1.2rem; background-color: pink; color: red;" />
                 </div>
                 <div class="text-sm">
-                  <Chip label="Looking for friends" style="height: 1.2rem; background-color: lightgreen;" />
+                  <Chip v-if="lookingFor == 'friends'" label="Looking for friends" style="height: 1.2rem; background-color: lightgreen;" />
                 </div>
               </div>
             </div>
@@ -26,23 +26,23 @@
 
         <template #subtitle>
           <p class="m-4 text-left">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
+            {{ introduction }}
           </p>
         </template>
 
         <template #content>
           <div class="flex flex-col gap-2 p-4 text-left">
             <div class="flex flex-col">
-              <Chip label="My personality in 5 words" class="desc_chip" />
-              <p class="text-sm text-left">Description for chip 1.</p>
+              <Chip class="desc_chip">{{ personalityDescription }}</Chip>
+              <p class="text-sm text-left">My personality in 5 Words.</p>
             </div>
             <div class="flex flex-col">
-              <Chip label="I love" class="desc_chip" />
-              <p class="text-sm text-left">Description for chip 2.</p>
+              <Chip class="desc_chip">{{ loves }}</Chip>
+              <p class="text-sm text-left">Things I love.</p>
             </div>
             <div class="flex flex-col">
-              <Chip label="I hate" class="desc_chip" />
-              <p class="text-sm text-left">Description for chip 3.</p>
+              <Chip class="desc_chip" >{{ hates }}</Chip>
+              <p class="text-sm text-left">Things I hate.</p>
             </div>
           </div>
         </template>
@@ -102,10 +102,34 @@ export default {
       type: String,
       required: true
     },
+    introduction:{
+      type: String,
+      required: true
+    },
+    gender:{
+      type: String,
+      required: true
+    },
+    personalityDescription:{
+      type: String,
+      required: true
+    },
+    loves:{
+      type: String,
+      required: true
+    },
+    hates:{
+      type: String,
+      required: true
+    },
     avatar: {
       type: String,
       required: false,
       default: 'https://primefaces.org/cdn/primevue/images/usercard.png'
+    },
+    lookingFor: {
+      type: String,
+      required: false
     },
     images: {
       type: Array,

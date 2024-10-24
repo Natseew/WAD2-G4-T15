@@ -3,10 +3,6 @@
     <div class="big-screen w-full lg:h-full">
       <div class="register-form">
         <h1 class="text-3xl">Create an Account</h1>
-        <p class="flex flex-row gap-4">
-          <InputText v-model="firstName" placeholder="First Name" />
-          <InputText v-model="lastName" placeholder="Last Name" />
-        </p>
         <p>
           <InputText v-model="email" placeholder="Email" />
         </p>

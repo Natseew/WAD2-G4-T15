@@ -5,9 +5,9 @@
         <template #start>
           <div class="flex items-center gap-4">
             <span
-              class="nav-link flex items-center"
-              :class="{ active: isActive('') }"
-              @click="navigateTo('')"
+              class="nav-link"
+              :class="{ active: isActive('Home') }"
+              @click="navigateTo('Home')"
             >
               <HomeIcon class="nav-icon" style="width: 1.2rem; height: 1.2rem;"/>
               <span class="ml-0.5 link-text">Home</span>
