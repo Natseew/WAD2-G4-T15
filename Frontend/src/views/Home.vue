@@ -1,21 +1,23 @@
 <template>
-  <div class="background"></div>
-  <div class="red-background"></div>
-  <div class="relative flex justify-center items-center flex-col h-screen">
+
+  <div class="background">
     <Navbar class="navbar" />
-    <div class="relative z-10 flex flex-col items-center max-w-sm w-full h-full">
-      <div class="cards-stack">
-        <MatchCard 
-          v-for="(match, index) in matches" 
-          :key="match.id" 
-          v-bind="match" 
-          :ref="getCardRef(index)"
-          @swipe-right="handleSwipeRight(index)"
-          @swipe-left="handleSwipeLeft(index)"
-          :style="{ zIndex: matches.length - index }"
-        />
+    <div class="red-background"></div>
+    <div class="flex justify-center items-center flex-col">
+      <div class="flex flex-col items-center w-full">
+        <div class="cards-stack">
+          <MatchCard 
+            v-for="(match, index) in matches" 
+            :key="match.id" 
+            v-bind="match" 
+            :ref="getCardRef(index)"
+            @swipe-right="handleSwipeRight(index)"
+            @swipe-left="handleSwipeLeft(index)"
+            :style="{ zIndex: matches.length - index }"
+          />
+        </div>
+        <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" />
       </div>
-      <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" />
     </div>
   </div>
 </template>
@@ -116,7 +118,7 @@ store.subscribe((mutation, state) => {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: -1;
+  z-index: 1;
 }
 
 .red-background {
@@ -159,6 +161,7 @@ store.subscribe((mutation, state) => {
 }
 
 .navbar {
+  position:fixed;
   z-index: 10;
 }
 
@@ -175,7 +178,7 @@ store.subscribe((mutation, state) => {
 }
 
 .cards-stack > * {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   transition: transform 0.3s ease;
