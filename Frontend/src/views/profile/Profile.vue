@@ -211,9 +211,18 @@
         </div>
 
         <!-- Profile Information -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <v-row>
+          <!-- Introduction Section -->
+          <v-col cols="12">
+            <div class="profile-field">
+              <label>Introduction</label>
+              <textarea v-model="data.introduction" disabled class="profile-textarea" style="width: 100%; height: 100%"></textarea>
+            </div>
+          </v-col>
+        </v-row>
+        <v-row>
           <!-- Basic Info Section -->
-          <div class="space-y-4">
+          <v-col cols="6">
             <div class="profile-field">
               <label>Age</label>
               <input type="text" v-model="data.age" disabled class="profile-input" />
@@ -223,7 +232,8 @@
               <label>Gender</label>
               <input type="text" v-model="data.gender" disabled class="profile-input" />
             </div>
-
+          </v-col>
+          <v-col cols="6">
             <div class="profile-field">
               <label>Religion</label>
               <input type="text" v-model="data.religion" disabled class="profile-input" />
@@ -233,51 +243,44 @@
               <label>Looking For</label>
               <input type="text" v-model="data.lookingFor" disabled class="profile-input" />
             </div>
-          </div>
-
-          <!-- About Section -->
-          <div class="space-y-4">
-            <div class="profile-field">
-              <label>Introduction</label>
-              <textarea v-model="data.introduction" disabled class="profile-textarea"></textarea>
-            </div>
-          </div>
+          </v-col>
+        </v-row>
 
           <!-- Full Width Sections -->
-          <div class="col-span-1 md:col-span-2 space-y-4">
-            <div class="profile-field">
-              <label>Personality Description</label>
-              <textarea v-model="data.personalityDescription" disabled class="profile-textarea"></textarea>
-            </div>
+        <v-row class="space-y-4">
+          <v-col class="profile-field">
+            <label>Personality Description</label>
+            <textarea v-model="data.personalityDescription" disabled class="profile-textarea"></textarea>
+          </v-col>
+        </v-row>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="profile-field">
-                <label>What I Love</label>
-                <textarea v-model="data.loves" disabled class="profile-textarea"></textarea>
-              </div>
-              <div class="profile-field">
-                <label>What I Hate</label>
-                <textarea v-model="data.hate" disabled class="profile-textarea"></textarea>
-              </div>
-            </div>
+          <v-row class="gap-4">
+            <v-col class="profile-field">
+              <label>What I Love</label>
+              <textarea v-model="data.loves" disabled class="profile-textarea"></textarea>
+            </v-col>
+            <v-col class="profile-field">
+              <label>What I Hate</label>
+              <textarea v-model="data.hates" disabled class="profile-textarea"></textarea>
+            </v-col>
+          </v-row>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="profile-field">
+            <v-row class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <v-col class="profile-field">
                 <label>Goals</label>
                 <textarea v-model="data.goals" disabled class="profile-textarea"></textarea>
-              </div>
-              <div class="profile-field">
+              </v-col>
+              <v-col class="profile-field">
                 <label>Dealbreakers</label>
                 <textarea v-model="data.dealbreakers" disabled class="profile-textarea"></textarea>
-              </div>
-            </div>
+              </v-col>
+            </v-row>
 
-            <div class="profile-field">
+            <v-row class="profile-field">
               <label>Hobbies</label>
               <textarea v-model="data.hobbies" disabled class="profile-textarea"></textarea>
-            </div>
-          </div>
-        </div>
+            </v-row>
+
       </div>
     </div>
   </div>
@@ -295,18 +298,20 @@ const auth = getAuth();
 
 let data = ref({
   "name": "",
-  "age": "",
-  "gender": "",
-  "hobbies": "",
-  "religion":"",
-  "lookingFor": "",
-  "introduction":"",
-  "personalityDescription":"",
-  "loves":"",
-  "hates":"",
-  "dealbreakers":"",
-  "goals":"",
-  "images":[]
+    "age": "",
+    "gender": "",
+    "hobbies": "",
+    "religion":"",
+    "lookingFor": "",
+    "introduction":"",
+    "personalityDescription":"",
+    "loves":"",
+    "hates":"",
+    "dealbreakers":"",
+    "goals":"",
+    "images":[],
+    "likes": [],
+    "matches": []
 });
 
 onAuthStateChanged(auth, (user) => {
@@ -356,7 +361,7 @@ onAuthStateChanged(auth, (user) => {
   @apply w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none disabled:bg-gray-50 disabled:text-gray-500;
 }
 
-.profile-textarea {
+.profile-textarea   {
   @apply w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none disabled:bg-gray-50 disabled:text-gray-500 min-h-[100px] resize-none;
 }
 

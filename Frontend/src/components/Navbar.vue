@@ -22,10 +22,10 @@
             </span>
             <span
               class="nav-link"
-              :class="{ active: isActive('view') }"
-              @click="navigateTo('view')"
+              :class="{ active: isActive('chat') }"
+              @click="navigateTo('chat')"
             >
-              View
+              Chat
             </span>
           </div>
         </template>

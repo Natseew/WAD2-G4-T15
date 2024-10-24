@@ -44,13 +44,17 @@ router.post('/:uid', async (req, res) => {
     age: req.body.age || '',
     gender:req.body.gender || '',
     goals:req.body.goals || '',
-    introduction:req.body.introduction || '',
-    lookingFor:req.body.lookingFor || '',
     hobbies: req.body.hobbies || '',
+    religion: req.body.religion || '',
+    lookingFor:req.body.lookingFor || '',
+    introduction:req.body.introduction || '',
+    personalityDescription: req.body.personalityDescription || '',
     loves: req.body.loves || '',
     hates: req.body.hates || '',
-    personalityDescription: req.body.personalityDescription || '',
-    images: req.body.images || []
+    dealbreakers: req.body.dealbreakers || '', 
+    images: req.body.images || [],
+    likes: req.body.images || [],
+    matches: req.body.images || []
   }); 
 
   res.sendStatus(200);
