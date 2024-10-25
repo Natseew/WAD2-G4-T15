@@ -38,6 +38,9 @@ const store = useStore();
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in
+    if(user.name == "newUser"){
+      router.push('/editProfile');
+    }
     store.dispatch('populateMatches', user.uid);
   } else {
     // User is signed out

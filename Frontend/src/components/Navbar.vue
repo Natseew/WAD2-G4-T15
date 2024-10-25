@@ -25,7 +25,8 @@
               :class="{ active: isActive('chat') }"
               @click="navigateTo('chat')"
             >
-              Chat
+              <ChatBubbleBottomCenterIcon class="nav-icon" style="width: 1.2rem; height: 1.2rem;"/>
+              <span class="ml-0.5 link-text">Chat</span>
             </span>
           </div>
         </template>
@@ -50,8 +51,7 @@
 import Toolbar from 'primevue/toolbar';
 import Avatar from 'primevue/avatar';
 import { useRouter, useRoute } from 'vue-router';
-import { HomeIcon } from '@heroicons/vue/24/solid';
-import { UserIcon } from '@heroicons/vue/24/solid';
+import { HomeIcon, UserIcon, ChatBubbleBottomCenterIcon } from '@heroicons/vue/24/solid';
 
 const router = useRouter();
 const route = useRoute();
