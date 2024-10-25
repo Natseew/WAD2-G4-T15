@@ -1,66 +1,53 @@
 <template>
     <div id="chat">
-        <v-container>
+        <v-container class="h-screen d-flex flex-column">
+            <Navbar class="navbar"/>
             <v-row>
-                <v-col cols="2">
-                    <v-navigation-drawer app class="side-menu">
-                        <div class="side-menu-content">
-                            <v-list>
-                                <v-list-item @click="$router.push('/')" >Never Alone.</v-list-item>
-                                <v-list-item> 
-                                    <Avatar 
-                                        @click="$router.push('/profile')" 
-                                        image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" 
-                                        class="cursor-pointer"
-                                        :size="'large'" 
-                                    />
-                                </v-list-item>
-                            </v-list>
-                        </div>
-                    </v-navigation-drawer>
-                </v-col>
-
-                 <v-col cols="10" v-if="isConnected" class="h-full">
+                <v-col cols="12" v-if="isConnected">
                     <div class="chat-container">
-                        <v-row class="h-full">
-                            <v-col cols="4">
-                                <v-list lines="three">
-                                    <div class="chat-list">
-                                        <v-list-item 
-                                            v-for="item of matches" 
-                                            @click="joinConversation(item.chatName)" 
-                                            :class="{ 'active-chat': activeConversation && activeConversation.uniqueName === item.chatName }"
-                                        >
-                                            <div class="d-flex">
-                                                <Avatar 
-                                                    :label="item.name[0].toUpperCase()" 
-                                                    class="mr-5" 
-                                                    size="large" 
-                                                    style="background-color: #FD0E42; color: #fff"
-                                                />
-                                                <span class="font-bold">{{ item.name }}</span>
-                                            </div>
-                                        </v-list-item>
+                        <v-row>
+                            <transition name="slide-x-reverse-transition" mode="out-in">
+                                <v-col cols="12" md="4" sm="12" v-if="showList()">
+                                    <v-list lines="three">
+                                        <div class="chat-list">
+                                            <v-list-item 
+                                                v-for="item of matches" 
+                                                @click="() => { joinConversation(item.chatName); reverseChatList(); }" 
+                                                :class="{ 'active-chat': activeConversation && activeConversation.uniqueName === item.chatName }"
+                                            >
+                                                <div class="d-flex">
+                                                    <Avatar 
+                                                        :label="item.name[0].toUpperCase()" 
+                                                        class="mr-5" 
+                                                        size="large" 
+                                                        style="background-color: #FD0E42; color: #fff"
+                                                    />
+                                                    <span class="font-bold">{{ item.name }}</span>
+                                                </div>
+                                            </v-list-item>
+                                        </div>
+                                    </v-list>
+                                </v-col>
+                            </transition>
+                            <v-col cols="12" lg="8" md="8" sm="12" class="conversation-col" v-if="showConversation()">
+                                <transition name="slide-x-reverse-transition" mode="out-in">
+                                    <div v-if="activeConversation">
+                                        <Conversation 
+                                            :active-conversation="activeConversation" 
+                                            :name="name" 
+                                            @reverse-chat-list="reverseChatList()"
+                                        />
                                     </div>
-                                </v-list>
-                            </v-col>
-                            <v-col cols="8" class="conversation-col">
-                                <div v-if="activeConversation">
-                                    <h2 class=chat-title>{{ activeConversation.uniqueName }}</h2>
-                                    <Conversation 
-                                        :active-conversation="activeConversation" 
-                                        :name="name" 
-                                    />
-                                </div>
-                                <div v-else class="no-chat">
-                                    <h3>Select a chat to start messaging</h3>
-                                </div>
+                                    <div v-else class="no-chat d-none d-lg-flex">
+                                        <h3>Select a chat to start messaging</h3>
+                                    </div>
+                                </transition>
                             </v-col>
                         </v-row>
                     </div>
                 </v-col>
 
-                <v-col cols="10" v-else class="h-screen w-full flex flex-col items-center justify-center">
+                <v-col cols="12" v-else class="h-screen w-full flex flex-col items-center justify-center">
                     <div>
                         <h1>Connecting Client to Server!</h1>
                         <p>{{ statusString }}</p>
@@ -69,18 +56,18 @@
             </v-row>
         </v-container>
     </div>
-
 </template>
 
 <script>
 import {Client as ConversationsClient} from "@twilio/conversations"
 import Conversation from "./conversation.vue"
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import Navbar from "../components/Navbar.vue";
 import Avatar from 'primevue/avatar';
 import axios from 'axios'
 
 export default {
-    components: { Conversation, Avatar},
+    components: { Conversation, Avatar, Navbar},
     data() {
         return {
             statusString: "",
@@ -89,7 +76,8 @@ export default {
             nameRegistered: false,
             isConnected: false,
             uid: "",
-            matches:[]
+            matches:[],
+            showChatList: true
         }
     },
     methods: {
@@ -151,6 +139,31 @@ export default {
         joinConversation: async function(chatName) {
             this.activeConversation = null
             this.activeConversation = await (this.conversationsClient.getConversationByUniqueName(chatName))
+        },
+        showList() {
+            if(this.isScreenMediumOrLess()){
+                if(this.showChatList){
+                    return true;
+                }
+                return false;
+            }
+            return true;
+        },
+        showConversation() {
+            if(this.isScreenMediumOrLess()){
+                if(!this.showChatList){
+                    return true;
+                }
+                return false;
+            }
+            return true;
+        },
+        isScreenMediumOrLess() {
+            return window.innerWidth <= 960;
+        },
+        reverseChatList(){
+            this.activeConversation = null
+            this.showChatList = !this.showChatList;
         }
     },
     async mounted() {
@@ -185,20 +198,6 @@ export default {
 </script>
 
 <style scoped>
-ul {
- list-style-type: none;
- padding: 0;
-}
- 
-li {
- display: inline-block;
- margin: 0 10px;
-}
- 
-a {
- color: #42b983;
-}
-
 #chat {
     background: linear-gradient(to bottom, #FD0E42, #C30F31);
     height: 100vh;
@@ -207,7 +206,7 @@ a {
 
 .v-container {
     height: 100%;
-    max-width: 100%;
+    max-width: 85%;
 }
 
 .v-col {
@@ -218,7 +217,7 @@ a {
     height: 100%;
 }
 
-.conversation-col{
+.conversation-col {
     position: relative;
 }
 
@@ -227,22 +226,14 @@ a {
     background: white;
     border-radius: 20px;
     overflow: hidden;
-    height: 100%; 
-}
-
-.chat-title{
-    margin: 20px 20px 10px 20px;
-    text-align: left;
-    font-weight: bold;
-    font-size: 30px;
-    border-radius: 10px;
+    height: calc(100% - 100px);
 }
 
 .chat-list {
     margin: 8px;
 }
 
-.chat-list .v-list-item{
+.chat-list .v-list-item {
     border-radius: 10px !important;
     margin-bottom: 10px;
 }
@@ -255,54 +246,11 @@ a {
     background-color: rgba(0, 0, 0, 0.3);
 }
 
-:deep(.side-menu.v-navigation-drawer) {
-    background: transparent !important;
-    border: none !important;
-    color: white;
-}
-
-.side-menu-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-}
-
-.no-chat{
+.no-chat {
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: rgba(0, 0, 0, 0.6);
-}
-
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-#app input {
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  margin-right: 5px;
-  width: 300px;
-}
-#app button {
-  background-color: #21cfbc;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
 }
 </style>
