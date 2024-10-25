@@ -1,7 +1,8 @@
 <template>
     <div id="conversation">
       <div class="chat-title">
-        {{ activeConversation.uniqueName }}
+        <span class="back-button pi pi-chevron-left d-lg-none" @click="$emit('reverse-chat-list')"></span>
+        <span>{{ activeConversation.uniqueName }} </span>
       </div>
       <div class="conversation-container">
         <div 
@@ -34,6 +35,7 @@
 
 <script>
 import "primeicons/primeicons.css";
+import InputText from 'primevue/inputtext';
 
 export default {
     props: ["activeConversation", "name"],
@@ -125,6 +127,10 @@ methods: {
   align-items: flex-start;
 }
 
+.back-button{
+  margin: auto 10px;
+}
+
 .myMessage .bubble {
   background-color: #abf1ea;
   border: 2px solid #87E0D7;
@@ -139,23 +145,26 @@ methods: {
 .input-container {
   position: absolute;
   bottom: 15px;
-  right: 70px;
-  display: flex;
+  right: 30px;
+  left: 30px;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  justify-content: space-between;
-  width: 90%;
+  gap: 10px;
+  max-width: 85%;
   margin: auto;
-  padding: 5px;
+  padding: 5px 5px 5px 5px;
   border-radius: 10px;
   border: 2px solid #FD0E42;
   background-color: white;
 }
 
 .input-container input {
-  flex-grow: 1;
   padding: 10px;
-  border-radius: 5px;
-  margin-right: 10px;
+  font-size: clamp(13px, 1.5vw, 16px);
+  border: none;
+  outline: none;
+  width: 100%;
 }
 
 .input-container button {

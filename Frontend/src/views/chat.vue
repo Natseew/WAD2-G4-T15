@@ -1,42 +1,47 @@
 <template>
     <div id="chat">
         <v-container class="h-screen d-flex flex-column">
-            <Navbar class="navbar" />
+            <Navbar class="navbar"/>
             <v-row>
-                 <v-col cols="12" v-if="isConnected" class="h-full">
+                <v-col cols="12" v-if="isConnected">
                     <div class="chat-container">
-                        <v-row class="h-full">
-                            <v-col cols="4">
-                                <v-list lines="three">
-                                    <div class="chat-list">
-                                        <v-list-item 
-                                            v-for="item of matches" 
-                                            @click="joinConversation(item.chatName)" 
-                                            :class="{ 'active-chat': activeConversation && activeConversation.uniqueName === item.chatName }"
-                                        >
-                                            <div class="d-flex">
-                                                <Avatar 
-                                                    :label="item.name[0].toUpperCase()" 
-                                                    class="mr-5" 
-                                                    size="large" 
-                                                    style="background-color: #FD0E42; color: #fff"
-                                                />
-                                                <span class="font-bold">{{ item.name }}</span>
-                                            </div>
-                                        </v-list-item>
+                        <v-row>
+                            <transition name="slide-x-reverse-transition" mode="out-in">
+                                <v-col cols="12" md="4" sm="12" v-if="showList()">
+                                    <v-list lines="three">
+                                        <div class="chat-list">
+                                            <v-list-item 
+                                                v-for="item of matches" 
+                                                @click="() => { joinConversation(item.chatName); reverseChatList(); }" 
+                                                :class="{ 'active-chat': activeConversation && activeConversation.uniqueName === item.chatName }"
+                                            >
+                                                <div class="d-flex">
+                                                    <Avatar 
+                                                        :label="item.name[0].toUpperCase()" 
+                                                        class="mr-5" 
+                                                        size="large" 
+                                                        style="background-color: #FD0E42; color: #fff"
+                                                    />
+                                                    <span class="font-bold">{{ item.name }}</span>
+                                                </div>
+                                            </v-list-item>
+                                        </div>
+                                    </v-list>
+                                </v-col>
+                            </transition>
+                            <v-col cols="12" lg="8" md="8" sm="12" class="conversation-col" v-if="showConversation()">
+                                <transition name="slide-x-reverse-transition" mode="out-in">
+                                    <div v-if="activeConversation">
+                                        <Conversation 
+                                            :active-conversation="activeConversation" 
+                                            :name="name" 
+                                            @reverse-chat-list="reverseChatList()"
+                                        />
                                     </div>
-                                </v-list>
-                            </v-col>
-                            <v-col cols="8" class="conversation-col">
-                                <div v-if="activeConversation">
-                                    <Conversation 
-                                        :active-conversation="activeConversation" 
-                                        :name="name" 
-                                    />
-                                </div>
-                                <div v-else class="no-chat">
-                                    <h3>Select a chat to start messaging</h3>
-                                </div>
+                                    <div v-else class="no-chat d-none d-lg-flex">
+                                        <h3>Select a chat to start messaging</h3>
+                                    </div>
+                                </transition>
                             </v-col>
                         </v-row>
                     </div>
@@ -71,7 +76,8 @@ export default {
             nameRegistered: false,
             isConnected: false,
             uid: "",
-            matches:[]
+            matches:[],
+            showChatList: true
         }
     },
     methods: {
@@ -133,6 +139,31 @@ export default {
         joinConversation: async function(chatName) {
             this.activeConversation = null
             this.activeConversation = await (this.conversationsClient.getConversationByUniqueName(chatName))
+        },
+        showList() {
+            if(this.isScreenMediumOrLess()){
+                if(this.showChatList){
+                    return true;
+                }
+                return false;
+            }
+            return true;
+        },
+        showConversation() {
+            if(this.isScreenMediumOrLess()){
+                if(!this.showChatList){
+                    return true;
+                }
+                return false;
+            }
+            return true;
+        },
+        isScreenMediumOrLess() {
+            return window.innerWidth <= 960;
+        },
+        reverseChatList(){
+            this.activeConversation = null
+            this.showChatList = !this.showChatList;
         }
     },
     async mounted() {
@@ -195,7 +226,7 @@ export default {
     background: white;
     border-radius: 20px;
     overflow: hidden;
-    height: calc(100% - 60px);
+    height: calc(100% - 100px);
 }
 
 .chat-list {
