@@ -187,9 +187,6 @@
   height:100vh;
 }
 
-<<<<<<< HEAD
-</style> -->
-=======
 </style> -->
 
 <template>
@@ -372,4 +369,3 @@ onAuthStateChanged(auth, (user) => {
   z-index: 10;
 }
 </style>
->>>>>>> 5719b1c11472df01dc5876f349f35d9da3c79b67

@@ -56,8 +56,25 @@ export default {
         { name: 'Burma Superstar', color: '#F3E9A1', notes: '' },
         { name: 'Salt and Straw', color: '#FFB6C1', notes: '' },
       ],
+      profile_data: {
+    "name": "",
+    "age": "",
+    "gender": "",
+    "hobbies": "",
+    "religion":"",
+    "lookingFor": "",
+    "introduction":"",
+    "personalityDescription":"",
+    "loves":"",
+    "hates":"",
+    "dealbreakers":"",
+    "goals":"",
+    "images":[],
+}
+
     };
   },
+
   methods: {
     openModal(item) {
       this.selectedItem = item;
