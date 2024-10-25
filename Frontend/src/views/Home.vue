@@ -41,6 +41,7 @@ onAuthStateChanged(auth, (user) => {
     if(user.name == "newUser"){
       router.push('/editProfile');
     }
+    store.dispatch('fetchMatches', user.uid);
     store.dispatch('populateMatches', user.uid);
   } else {
     // User is signed out
@@ -49,11 +50,13 @@ onAuthStateChanged(auth, (user) => {
 });
 
 // Sample matches data for testing 
-const matches = ref([
-  { id: 1, name: 'Natalie' },
-  { id: 2, name: 'John' },
-  { id: 3, name: 'Emma' },
-]);
+// const matches = ref([
+//   { id: 1, name: 'Natalie' },
+//   { id: 2, name: 'John' },
+//   { id: 3, name: 'Emma' },
+// ]);
+
+const matches = ref([]);
 
 const cardRefs = ref([]);
 
@@ -88,7 +91,11 @@ const swipeCard = (index, isRightSwipe) => {
 
 const likeUser = (match) => {
   const uid = store.getters.getUser.uid;
-  store.dispatch('likeUser', { uid, likedUser: match });
+  console.log(match.name)
+  const likedUserId = match.uid;
+  console.log(uid)
+  console.log(likedUserId)
+  store.dispatch('likeUser', { uid, likedUserId });
 };
 
 const handleSwipeLeft = (index) => {
