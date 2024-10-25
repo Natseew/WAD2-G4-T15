@@ -3,7 +3,7 @@ import axios from 'axios';
 const base_url = import.meta.env.VITE_ENDPOINT ?? `http://localhost:${import.meta.env.VITE_PORT}`;
 
 const store = createStore({
-  state () {
+  state() {
     return {
       user: {},
       populateMatches: []
@@ -25,6 +25,9 @@ const store = createStore({
       state.populateMatches = populateMatchesData;
     },
     addLikeToUser(state, likedUser) {
+      if (!state.user.likes) {
+        state.user.likes = [];
+      }
       state.user.likes.push({
         name: likedUser.name,
         uid: likedUser.id,
@@ -34,7 +37,7 @@ const store = createStore({
   actions: {    
     async fetchMatches({ commit }, uid) {
       try {
-        const response = await axios.get(`${base_url}/${uid}`);
+        const response = await axios.get(`${base_url}/user/${uid}`);
         commit('setUser', response.data);
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
@@ -43,28 +46,27 @@ const store = createStore({
 
     async populateMatches({ commit }, uid) {
       try {
-        const response = await axios.post(`${base_url}/user/populate_homepage/${uid}`);
-        console.log(response)
-        commit('setPopulateMatches', response.data);
+          const response = await axios.post(`${base_url}/user/populate_homepage/${uid}`);
+          console.log("populateMatches response data:", response.data); // Check the full response
+          commit('setPopulateMatches', response.data.matches); // Ensure `matches` exists in response.data
       } catch (error) {
-        console.error("Failed to fetch user profile:", error);
+          console.error("Failed to fetch populateMatches data:", error);
       }
     },
 
-    async likeUser({ commit }, { uid, likedUser }) {
+    async likeUser({ commit }, { uid, likedUserId }) {
       try {
-        const response = await axios.post(`${base_url}/user/like`, {
-          uid,
-          likedUserId: likedUser.id
-        });
-
-        commit('addLikeToUser', likedUser);
+        console.log(likedUserId);
+        const response = await axios.post(`${base_url}/user/like/${uid}/${likedUserId}`);
+        
+        if (response.status === 200) {
+          commit('addLikeToUser', { uid: likedUserId });
+        }
       } catch (error) {
         console.error("Failed to like user:", error);
       }
     },
   }
-
 });
 
 export default store;

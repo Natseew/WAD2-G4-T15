@@ -62,7 +62,6 @@ router.post('/:uid', async (req, res) => {
 
 router.post('/populate_homepage/:uid', async (req, res) => {
   try {
-
     const currentUserDoc = await ref.doc(req.params.uid).get();
 
     if (!currentUserDoc.exists) {
@@ -87,9 +86,15 @@ router.post('/populate_homepage/:uid', async (req, res) => {
       return res.status(404).send('No users of opposite gender found');
     }
 
+    const likedUserIds = new Set(currentUser.likes?.map(like => like.uid) || []);
+
     const users = [];
     oppositeGenderQuery.forEach(doc => {
-      users.push(doc.data());
+      const userData = doc.data();
+
+      if (!likedUserIds.has(doc.id)) {
+        users.push(userData);
+      }
     });
 
     res.send(users);
@@ -100,19 +105,18 @@ router.post('/populate_homepage/:uid', async (req, res) => {
   }
 });
 
-router.post('/like', async (req, res) => {
-  const { uid, likedUserId } = req.body;
 
+router.post('/like/:uid/:likedUserId', async (req, res) => {
   try {
 
-    const userDoc = await ref.doc(uid).get();
+    const { uid, likedUserId } = req.params; 
 
+    const userDoc = await ref.doc(uid).get();
     if (!userDoc.exists) {
       return res.status(404).send('User not found');
     }
 
     const userData = userDoc.data();
-
     const alreadyLiked = userData.likes?.some(like => like.uid === likedUserId);
 
     if (alreadyLiked) {
@@ -120,19 +124,21 @@ router.post('/like', async (req, res) => {
     }
 
     const likedUserDoc = await ref.doc(likedUserId).get();
-
     if (!likedUserDoc.exists) {
       return res.status(404).send('Liked user not found');
     }
 
     const likedUserData = likedUserDoc.data();
 
-    await ref.doc(userId).update({
+    await ref.doc(uid).update({
       likes: FieldValue.arrayUnion({
         name: likedUserData.name,
         uid: likedUserId
       })
     });
+
+    const updatedUserDoc = await ref.doc(uid).get();
+    console.log('Updated likes:', updatedUserDoc.data().likes);
 
     return res.sendStatus(200);
 
@@ -141,5 +147,6 @@ router.post('/like', async (req, res) => {
     return res.sendStatus(500);
   }
 });
+
 
 module.exports = router
