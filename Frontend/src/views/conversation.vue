@@ -68,6 +68,20 @@ methods: {
 
 <style scoped>
 /* Main conversation area */
+
+@media (max-width: 769px){
+  .conversation-container {
+    max-height: calc(100vh - 250px);
+  }
+}
+
+@media (min-width: 769px){ 
+  .conversation-container {
+    max-height: calc(100vh - 350px);
+    padding: 20px;
+  }
+}
+
 #conversation {
   width: 100%;
   background-color: white;
@@ -78,8 +92,6 @@ methods: {
 .conversation-container {
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - 350px);
-  padding: 20px;
   overflow-y: auto;
 }
 
@@ -96,7 +108,7 @@ methods: {
 /* Chat title styling */
 .chat-title {
   text-align: left;
-  padding: 15px 16px 0;
+  padding: 15px 16px 5px 0;
   font-weight: bold;
   font-size: 20px;
   color: rgba(0, 0, 0, 0.87);

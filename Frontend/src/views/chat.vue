@@ -198,19 +198,42 @@ export default {
 </script>
 
 <style scoped>
+
+@media (max-width: 769px){
+    ::v-deep .main-content {
+        display:none;
+    }
+
+    .v-container{
+        height: 100%;
+        max-width: 98%;
+    }
+
+    .chat-container{
+        height: calc(100% - 90px);
+    }
+}
+
+@media (min-width: 769px){ 
+    .v-container {
+        height: 100%;
+        max-width: 85%;
+    }
+
+    .chat-container{
+        height: calc(100% - 100px);
+    }
+}
+
 #chat {
     background: linear-gradient(to bottom, #FD0E42, #C30F31);
     height: 100vh;
     width: 100vw;
 }
 
-.v-container {
-    height: 100%;
-    max-width: 85%;
-}
-
 .v-col {
     height: 100%;
+    padding: 0px;
 }
 
 .v-row {
@@ -222,11 +245,9 @@ export default {
 }
 
 .chat-container {
-    margin: 16px;
     background: white;
-    border-radius: 20px;
     overflow: hidden;
-    height: calc(100% - 100px);
+    border-radius: 10px;
 }
 
 .chat-list {
