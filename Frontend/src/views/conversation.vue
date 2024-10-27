@@ -1,5 +1,9 @@
 <template>
-    <div id="conversation" class="h-100">
+    <div id="conversation">
+      <div class="chat-title">
+        <span class="back-button pi pi-chevron-left d-lg-none" @click="$emit('reverse-chat-list')"></span>
+        <span>{{ activeConversation.uniqueName }} </span>
+      </div>
       <div class="conversation-container">
         <div 
           v-for="message in messages" :key="message.index"
@@ -31,6 +35,7 @@
 
 <script>
 import "primeicons/primeicons.css";
+import InputText from 'primevue/inputtext';
 
 export default {
     props: ["activeConversation", "name"],
@@ -62,29 +67,55 @@ methods: {
 </script>
 
 <style scoped>
+/* Main conversation area */
 
-#conversation{
+@media (max-width: 769px){
+  .conversation-container {
+    max-height: calc(100vh - 250px);
+  }
+}
+
+@media (min-width: 769px){ 
+  .conversation-container {
+    max-height: calc(100vh - 350px);
+    padding: 20px;
+  }
+}
+
+#conversation {
   width: 100%;
   background-color: white;
   border-radius: 20px;
 }
+
+/* Messages container with overflow scrolling */
 .conversation-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    max-height: 77vh;
-    padding: 20px;
-    overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 
-.message-row{
+/* Row for each message bubble and avatar */
+.message-row {
   display: flex;
 }
 
-.chat-profile{
+/* Styles for avatar in the chat */
+.chat-profile {
   margin: 10px;
 }
 
+/* Chat title styling */
+.chat-title {
+  text-align: left;
+  padding: 15px 16px 5px 0;
+  font-weight: bold;
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.87);
+  background: #fff;
+}
+
+/* Bubble container with alignment for sent vs received messages */
 .bubble-container {
   width: 100%;
   display: flex;
@@ -92,49 +123,60 @@ methods: {
   align-items: flex-end;
 }
 
+/* Message bubble styling */
 .bubble {
- border: 2px solid #f1f1f1;
- background-color: #fdfbfa;
- border-radius: 5px;
- padding: 10px;
- margin: 10px 0;
- width: 230px;
- text-align: left;
+  border: 2px solid #f1f1f1;
+  background-color: #fdfbfa;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  width: 230px;
+  text-align: left;
 }
 
+/* Styling for the sender's own messages */
 .bubble-container.myMessage {
   align-items: flex-start;
 }
- 
-.myMessage .bubble {
- background-color: #abf1ea;
- border: 2px solid #87E0D7;
-}
- 
-.name {
- padding-right: 8px;
- font-size: 11px;
+
+.back-button{
+  margin: auto 10px;
 }
 
-.input-container{
+.myMessage .bubble {
+  background-color: #abf1ea;
+  border: 2px solid #87E0D7;
+}
+
+.name {
+  padding-right: 8px;
+  font-size: 11px;
+}
+
+/* Input container for message entry */
+.input-container {
   position: absolute;
-  bottom: 10px;
-  right: 40px;
-  display: flex;
+  bottom: 15px;
+  right: 30px;
+  left: 30px;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  justify-content: space-between;
-  width: 90%;
+  gap: 10px;
+  max-width: 85%;
   margin: auto;
-  padding: 5px;
+  padding: 5px 5px 5px 5px;
   border-radius: 10px;
   border: 2px solid #FD0E42;
+  background-color: white;
 }
 
 .input-container input {
-  flex-grow: 1; 
   padding: 10px;
-  border-radius: 5px;
-  margin-right: 10px;
+  font-size: clamp(13px, 1.5vw, 16px);
+  border: none;
+  outline: none;
+  width: 100%;
 }
 
 .input-container button {
@@ -146,16 +188,17 @@ methods: {
   cursor: pointer;
 }
 
-input:focus{
-  box-shadow: none;
-}
-
 .input-container button:hover {
   background-color: #c10d36;
 }
- 
+
+input:focus {
+  box-shadow: none;
+}
+
+/* Custom scrollbar styling */
 ::-webkit-scrollbar {
- width: 10px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -164,8 +207,8 @@ input:focus{
   border: 2px solid transparent;
   background-clip: content-box;
 }
- 
+
 ::-webkit-scrollbar-thumb:hover {
- background: #555;
+  background: #555;
 }
 </style>
