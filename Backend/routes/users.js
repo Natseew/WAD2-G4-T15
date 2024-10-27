@@ -40,6 +40,7 @@ router.get('/:uid', async (req,res) => {
 router.post('/:uid', async (req, res) => {
 
   await ref.doc(req.params.uid).set({
+    uid: req.body.uid || '',
     name: req.body.name || '',
     age: req.body.age || '',
     gender:req.body.gender || '',

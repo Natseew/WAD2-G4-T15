@@ -57,7 +57,7 @@ const register = () => {
   createUserWithEmailAndPassword(getAuth(), email.value, password.value)
     .then((response) => {
       console.log(response.user.uid)
-      axios.post('/user/'+ response.user.uid, {"name":"newUser"});
+      axios.post('/user/'+ response.user.uid, {"name":"newUser", "uid":response.user.uid});
       console.log("Successfully registered!");
       router.push("/editProfile")
     })
