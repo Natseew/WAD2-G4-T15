@@ -91,7 +91,6 @@ const swipeCard = (index, isRightSwipe) => {
 
 const likeUser = (match) => {
   const uid = store.getters.getUser.uid;
-  console.log(match.name)
   const likedUserId = match.uid;
   console.log(uid)
   console.log(likedUserId)

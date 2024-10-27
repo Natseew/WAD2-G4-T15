@@ -38,8 +38,7 @@ const store = createStore({
     async fetchMatches({ commit }, uid) {
       try {
         const response = await axios.get(`${base_url}/user/${uid}`);
-        // Ensure UID is included in the user data
-        const userData = { ...response.data, uid }; // Include the uid
+        const userData = { ...response.data, uid }
         console.log(userData)
         commit('setUser', userData);
       } catch (error) {
@@ -50,6 +49,7 @@ const store = createStore({
     async populateMatches({ commit }, uid) {
       try {
           const response = await axios.post(`${base_url}/user/populate_homepage/${uid}`);
+          console.log(response.data)
           commit('setPopulateMatches', response.data);
       } catch (error) {
           console.error("Failed to fetch populateMatches data:", error);
