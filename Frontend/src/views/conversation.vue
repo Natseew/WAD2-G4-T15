@@ -35,7 +35,6 @@
 
 <script>
 import "primeicons/primeicons.css";
-import InputText from 'primevue/inputtext';
 
 export default {
     props: ["activeConversation", "name"],
