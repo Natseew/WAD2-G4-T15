@@ -54,8 +54,8 @@ router.post('/:uid', async (req, res) => {
     hates: req.body.hates || '',
     dealbreakers: req.body.dealbreakers || '', 
     images: req.body.images || [],
-    likes: req.body.images || [],
-    matches: req.body.images || []
+    likes: req.body.likes || [],
+    matches: req.body.matches || []
   }); 
 
   res.sendStatus(200);
