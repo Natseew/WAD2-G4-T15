@@ -133,12 +133,10 @@ router.post('/like/:uid/:likedUserId', async (req, res) => {
 
     const userData = userDoc.data();
     const likedUserData = likedUserDoc.data();
-
-    const likedUserAlreadyLiked = likedUserData.likes?.some(like => like.uid === uid);
+    const likedUserAlreadyLiked = likedUserData.likes?.some(like => like.uid == uid);
 
     if (likedUserAlreadyLiked) {
-      const matchCount = (userData.matches?.length || 0) + 1;
-      const chatName = `chatTest${matchCount}`;
+      const chatName = `${uid}${likedUserId}`;
 
       const userMatch = { name: likedUserData.name, chatName, uid: likedUserId };
       const likedUserMatch = { name: userData.name, chatName, uid };

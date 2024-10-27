@@ -2,7 +2,7 @@
     <div id="conversation">
       <div class="chat-title">
         <span class="back-button pi pi-chevron-left d-lg-none" @click="$emit('reverse-chat-list')"></span>
-        <span>{{ activeConversation.uniqueName }} </span>
+        <span>{{ shownName }} </span>
       </div>
       <div class="conversation-container">
         <div 
@@ -12,7 +12,7 @@
         >
           <div class="message-row">
             <div class="bubble">
-              <div class="name">{{ message?.state?.author }}:</div>
+              <div class="name">{{ message?.state?.author === name ? authorName : receiverName }}</div>
               <div class="message">{{ message?.state?.body }}</div>
             </div>
             <div class="flex items-end chat-profile">
@@ -37,7 +37,7 @@
 import "primeicons/primeicons.css";
 
 export default {
-    props: ["activeConversation", "name"],
+    props: ["activeConversation", "name", "shownName", "authorName", "receiverName"],
     data() {
         return {
             messages: [],
@@ -119,7 +119,7 @@ methods: {
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
 }
 
 /* Message bubble styling */
@@ -135,7 +135,7 @@ methods: {
 
 /* Styling for the sender's own messages */
 .bubble-container.myMessage {
-  align-items: flex-start;
+  align-items: flex-end;
 }
 
 .back-button{
