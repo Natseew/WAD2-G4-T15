@@ -6,7 +6,7 @@
     <div class="flex justify-center items-center flex-col">
       <div class="flex flex-col items-center w-full">
         <div class="cards-stack">
-          <MatchCard 
+          <NewMatchCard 
             v-for="(match, index) in matches" 
             :key="match.id" 
             v-bind="match" 
@@ -27,7 +27,7 @@ import { ref, onMounted } from 'vue';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import MatchCard from "../components/MatchCard.vue";
+import NewMatchCard from "../components/NewMatchCard.vue";
 import ButtonGroup from "../components/ButtonGroup.vue";
 import Navbar from "../components/Navbar.vue";
 
