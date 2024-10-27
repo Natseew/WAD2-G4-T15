@@ -6,16 +6,20 @@
       </div>
       <div class="conversation-container">
         <div 
-          v-for="message in messages" :key="message.index"
+          v-for="(message, index) in messages" 
+          :key="message.index"
           class="bubble-container"
-          :class="{ myMessage: message?.state?.author === name }"
+          :class="{ 
+            myMessage: message?.state?.author === name,
+            noAvatar: !shouldHideAvatar(message, index)
+          }"
         >
           <div class="message-row">
             <div class="bubble">
-              <div class="name">{{ message?.state?.author }}:</div>
+              <div class="name" v-if="message?.state?.author === this.name">{{ message?.state?.author }}:</div>
               <div class="message">{{ message?.state?.body }}</div>
             </div>
-            <div class="flex items-end chat-profile">
+            <div class="flex items-end chat-profile" v-if="shouldHideAvatar(message, index)">
               <v-avatar color="surface-variant" rounded="1">
                 <v-img
                   src="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" 
@@ -61,8 +65,22 @@ methods: {
             .then(() => {
                 this.messageText = ""
             })
+    },
+    shouldHideAvatar(message, index) {
+        // First get the next message
+        const nextMessage = this.messages[index + 1];
+
+        console.log(nextMessage);
+        
+        // If there's no next message, show avatar (it's the last message)
+        if (!nextMessage) {
+          return true;
+        }
+        
+        // Hide avatar if next message is also from the current user
+        return nextMessage?.state?.author === this.name;
     }
-}
+  }
 }
 </script>
 
@@ -137,6 +155,14 @@ methods: {
 /* Styling for the sender's own messages */
 .bubble-container.myMessage {
   align-items: flex-start;
+}
+
+.noAvatar .message-row{
+  margin-right: 60px;
+}
+
+.noAvatar .message-row .bubble{
+  margin-bottom: 0px;
 }
 
 .back-button{
