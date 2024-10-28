@@ -11,15 +11,16 @@
           class="bubble-container"
           :class="{ 
             myMessage: message?.state?.author === name,
-            noAvatar: !shouldHideAvatar(message, index)
+            senderMessage: message?.state?.author !== name,
+            noAvatar: shouldHideAvatar(message, index)
           }"
         >
           <div class="message-row">
             <div class="bubble">
-              <div class="name" v-if="message?.state?.author === this.name">{{ message?.state?.author === name ? authorName : receiverName }}</div>
+              <div class="name" v-if="message?.state?.author !== name">{{ message?.state?.author === name ? authorName : receiverName }}</div>
               <div class="message">{{ message?.state?.body }}</div>
             </div>
-            <div class="flex items-end chat-profile" v-if="shouldHideAvatar(message, index)">
+            <div class="flex items-end chat-profile" v-if="!shouldHideAvatar(message, index)">
               <v-avatar color="surface-variant" rounded="1">
                 <v-img
                   src="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" 
@@ -68,16 +69,10 @@ methods: {
     shouldHideAvatar(message, index) {
         // First get the next message
         const nextMessage = this.messages[index + 1];
-
-        console.log(nextMessage);
-        
-        // If there's no next message, show avatar (it's the last message)
-        if (!nextMessage) {
-          return true;
-        }
-        
+                
         // Hide avatar if next message is also from the current user
-        return nextMessage?.state?.author === this.name;
+        return nextMessage && nextMessage.state.author === message.state.author;
+
     }
   }
 }
@@ -113,7 +108,7 @@ methods: {
 }
 
 /* Row for each message bubble and avatar */
-.message-row {
+.message-row{
   display: flex;
 }
 
@@ -156,12 +151,22 @@ methods: {
   align-items: flex-end;
 }
 
-.noAvatar .message-row{
-  margin-right: 60px;
+/* Styling for the matches messages */
+.bubble-container.senderMessage .message-row{
+  flex-direction: row-reverse;
 }
 
 .noAvatar .message-row .bubble{
   margin-bottom: 0px;
+}
+
+/*Style positioning of bubble */
+.myMessage.noAvatar .bubble{
+  margin-right: 60px;
+}
+
+.senderMessage.noAvatar .bubble{
+  margin-left: 60px;
 }
 
 .back-button{

@@ -41,7 +41,7 @@
                                             @reverse-chat-list="reverseChatList()"
                                         />
                                     </div>
-                                    <div v-else class="no-chat d-none d-lg-flex">
+                                    <div v-else class="no-chat" v-if="!isScreenMediumOrLess()">
                                         <h3>Select a chat to start messaging</h3>
                                     </div>
                                 </transition>
@@ -81,7 +81,8 @@ export default {
             matches:[],
             showChatList: true,
             shownChatName: "",
-            receiverName: ""
+            receiverName: "",
+            windowWidth: window.innerWidth
         }
     },
     methods: {
@@ -162,14 +163,28 @@ export default {
             return true;
         },
         isScreenMediumOrLess() {
-            return window.innerWidth <= 960;
+            return this.windowWidth <= 960;
         },
         reverseChatList(){
             this.activeConversation = null
             this.showChatList = !this.showChatList;
+        },
+        handleResize() {
+            this.windowWidth = window.innerWidth;
+            console.log("Window resized to:", window.innerWidth);
+            if(this.isScreenMediumOrLess()){
+                this.showChatList = !this.activeConversation;
+            }
+            else{
+                this.showChatList = true;
+            }
+            console.log(this.showChatList);
         }
     },
     async mounted() {
+
+        window.addEventListener("resize", this.handleResize);
+
         const auth = getAuth();
 
         onAuthStateChanged(auth, (user) => {
@@ -194,6 +209,10 @@ export default {
                 router.push('/login');
             }
         })
+    },
+
+    beforeDestroy() {
+        window.removeEventListener("resize", this.handleResize);
     }
 }
 
