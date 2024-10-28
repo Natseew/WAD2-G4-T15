@@ -32,14 +32,22 @@ const store = createStore({
         name: likedUser.name,
         uid: likedUser.id,
       });
-    }
+    },
+    addDislikeToUser(state, dislikedUser) {
+      if (!state.user.dislikes) {
+        state.user.dislikes = [];
+      }
+      state.user.dislikes.push({
+        name: dislikedUser.name,
+        uid: dislikedUser.id,
+      });
+    },
   },
   actions: {    
     async fetchMatches({ commit }, uid) {
       try {
         const response = await axios.get(`${base_url}/user/${uid}`);
-        // Ensure UID is included in the user data
-        const userData = { ...response.data, uid }; // Include the uid
+        const userData = { ...response.data, uid }
         console.log(userData)
         commit('setUser', userData);
       } catch (error) {
@@ -50,6 +58,7 @@ const store = createStore({
     async populateMatches({ commit }, uid) {
       try {
           const response = await axios.post(`${base_url}/user/populate_homepage/${uid}`);
+          console.log(response.data)
           commit('setPopulateMatches', response.data);
       } catch (error) {
           console.error("Failed to fetch populateMatches data:", error);
@@ -66,6 +75,19 @@ const store = createStore({
         }
       } catch (error) {
         console.error("Failed to like user:", error);
+      }
+    },
+
+    async dislikeUser({ commit }, { uid, dislikedUserId }) {
+      try {
+        console.log(dislikedUserId);
+        const response = await axios.post(`${base_url}/user/dislike/${uid}/${dislikedUserId}`);
+        
+        if (response.status === 200) {
+          commit('addDislikeToUser', { uid: dislikedUserId });
+        }
+      } catch (error) {
+        console.error("Failed to dislike user:", error);
       }
     },
   }

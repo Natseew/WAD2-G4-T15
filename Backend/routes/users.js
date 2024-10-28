@@ -40,6 +40,7 @@ router.get('/:uid', async (req,res) => {
 router.post('/:uid', async (req, res) => {
 
   await ref.doc(req.params.uid).set({
+    uid: req.body.uid || '',
     name: req.body.name || '',
     age: req.body.age || '',
     gender:req.body.gender || '',
@@ -53,8 +54,9 @@ router.post('/:uid', async (req, res) => {
     hates: req.body.hates || '',
     dealbreakers: req.body.dealbreakers || '', 
     images: req.body.images || [],
-    likes: req.body.images || [],
-    matches: req.body.images || []
+    likes: req.body.likes || [],
+    dislikes: req.body.dislikes || [],
+    matches: req.body.matches || []
   }); 
 
   res.sendStatus(200);
@@ -87,12 +89,18 @@ router.post('/populate_homepage/:uid', async (req, res) => {
     }
 
     const likedUserIds = new Set(currentUser.likes?.map(like => like.uid) || []);
+    const matchedUserIds = new Set(currentUser.matches?.map(match => match.uid) || []);
+    const dislikedUserIds = new Set(currentUser.dislikes?.map(dislike => dislike.uid) || []);
 
     const users = [];
     oppositeGenderQuery.forEach(doc => {
       const userData = doc.data();
 
-      if (!likedUserIds.has(doc.id)) {
+      if (
+        !likedUserIds.has(doc.id) &&
+        !matchedUserIds.has(doc.id) &&
+        !dislikedUserIds.has(doc.id)
+      ) {
         users.push(userData);
       }
     });
@@ -106,29 +114,52 @@ router.post('/populate_homepage/:uid', async (req, res) => {
 });
 
 
+
+
 router.post('/like/:uid/:likedUserId', async (req, res) => {
   try {
-
-    const { uid, likedUserId } = req.params; 
+    const { uid, likedUserId } = req.params;
 
     const userDoc = await ref.doc(uid).get();
+    const likedUserDoc = await ref.doc(likedUserId).get();
+
     if (!userDoc.exists) {
       return res.status(404).send('User not found');
     }
 
-    const userData = userDoc.data();
-    const alreadyLiked = userData.likes?.some(like => like.uid === likedUserId);
-
-    if (alreadyLiked) {
-      return res.status(400).send('User already liked');
-    }
-
-    const likedUserDoc = await ref.doc(likedUserId).get();
     if (!likedUserDoc.exists) {
       return res.status(404).send('Liked user not found');
     }
 
+    const userData = userDoc.data();
     const likedUserData = likedUserDoc.data();
+    const likedUserAlreadyLiked = likedUserData.likes?.some(like => like.uid == uid);
+
+    if (likedUserAlreadyLiked) {
+      const chatName = `${uid}${likedUserId}`;
+
+      const userMatch = { name: likedUserData.name, chatName, uid: likedUserId };
+      const likedUserMatch = { name: userData.name, chatName, uid };
+
+      await ref.doc(uid).update({
+        matches: FieldValue.arrayUnion(userMatch),
+      });
+
+      await ref.doc(likedUserId).update({
+        matches: FieldValue.arrayUnion(likedUserMatch),
+      });
+
+      const updatedLikes = likedUserData.likes.filter(like => like.uid !== uid);
+      await ref.doc(likedUserId).update({ likes: updatedLikes });
+
+      console.log(`Matched ${uid} with ${likedUserId}`);
+      return res.status(200).send('Match created');
+    }
+
+    const alreadyLiked = userData.likes?.some(like => like.uid === likedUserId);
+    if (alreadyLiked) {
+      return res.status(400).send('User already liked');
+    }
 
     await ref.doc(uid).update({
       likes: FieldValue.arrayUnion({
@@ -137,15 +168,55 @@ router.post('/like/:uid/:likedUserId', async (req, res) => {
       })
     });
 
-    const updatedUserDoc = await ref.doc(uid).get();
-    console.log('Updated likes:', updatedUserDoc.data().likes);
-
+    console.log(`Liked ${likedUserId} for user ${uid}`);
     return res.sendStatus(200);
 
   } catch (error) {
     console.error('Error liking user:', error);
     return res.sendStatus(500);
   }
+});
+
+router.post('/dislike/:uid/:dislikedUserId', async (req, res) => {
+
+  try {
+
+    const { uid, dislikedUserId } = req.params;
+
+    const userDoc = await ref.doc(uid).get();
+    const dislikedUserDoc = await ref.doc(dislikedUserId).get();
+
+    if (!userDoc.exists) {
+      return res.status(404).send('User not found');
+    }
+
+    if (!dislikedUserDoc.exists) {
+      return res.status(404).send('Liked user not found');
+    }
+
+    const userData = userDoc.data();
+    const dislikedUserData = dislikedUserDoc.data();
+
+    const alreadyDisliked = userData.dislikes?.some(dislike => dislike.uid === dislikedUserId);
+    if (alreadyDisliked) {
+      return res.status(400).send('User already disliked');
+    }
+
+    await ref.doc(uid).update({
+      dislikes: FieldValue.arrayUnion({
+        name: dislikedUserData.name,
+        uid: dislikedUserId
+      })
+    });
+
+    console.log(`Liked ${dislikedUserId} for user ${uid}`);
+    return res.sendStatus(200);
+
+  } catch (error){
+    console.error('Error disliking user:', error);
+    return res.sendStatus(500);
+  }
+
 });
 
 
