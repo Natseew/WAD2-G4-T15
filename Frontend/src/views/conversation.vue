@@ -89,7 +89,7 @@ methods: {
 
 @media (min-width: 769px){ 
   .conversation-container {
-    max-height: calc(100vh - 350px);
+    max-height: calc(100vh - 310px);
     padding: 20px;
   }
 }

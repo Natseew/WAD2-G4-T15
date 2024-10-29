@@ -249,8 +249,6 @@ export default {
 
 #chat {
     background: linear-gradient(to bottom, #FD0E42, #C30F31);
-    height: 100vh;
-    width: 100vw;
 }
 
 .v-col {
@@ -264,6 +262,7 @@ export default {
 
 .conversation-col {
     position: relative;
+    height: 100%;
 }
 
 .chat-container {
