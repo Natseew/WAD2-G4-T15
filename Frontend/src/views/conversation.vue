@@ -142,7 +142,8 @@ methods: {
   border-radius: 5px;
   padding: 10px;
   margin: 10px 0;
-  width: 230px;
+  min-width: 80px;
+  max-width: 230px;
   text-align: left;
 }
 
