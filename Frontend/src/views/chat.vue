@@ -7,7 +7,7 @@
                     <div class="chat-container">
                         <v-row>
                             <transition name="slide-x-reverse-transition" mode="out-in">
-                                <v-col cols="12" md="4" sm="12" v-if="showList()">
+                                <v-col cols="12" md="4" sm="12" class="chat-list-col" v-if="showList()">
                                     <v-list lines="three">
                                         <div class="chat-list">
                                             <v-list-item 
@@ -16,12 +16,14 @@
                                                 :class="{ 'active-chat': activeConversation && activeConversation.uniqueName === item.chatName }"
                                             >
                                                 <div class="d-flex">
+                                                    <!--:label="item.name[0].toUpperCase()"-->
                                                     <Avatar 
-                                                        :label="item.name[0].toUpperCase()" 
+                                                        shape="circle"
                                                         class="mr-5" 
                                                         size="large" 
-                                                        style="background-color: #FD0E42; color: #fff"
-                                                    />
+                                                    >
+                                                        <v-img src="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" />
+                                                    </Avatar>
                                                     <span class="font-bold">{{ item.name }}</span>
                                                 </div>
                                             </v-list-item>
@@ -258,6 +260,16 @@ export default {
 
 .v-row {
     height: 100%;
+    overflow: hidden;
+}
+
+.chat-list-col{
+    height: 100%;
+}
+
+.chat-list-col{
+    height: 100%;
+    overflow-y: auto;
 }
 
 .conversation-col {
@@ -294,5 +306,21 @@ export default {
     align-items: center;
     justify-content: center;
     color: rgba(0, 0, 0, 0.6);
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: linear-gradient(to bottom, #FD0E42, #C30F31);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 </style>
