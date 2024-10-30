@@ -289,15 +289,53 @@ export default {
 
 .chat-list .v-list-item {
     border-radius: 10px !important;
-    margin-bottom: 10px;
+    margin-bottom: 10px !important;
 }
 
 .chat-list .v-list-item:hover {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .chat-list .v-list-item.active-chat {
-    background-color: rgba(0, 0, 0, 0.3);
+  /* Create gradient border effect */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    padding: 3px; /* Border width */
+    background: conic-gradient(
+      from var(--angle),
+      #ff7676 25%,
+      #f54ea2,
+      #ffb3b3 75%,
+      #ff7676 
+    );
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    --angle: 0deg;
+    animation: rotate 3s linear infinite;
+  }
+}
+
+/* Rotation animation */
+@keyframes rotate {
+  to {
+    --angle: 360deg;
+  }
+}
+
+/* Support for @property (modern browsers) */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
 }
 
 .no-chat {
