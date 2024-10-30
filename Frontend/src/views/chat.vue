@@ -244,7 +244,7 @@ export default {
         max-width: 85%;
     }
 
-    .chat-container{
+    .chat-container{   
         height: calc(100% - 100px);
     }
 }
@@ -263,6 +263,10 @@ export default {
     overflow: hidden;
 }
 
+.v-list{
+    background: transparent;
+}
+
 .chat-list-col{
     height: 100%;
 }
@@ -278,9 +282,11 @@ export default {
 }
 
 .chat-container {
-    background: white;
-    overflow: hidden;
+    background: rgba(255,255,255);
     border-radius: 10px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);;
+    border: 1px solid rgba(255,255,255,0.5);
 }
 
 .chat-list {
