@@ -101,7 +101,7 @@ methods: {
 
 #conversation {
   width: 100%;
-  background-color: white;
+  background: transparent;
   border-radius: 20px;
 }
 
@@ -128,8 +128,6 @@ methods: {
   padding: 15px 16px 5px 0;
   font-weight: bold;
   font-size: 20px;
-  color: rgba(0, 0, 0, 0.87);
-  background: #fff;
 }
 
 /* Bubble container with alignment for sent vs received messages */
@@ -142,12 +140,13 @@ methods: {
 
 /* Message bubble styling */
 .bubble {
-  border: 2px solid #f1f1f1;
-  background-color: #fdfbfa;
-  border-radius: 5px;
+  border: 2px solid #FD0E42;
+  background-color: #fff;
+  border-radius: 15px;
   padding: 10px;
   margin: 10px 0;
-  width: 230px;
+  min-width: 80px;
+  max-width: 230px;
   text-align: left;
 }
 
@@ -179,8 +178,9 @@ methods: {
 }
 
 .myMessage .bubble {
-  background-color: #abf1ea;
-  border: 2px solid #87E0D7;
+  background-color: #FD0E42;
+  border: 2px solid #FD0E42;
+  color: white;
 }
 
 .name {
@@ -203,15 +203,19 @@ methods: {
   padding: 5px 5px 5px 5px;
   border-radius: 10px;
   border: 2px solid #FD0E42;
-  background-color: white;
 }
 
 .input-container input {
   padding: 10px;
   font-size: clamp(13px, 1.5vw, 16px);
+  color: black;
   border: none;
   outline: none;
   width: 100%;
+}
+
+::placeholder {
+  color: black;
 }
 
 .input-container button {

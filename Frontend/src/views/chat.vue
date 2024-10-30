@@ -7,7 +7,7 @@
                     <div class="chat-container">
                         <v-row>
                             <transition name="slide-x-reverse-transition" mode="out-in">
-                                <v-col cols="12" md="4" sm="12" v-if="showList()">
+                                <v-col cols="12" md="4" sm="12" class="chat-list-col" v-if="showList()">
                                     <v-list lines="three">
                                         <div class="chat-list">
                                             <v-list-item 
@@ -16,12 +16,14 @@
                                                 :class="{ 'active-chat': activeConversation && activeConversation.uniqueName === item.chatName }"
                                             >
                                                 <div class="d-flex">
+                                                    <!--:label="item.name[0].toUpperCase()"-->
                                                     <Avatar 
-                                                        :label="item.name[0].toUpperCase()" 
+                                                        shape="circle"
                                                         class="mr-5" 
                                                         size="large" 
-                                                        style="background-color: #FD0E42; color: #fff"
-                                                    />
+                                                    >
+                                                        <v-img src="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" />
+                                                    </Avatar>
                                                     <span class="font-bold">{{ item.name }}</span>
                                                 </div>
                                             </v-list-item>
@@ -242,15 +244,13 @@ export default {
         max-width: 85%;
     }
 
-    .chat-container{
+    .chat-container{   
         height: calc(100% - 100px);
     }
 }
 
 #chat {
     background: linear-gradient(to bottom, #FD0E42, #C30F31);
-    height: 100vh;
-    width: 100vw;
 }
 
 .v-col {
@@ -260,16 +260,33 @@ export default {
 
 .v-row {
     height: 100%;
+    overflow: hidden;
+}
+
+.v-list{
+    background: transparent;
+}
+
+.chat-list-col{
+    height: 100%;
+}
+
+.chat-list-col{
+    height: 100%;
+    overflow-y: auto;
 }
 
 .conversation-col {
     position: relative;
+    height: 100%;
 }
 
 .chat-container {
-    background: white;
-    overflow: hidden;
+    background: rgba(255,255,255);
     border-radius: 10px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);;
+    border: 1px solid rgba(255,255,255,0.5);
 }
 
 .chat-list {
@@ -278,15 +295,53 @@ export default {
 
 .chat-list .v-list-item {
     border-radius: 10px !important;
-    margin-bottom: 10px;
+    margin-bottom: 10px !important;
 }
 
 .chat-list .v-list-item:hover {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .chat-list .v-list-item.active-chat {
-    background-color: rgba(0, 0, 0, 0.3);
+  /* Create gradient border effect */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    padding: 3px; /* Border width */
+    background: conic-gradient(
+      from var(--angle),
+      #ff7676 25%,
+      #f54ea2,
+      #ffb3b3 75%,
+      #ff7676 
+    );
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    --angle: 0deg;
+    animation: rotate 3s linear infinite;
+  }
+}
+
+/* Rotation animation */
+@keyframes rotate {
+  to {
+    --angle: 360deg;
+  }
+}
+
+/* Support for @property (modern browsers) */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
 }
 
 .no-chat {
@@ -295,5 +350,21 @@ export default {
     align-items: center;
     justify-content: center;
     color: rgba(0, 0, 0, 0.6);
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: linear-gradient(to bottom, #FD0E42, #C30F31);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 </style>
