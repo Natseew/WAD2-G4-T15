@@ -3,7 +3,7 @@
   <div class="background">
     <Navbar class="navbar" />
     <div class="red-background"></div>
-    <div class="flex justify-center items-center flex-col">
+    <div class="flex justify-center items-center flex-col mt-15">
       <div class="flex flex-col items-center w-full">
         <div class="cards-stack">
           <NewMatchCard 
@@ -16,7 +16,7 @@
             :style="{ zIndex: matches.length - index }"
           />
         </div>
-        <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" />
+        <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" class="mt-15 z-10" />
       </div>
     </div>
   </div>
@@ -49,13 +49,6 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// Sample matches data for testing 
-// const matches = ref([
-//   { id: 1, name: 'Natalie' },
-//   { id: 2, name: 'John' },
-//   { id: 3, name: 'Emma' },
-// ]);
-
 const matches = ref([]);
 
 const cardRefs = ref([]);
@@ -66,12 +59,18 @@ const getCardRef = (index) => (el) => {
 
 const handleHeartClick = () => {
   if (matches.value.length === 0) return;
-  swipeCard(0, true);
+  const topCard = cardRefs.value[0];
+  if (topCard) {
+    topCard.swipeRight();
+  }
 };
 
 const handleTimesClick = () => {
   if (matches.value.length === 0) return;
-  swipeCard(0, false);
+  const topCard = cardRefs.value[0];
+  if (topCard) {
+    topCard.swipeLeft();
+  }
 };
 
 const swipeCard = (index, isRightSwipe) => {
@@ -141,7 +140,7 @@ store.subscribe((mutation, state) => {
 }
 
 .red-background {
-  background: linear-gradient(to bottom, #FD0E42, #C30F31);
+  background: linear-gradient(to bottom, #B0190F, #c58550);
   height: 40vh;
   width: 100%;
   position: absolute;

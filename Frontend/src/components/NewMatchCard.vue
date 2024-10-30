@@ -1,7 +1,7 @@
 <template>
     <div class="page-container">
       <div class="card-container" @click="flipCard">
-        <div :class="['card', { 'flipped': isFlipped }]">
+        <div class= "card" :class="{ flipped: isFlipped, [swipeClass]: swipeClass }" ref="flipContainer" >
           <div class="card-side front">
             <div class="card-header">
               <div class="waves-container">
@@ -11,38 +11,38 @@
               </div>
               <img
                 class="profile-img"
-                src="https://i0.wp.com/www.plainviewmedia.com/wp-content/uploads/2014/08/QCM-039.jpg?fit=1001%2C1500&ssl=1"
+                :src="images[0]"
                 alt="profile-picture"
+                :style="{'border': `3px solid ${ gender == 'male'? 'rgb(155, 200, 248)' : 'rgb(248, 100, 155)' }`}"
               />
             </div>
             <div class="card-body">
-              <h1 class="name">{{ profile.name }}</h1>
-              <Chip v-if="profile.lookingFor === 'love'" label="Looking for love" style="height: 1.2rem; background-color: pink; color: red;" />
-              <Chip v-if="profile.lookingFor === 'friends'" label="Looking for friends" style="height: 1.2rem; background-color: lightgreen;" />
+              <h1 class="name">{{ name }}</h1>
+              <Chip v-if="lookingFor === 'Love'" label="Looking for love" style="height: 1.2rem; background-color: pink; color: red;" />
+              <Chip v-if="lookingFor === 'Love'" label="Looking for friends" style="height: 1.2rem; background-color: lightblue;" />
               
               <div class="quick-info">
-                <span>{{ profile.age }} • {{ profile.gender }} • {{ profile.religion }}</span>
-                
+                <span>{{ age }} • {{ gender }} • {{ religion }}</span>
               </div>
               <div class="section">
-                <p class="quote">"{{ profile.quote }}"</p>
+                <!-- <p class="quote">"{{ quote ? quote || "generic quote" }}"</p> -->
               </div>
               <div class="section">
-                <p class="intro">{{ profile.introduction }}</p>
+                <p class="intro">{{ introduction }}</p>
               </div>
               <div class="section personality">
                 <p class="subtitle">Personality</p>
-                <p>{{ profile.personalityDescription }}</p>
+                <p>{{personalityDescription }}</p>
               </div>
               <div class="section interests">
                 <div class="interests-grid">
                   <div class="interest-item">
                     <h3>Loves</h3>
-                    <p>{{ profile.loves }}</p>
+                    <p>{{loves }}</p>
                   </div>
                   <div class="interest-item">
                     <h3>Hates</h3>
-                    <p>{{ profile.hates }}</p>
+                    <p>{{ hates }}</p>
                   </div>
                 </div>
               </div>
@@ -62,7 +62,7 @@
                     </svg>
                 </div>
                 <h3 class="back-title">Deal Breakers</h3>
-                <p>{{ profile.dealbreakers }}</p>
+                <p>{{ dealbreakers }}</p>
               </div>
               <div class="section">
                 <div class="icon-container">
@@ -73,7 +73,7 @@
                     </svg>
                 </div>
                 <h3 class="back-title">Life Goals</h3>
-                <p>{{ profile.goals }}</p>
+                <p>{{ goals }}</p>
               </div>
               <div class="section">
                 <div class="icon-container">
@@ -85,7 +85,7 @@
                     </svg>
                 </div>
                 <h3 class="back-title">Hobbies</h3>
-                <p>{{ profile.hobbies }}</p>
+                <p>{{ hobbies }}</p>
               </div>
            
             </div>
@@ -99,6 +99,8 @@
   import Card from 'primevue/card';
   import Chip from 'primevue/chip';
   import Carousel from 'primevue/carousel';
+  import { ref, defineExpose } from 'vue';
+
   export default {
     name: "MatchCard",
     components: {
@@ -106,33 +108,117 @@
     Chip,
     Carousel,
   },
-    name: "ProfileCard",
-    data() {
-      return {
-        isFlipped: false,
-        profile: {
-          name: "Sarah Johnson",
-          age: "28",
-          gender: "Female",
-          quote: "Just do it",
-          hobbies: "Photography, Hiking, Reading",
-          religion: "Christian",
-          lookingFor: "love",
-          introduction: "Adventure-seeking photographer with a passion for life",
-          personalityDescription: "Outgoing introvert with a creative mind",
-          loves: "Sunset walks, coffee shops, spontaneous trips",
-          hates: "Negativity, closed-mindedness, loud chewing",
-          dealbreakers: "Smoking, lack of ambition, poor communication",
-          goals: "Travel to 30 countries, start my own gallery, adopt a dog",
-          images: []
-        }
-      };
+  props: {
+    name: {
+      type: String,
+      required: true
     },
-    methods: {
-      flipCard() {
-        this.isFlipped = !this.isFlipped;
-      },
+    age: {
+      type: String,
+      required: true
     },
+    religion: {
+      type: String,
+      required: true
+    },
+    introduction:{
+      type: String,
+      required: true
+    },
+    gender:{
+      type: String,
+      required: true
+    },
+    personalityDescription:{
+      type: String,
+      required: true
+    },
+    loves:{
+      type: String,
+      required: true
+    },
+    quote:{
+      type: String,
+      required: false
+    },
+    hates:{
+      type: String,
+      required: true
+    },
+    avatar: {
+      type: String,
+      required: false,
+      default: 'https://primefaces.org/cdn/primevue/images/usercard.png'
+    },
+    lookingFor: {
+      type: String,
+      required: false
+    },
+    images: {
+      type: Array,
+      required: false,
+      default: () => ([
+        'https://primefaces.org/cdn/primevue/images/usercard.png',
+        'https://primefaces.org/cdn/primevue/images/usercard.png',
+        'https://primefaces.org/cdn/primevue/images/usercard.png',
+      ])
+    },
+    dealbreakers:{
+      type: String,
+      required: false
+    },
+    goals:{
+      type: String,
+      required: false
+    },
+    hobbies:{
+      type: String,
+      required: false
+    },
+  },
+  setup(props, { emit }) {
+    const isFlipped = ref(false);
+    const swipeClass = ref('');
+    const flipContainer = ref(null);
+
+    const flipCard = () => {
+      isFlipped.value = !isFlipped.value;
+    };
+
+    const swipeRight = () => {
+      swipeClass.value = 'swipe-right';
+      setTimeout(() => {
+        emit('swipe-right');
+        swipeClass.value = '';
+      }, 300);
+    };
+
+    const swipeLeft = () => {
+      swipeClass.value = 'swipe-left';
+      setTimeout(() => {
+        emit('swipe-left');
+        swipeClass.value = '';
+      }, 300);
+    };
+
+    defineExpose({
+      swipeRight,
+      swipeLeft,
+    });
+
+    const imageLoadError = (item) => {
+      console.error('Failed to load image:', item);
+    };
+    return {
+      isFlipped,
+      flipCard,
+      swipeRight,
+      swipeLeft,
+      swipeClass,
+      flipContainer,
+      imageLoadError,
+    };
+  }
   };
   </script>
   
@@ -149,22 +235,28 @@
   
   .page-container {
     min-height: 100vh;
-    width: 500px;
+    width: 100%;
     padding: 2rem;
   }
   
   .card-container {
     perspective: 1000px;
-    width: 90%;
+    width: 100%;
     max-width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
   .card {
     position: relative;
-    width: 100%;
-    height: auto; /* Allow height to adjust based on content */
+    width: 24rem;
+    height: 40rem;
     transform-style: preserve-3d;
     transition: transform 0.6s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
   .card.flipped {
@@ -178,7 +270,7 @@
     backface-visibility: hidden;
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 8px rgba(255, 255, 255, 0.5);
     overflow: hidden; /* Prevent content overflow */
   }
   
@@ -215,7 +307,7 @@
     position: absolute;
     width: 650px;
     height: 650px;
-    background-image: linear-gradient(to bottom left, #8aafff, #5b86e5);
+    background-image: linear-gradient(to bottom left, #f5c068, #e79a5d);
     transform: translateX(-50%);
   }
   
@@ -262,7 +354,7 @@
     top: 80%;
     transform: translate(-50%, -50%);
     z-index: 1;
-    border: 3px solid rgb(155, 200, 248);
+    border: 3px solid rgb(248, 155, 155);
   }
   
   .card-body {
@@ -311,7 +403,7 @@
     font-size: 16px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #4d78c7;
+    color: #141414;
     margin-bottom: 5px;
   }
   
@@ -326,7 +418,7 @@
     font-size: 14px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #4d78c7;
+    color: #141414;
   }
   
   .interest-item p {
@@ -339,7 +431,17 @@
     font-size: 18px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #4d78c7;
+    color: #141414;
+  }
+
+  .swipe-right {
+    transform: translateX(100%) rotate(20deg);
+    transition: transform 0.6s ease-out;
+  }
+
+  .swipe-left {
+    transform: translateX(-100%) rotate(-20deg);
+    transition: transform 0.6s ease-out;
   }
   
   @media (min-width: 768px) {
