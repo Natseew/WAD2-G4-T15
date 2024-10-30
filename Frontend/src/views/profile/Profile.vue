@@ -6,6 +6,33 @@
 
     <div class="container mx-auto px-4 pt-20 pb-8 relative z-10">
       <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6">
+        <v-overlay
+            v-model="overlay"
+            class="align-center justify-center"
+            >
+          <v-card width="450" align-center justify-center class="pa-4">
+            <v-row>
+              <v-col sm="8">
+                <v-file-input
+                  label="File input"
+                  show-size
+                  prepend-icon="mdi-camera"
+                  variant="filled"
+                  v-model="file"
+                  clearable
+                ></v-file-input>
+              </v-col>
+              <v-col sm="4">
+                <v-btn
+                  :loading="loading"
+                  class="mt-2"
+                  text="Submit"
+                  v-on:click="uploadTask"
+                ></v-btn>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-overlay>
         <!-- Profile Header -->
         <div v-if="loading == true">
           <v-progress-circular color="blue-lighten-3" indeterminate :size="56"></v-progress-circular>
@@ -15,6 +42,7 @@
             <PencilSquareIcon @click="disabled = !disabled" class="absolute right-0" style="width: 1.8rem; height: 1.8rem;"></PencilSquareIcon>
             <div class="relative mb-4">
               <img
+                @click="overlay = !overlay"
                 :src="data.images[0] || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'" 
                 alt="Profile"
                 class="w-40 h-40 rounded-full object-cover border-4 border-white shadow-lg"
@@ -26,6 +54,15 @@
 
           <!-- Profile Information -->
           <v-form validate-on="submit lazy" @submit.prevent="submit" class="relative">
+            <v-row v-if="!disabled">
+            <!-- Introduction Section -->
+            <v-col cols="12">
+              <div class="profile-field">
+                <label>Name</label>
+                <input type="text"  v-model="data.name" :disabled="disabled" class="profile-input" />
+              </div>
+            </v-col>
+          </v-row>
           <v-row>
             <!-- Introduction Section -->
             <v-col cols="12">
@@ -112,6 +149,8 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Navbar from '../../components/Navbar.vue';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
+import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
+import {ref as firebaseRef} from "firebase/storage";
 import { PencilSquareIcon } from '@heroicons/vue/24/solid';
 
 const router = useRouter();
@@ -120,6 +159,18 @@ let userData = ref()
 
 const loading = ref(true);
 let disabled = ref(true)
+let overlay = ref(false)
+
+const storage = getStorage();
+  
+
+  // Create file metadata including the content type
+  /* @type {any} */
+  const metadata = {
+    contentType: 'image/jpg',
+  };
+  const file = ref()
+  // Upload the file and metadata
 
 
 let data = ref({
@@ -166,10 +217,23 @@ const submit =  (() => {
     }catch(error){
       console.log(error)
     }
-    loading.value = false; 
+    loading.value = false;
+    disabled.value = true; 
     overlay.value = false;
   }
 });
+
+const uploadTask = () => {
+    if(file){
+      const storageRef = firebaseRef(storage, 'gs://wad2-g4-t15.appspot.com/'+file.value.name)
+      uploadBytes(storageRef, file.value, metadata).then((snapshot) => {
+        getDownloadURL(snapshot.ref).then((url) => {
+          data.value.images.unshift(url)
+          submit()
+        });
+      });
+    };
+  };
 </script>
 
 <style scoped>

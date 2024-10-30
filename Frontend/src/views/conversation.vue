@@ -42,6 +42,7 @@
 import "primeicons/primeicons.css";
 
 export default {
+
     props: ["activeConversation", "name", "shownName", "authorName", "receiverName"],
     data() {
         return {
@@ -61,10 +62,14 @@ export default {
 },
 methods: {
     sendMessage: function() {
+      console.log(this.messageText)
         this.activeConversation.sendMessage(this.messageText)
-            .then(() => {
-                this.messageText = ""
-            })
+          .then(() => {
+              this.messageText = ""
+          })
+        if(this.messageText == "!game"){
+          this.$router.push('/quiz');
+        }
     },
     shouldHideAvatar(message, index) {
         // First get the next message
