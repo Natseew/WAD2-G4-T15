@@ -2,20 +2,25 @@
     <div id="conversation">
       <div class="chat-title">
         <span class="back-button pi pi-chevron-left d-lg-none" @click="$emit('reverse-chat-list')"></span>
-        <span>{{ activeConversation.uniqueName }} </span>
+        <span>{{ shownName }} </span>
       </div>
       <div class="conversation-container">
         <div 
-          v-for="message in messages" :key="message.index"
+          v-for="(message, index) in messages" 
+          :key="message.index"
           class="bubble-container"
-          :class="{ myMessage: message?.state?.author === name }"
+          :class="{ 
+            myMessage: message?.state?.author === name,
+            senderMessage: message?.state?.author !== name,
+            noAvatar: shouldHideAvatar(message, index)
+          }"
         >
           <div class="message-row">
             <div class="bubble">
-              <div class="name">{{ message?.state?.author }}:</div>
+              <div class="name" v-if="message?.state?.author !== name">{{ message?.state?.author === name ? authorName : receiverName }}</div>
               <div class="message">{{ message?.state?.body }}</div>
             </div>
-            <div class="flex items-end chat-profile">
+            <div class="flex items-end chat-profile" v-if="!shouldHideAvatar(message, index)">
               <v-avatar color="surface-variant" rounded="1">
                 <v-img
                   src="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" 
@@ -37,7 +42,8 @@
 import "primeicons/primeicons.css";
 
 export default {
-    props: ["activeConversation", "name"],
+
+    props: ["activeConversation", "name", "shownName", "authorName", "receiverName"],
     data() {
         return {
             messages: [],
@@ -56,12 +62,24 @@ export default {
 },
 methods: {
     sendMessage: function() {
+      console.log(this.messageText)
         this.activeConversation.sendMessage(this.messageText)
-            .then(() => {
-                this.messageText = ""
-            })
+          .then(() => {
+              this.messageText = ""
+          })
+        if(this.messageText == "!game"){
+          this.$router.push('/quiz');
+        }
+    },
+    shouldHideAvatar(message, index) {
+        // First get the next message
+        const nextMessage = this.messages[index + 1];
+                
+        // Hide avatar if next message is also from the current user
+        return nextMessage && nextMessage.state.author === message.state.author;
+
     }
-}
+  }
 }
 </script>
 
@@ -95,7 +113,7 @@ methods: {
 }
 
 /* Row for each message bubble and avatar */
-.message-row {
+.message-row{
   display: flex;
 }
 
@@ -119,7 +137,7 @@ methods: {
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
 }
 
 /* Message bubble styling */
@@ -135,7 +153,25 @@ methods: {
 
 /* Styling for the sender's own messages */
 .bubble-container.myMessage {
-  align-items: flex-start;
+  align-items: flex-end;
+}
+
+/* Styling for the matches messages */
+.bubble-container.senderMessage .message-row{
+  flex-direction: row-reverse;
+}
+
+.noAvatar .message-row .bubble{
+  margin-bottom: 0px;
+}
+
+/*Style positioning of bubble */
+.myMessage.noAvatar .bubble{
+  margin-right: 60px;
+}
+
+.senderMessage.noAvatar .bubble{
+  margin-left: 60px;
 }
 
 .back-button{

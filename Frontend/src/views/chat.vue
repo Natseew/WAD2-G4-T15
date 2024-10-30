@@ -12,7 +12,7 @@
                                         <div class="chat-list">
                                             <v-list-item 
                                                 v-for="item of matches" 
-                                                @click="() => { joinConversation(item.chatName); reverseChatList(); }" 
+                                                @click="() => { joinConversation(item.uid, item.chatName); reverseChatList(); shownChatName = `${item.name}'s and ${name}'s chat`; receiverName=item.name}" 
                                                 :class="{ 'active-chat': activeConversation && activeConversation.uniqueName === item.chatName }"
                                             >
                                                 <div class="d-flex">
@@ -34,11 +34,14 @@
                                     <div v-if="activeConversation">
                                         <Conversation 
                                             :active-conversation="activeConversation" 
-                                            :name="name" 
+                                            :name="uid" 
+                                            :shownName = "shownChatName"
+                                            :authorName = "name"
+                                            :receiverName = "receiverName"
                                             @reverse-chat-list="reverseChatList()"
                                         />
                                     </div>
-                                    <div v-else class="no-chat d-none d-lg-flex">
+                                    <div v-else class="no-chat" v-if="!isScreenMediumOrLess()">
                                         <h3>Select a chat to start messaging</h3>
                                     </div>
                                 </transition>
@@ -73,11 +76,13 @@ export default {
             statusString: "",
             activeConversation: null,
             name: "",
-            nameRegistered: false,
             isConnected: false,
             uid: "",
             matches:[],
-            showChatList: true
+            showChatList: true,
+            shownChatName: "",
+            receiverName: "",
+            windowWidth: window.innerWidth
         }
     },
     methods: {
@@ -112,7 +117,6 @@ export default {
             })
         },
         registerName: async function() {
-            this.nameRegistered = true
             await this.initConversationsClient()
         },
         createConversation: async function(user2, chatName) {
@@ -129,16 +133,16 @@ export default {
                 const newConversation = await this.conversationsClient.createConversation({uniqueName: chatName})
                 const joinedConversation = await newConversation.join().catch(err => console.log(err))
                 await joinedConversation.add(this.uid).catch(err => console.log("error: ", err))
-                await joinedConversation.add("NeverAlone").catch(err => console.log("error: ", err))
                 await joinedConversation.add(user2).catch(err => console.log("error: ", err))
+                await joinedConversation.add("NeverAlone").catch(err => console.log("error: ", err))
                 this.activeConversation = joinedConversation
             } catch {
-               console.log("Conversation Already Exists")
+                this.activeConversation = await (this.conversationsClient.getConversationByUniqueName(chatName))
             }
         },
-        joinConversation: async function(chatName) {
+        joinConversation: async function(user2, chatName) {
             this.activeConversation = null
-            this.activeConversation = await (this.conversationsClient.getConversationByUniqueName(chatName))
+            this.createConversation(user2 ,chatName)
         },
         showList() {
             if(this.isScreenMediumOrLess()){
@@ -159,14 +163,28 @@ export default {
             return true;
         },
         isScreenMediumOrLess() {
-            return window.innerWidth <= 960;
+            return this.windowWidth <= 960;
         },
         reverseChatList(){
             this.activeConversation = null
             this.showChatList = !this.showChatList;
+        },
+        handleResize() {
+            this.windowWidth = window.innerWidth;
+            console.log("Window resized to:", window.innerWidth);
+            if(this.isScreenMediumOrLess()){
+                this.showChatList = !this.activeConversation;
+            }
+            else{
+                this.showChatList = true;
+            }
+            console.log(this.showChatList);
         }
     },
     async mounted() {
+
+        window.addEventListener("resize", this.handleResize);
+
         const auth = getAuth();
 
         onAuthStateChanged(auth, (user) => {
@@ -178,9 +196,9 @@ export default {
                     .then(response =>{
                         // handle success
                         console.log(response.data)
-                        this.value = response.data.name
+                        this.name = response.data.name
                         for(var item of response.data.matches){
-                            this.matches.push(JSON.parse(item))
+                            this.matches.push(item)
                         }
                     })
                 this.registerName()
@@ -191,6 +209,10 @@ export default {
                 router.push('/login');
             }
         })
+    },
+
+    beforeDestroy() {
+        window.removeEventListener("resize", this.handleResize);
     }
 }
 

@@ -54,8 +54,9 @@ router.post('/:uid', async (req, res) => {
     hates: req.body.hates || '',
     dealbreakers: req.body.dealbreakers || '', 
     images: req.body.images || [],
-    likes: req.body.images || [],
-    matches: req.body.images || []
+    likes: req.body.likes || [],
+    dislikes: req.body.dislikes || [],
+    matches: req.body.matches || []
   }); 
 
   res.sendStatus(200);
@@ -89,12 +90,17 @@ router.post('/populate_homepage/:uid', async (req, res) => {
 
     const likedUserIds = new Set(currentUser.likes?.map(like => like.uid) || []);
     const matchedUserIds = new Set(currentUser.matches?.map(match => match.uid) || []);
+    const dislikedUserIds = new Set(currentUser.dislikes?.map(dislike => dislike.uid) || []);
 
     const users = [];
     oppositeGenderQuery.forEach(doc => {
       const userData = doc.data();
 
-      if (!likedUserIds.has(doc.id) && !matchedUserIds.has(doc.id)) {
+      if (
+        !likedUserIds.has(doc.id) &&
+        !matchedUserIds.has(doc.id) &&
+        !dislikedUserIds.has(doc.id)
+      ) {
         users.push(userData);
       }
     });
@@ -106,6 +112,7 @@ router.post('/populate_homepage/:uid', async (req, res) => {
     res.sendStatus(500);
   }
 });
+
 
 
 
@@ -126,12 +133,10 @@ router.post('/like/:uid/:likedUserId', async (req, res) => {
 
     const userData = userDoc.data();
     const likedUserData = likedUserDoc.data();
-
-    const likedUserAlreadyLiked = likedUserData.likes?.some(like => like.uid === uid);
+    const likedUserAlreadyLiked = likedUserData.likes?.some(like => like.uid == uid);
 
     if (likedUserAlreadyLiked) {
-      const matchCount = (userData.matches?.length || 0) + 1;
-      const chatName = `chatTest${matchCount}`;
+      const chatName = `${uid}${likedUserId}`;
 
       const userMatch = { name: likedUserData.name, chatName, uid: likedUserId };
       const likedUserMatch = { name: userData.name, chatName, uid };
@@ -170,6 +175,48 @@ router.post('/like/:uid/:likedUserId', async (req, res) => {
     console.error('Error liking user:', error);
     return res.sendStatus(500);
   }
+});
+
+router.post('/dislike/:uid/:dislikedUserId', async (req, res) => {
+
+  try {
+
+    const { uid, dislikedUserId } = req.params;
+
+    const userDoc = await ref.doc(uid).get();
+    const dislikedUserDoc = await ref.doc(dislikedUserId).get();
+
+    if (!userDoc.exists) {
+      return res.status(404).send('User not found');
+    }
+
+    if (!dislikedUserDoc.exists) {
+      return res.status(404).send('Liked user not found');
+    }
+
+    const userData = userDoc.data();
+    const dislikedUserData = dislikedUserDoc.data();
+
+    const alreadyDisliked = userData.dislikes?.some(dislike => dislike.uid === dislikedUserId);
+    if (alreadyDisliked) {
+      return res.status(400).send('User already disliked');
+    }
+
+    await ref.doc(uid).update({
+      dislikes: FieldValue.arrayUnion({
+        name: dislikedUserData.name,
+        uid: dislikedUserId
+      })
+    });
+
+    console.log(`Liked ${dislikedUserId} for user ${uid}`);
+    return res.sendStatus(200);
+
+  } catch (error){
+    console.error('Error disliking user:', error);
+    return res.sendStatus(500);
+  }
+
 });
 
 

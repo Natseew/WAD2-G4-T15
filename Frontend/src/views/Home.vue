@@ -79,6 +79,8 @@ const swipeCard = (index, isRightSwipe) => {
   if (swipedMatch) {
     if (isRightSwipe) {
       likeUser(swipedMatch);
+    } else {
+      dislikeUser(swipedMatch);
     }
 
     matches.value.splice(index, 1);
@@ -95,6 +97,14 @@ const likeUser = (match) => {
   console.log(uid)
   console.log(likedUserId)
   store.dispatch('likeUser', { uid, likedUserId });
+};
+
+const dislikeUser = (match) => {
+  const uid = store.getters.getUser.uid;
+  const dislikedUserId = match.uid;
+  console.log(uid)
+  console.log(dislikedUserId)
+  store.dispatch('dislikeUser', { uid, dislikedUserId });
 };
 
 const handleSwipeLeft = (index) => {
