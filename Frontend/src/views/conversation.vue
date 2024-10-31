@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="input-container">
-        <input @keyup.enter="sendMessage" v-model="messageText" placeholder="Enter your message">
+        <input @keyup.enter="sendMessage" v-model="messageText" :placeholder="placeholderText">
         <button class="pi pi-send" @click="sendMessage"></button>
       </div>
     </div>
@@ -48,7 +48,8 @@ export default {
         return {
             messages: [],
             messageText: "",
-            isSignedInUser: false
+            isSignedInUser: false,
+            placeholderText: "Enter your message"
         }
     },
     mounted() {
@@ -63,6 +64,10 @@ export default {
 methods: {
     sendMessage: function() {
       console.log(this.messageText)
+        if(!this.messageText.trim()){
+          this.placeholderText = "Message cannot be empty";
+          return;
+        }
         this.activeConversation.sendMessage(this.messageText)
           .then(() => {
               this.messageText = ""
@@ -88,7 +93,7 @@ methods: {
 
 @media (max-width: 769px){
   .conversation-container {
-    max-height: calc(100vh - 250px);
+    max-height: calc(100vh - 260px);
   }
 }
 
@@ -242,7 +247,7 @@ input:focus {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 20px;
-  background: linear-gradient(to bottom, #FD0E42, #C30F31);
+  background: linear-gradient(to bottom, #B0190F, #c58550);
   border: 2px solid transparent;
   background-clip: content-box;
 }

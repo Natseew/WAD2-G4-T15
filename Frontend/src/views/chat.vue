@@ -250,7 +250,7 @@ export default {
 }
 
 #chat {
-    background: linear-gradient(to bottom, #FD0E42, #C30F31);
+    background: linear-gradient(to bottom, #B0190F, #c58550);
 }
 
 .v-col {
@@ -315,10 +315,10 @@ export default {
     padding: 3px; /* Border width */
     background: conic-gradient(
       from var(--angle),
-      #ff7676 25%,
-      #f54ea2,
-      #ffb3b3 75%,
-      #ff7676 
+      #c58550 25%,
+      #ffb3b3,
+      #B0190F 75%,
+      #c58550 
     );
     -webkit-mask: 
       linear-gradient(#fff 0 0) content-box,
@@ -359,7 +359,7 @@ export default {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 20px;
-  background: linear-gradient(to bottom, #FD0E42, #C30F31);
+  background: linear-gradient(to bottom, #B0190F, #c58550);
   border: 2px solid transparent;
   background-clip: content-box;
 }
