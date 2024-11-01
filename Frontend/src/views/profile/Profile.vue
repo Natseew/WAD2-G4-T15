@@ -7,9 +7,9 @@
     <div class="container mx-auto px-4 pt-20 pb-8 relative z-10">
       <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6">
         <v-overlay
-            v-model="overlay"
-            class="align-center justify-center"
-            >
+          v-model="overlay"
+          class="align-center justify-center"
+        >
           <v-card width="450" align-center justify-center class="pa-4">
             <v-row>
               <v-col sm="8">
@@ -39,7 +39,11 @@
         </div>
         <div v-else>
           <div class="flex flex-col items-center mb-8 relative">
-            <PencilSquareIcon @click="disabled = !disabled" class="absolute right-0" style="width: 1.8rem; height: 1.8rem;"></PencilSquareIcon>
+            <PencilSquareIcon
+              @click="disabled = !disabled"
+              class="absolute right-0 edit-icon"
+              style="width: 1.8rem; height: 1.8rem;"
+            ></PencilSquareIcon>
             <div class="relative mb-4">
               <img
                 @click="overlay = !overlay"
@@ -55,66 +59,66 @@
           <!-- Profile Information -->
           <v-form validate-on="submit lazy" @submit.prevent="submit" class="relative">
             <v-row v-if="!disabled">
-            <!-- Introduction Section -->
-            <v-col cols="12">
-              <div class="profile-field">
-                <label>Name</label>
-                <input type="text"  v-model="data.name" :disabled="disabled" class="profile-input" />
-              </div>
-            </v-col>
-          </v-row>
-          <v-row>
-            <!-- Introduction Section -->
-            <v-col cols="12">
-              <div class="profile-field">
-                <label>Introduction</label>
-                <textarea v-model="data.introduction" :disabled="disabled" class="profile-textarea" style="width: 100%; height: 100%"></textarea>
-              </div>
-            </v-col>
-          </v-row>
-          <v-row>
-            <!-- Basic Info Section -->
-            <v-col cols="6">
-              <div class="profile-field">
-                <label>Age</label>
-                <input type="text" v-model="data.age" :disabled="disabled" class="profile-input" />
-              </div>
-              
-              <div class="profile-field"  >
-                <label>Gender</label>
-                <v-select
-                  :disabled="disabled"
-                  label="Gender"
-                  :items="['Male','Female']"
-                  v-model="data.gender"
-                ></v-select>
-              </div>
-            </v-col>
-            <v-col cols="6">
-              <div class="profile-field">
-                <label>Religion</label>
-                <input type="text" v-model="data.religion" :disabled="disabled" class="profile-input" />
-              </div>
+              <!-- Introduction Section -->
+              <v-col cols="12">
+                <div class="profile-field">
+                  <label>Name</label>
+                  <input type="text" v-model="data.name" :disabled="disabled" class="profile-input" />
+                </div>
+              </v-col>
+            </v-row>
+            <v-row>
+              <!-- Introduction Section -->
+              <v-col cols="12">
+                <div class="profile-field">
+                  <label>Introduction</label>
+                  <textarea v-model="data.introduction" :disabled="disabled" class="profile-textarea" style="width: 100%; height: 100%"></textarea>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row>
+              <!-- Basic Info Section -->
+              <v-col cols="6">
+                <div class="profile-field">
+                  <label>Age</label>
+                  <input type="text" v-model="data.age" :disabled="disabled" class="profile-input" />
+                </div>
 
-              <div class="profile-field">
-                <label>Looking For</label>
-                <v-select
-                  :disabled="disabled"
-                  label="Gender"
-                  :items="['Love','Friends']"
-                  v-model="data.lookingFor"
-                ></v-select>
-              </div>
-            </v-col>
-          </v-row>
+                <div class="profile-field">
+                  <label>Gender</label>
+                  <v-select
+                    :disabled="disabled"
+                    label="Gender"
+                    :items="['Male','Female']"
+                    v-model="data.gender"
+                  ></v-select>
+                </div>
+              </v-col>
+              <v-col cols="6">
+                <div class="profile-field">
+                  <label>Religion</label>
+                  <input type="text" v-model="data.religion" :disabled="disabled" class="profile-input" />
+                </div>
+
+                <div class="profile-field">
+                  <label>Looking For</label>
+                  <v-select
+                    :disabled="disabled"
+                    label=""
+                    :items="['Love','Friends']"
+                    v-model="data.lookingFor"
+                  ></v-select>
+                </div>
+              </v-col>
+            </v-row>
 
             <!-- Full Width Sections -->
-          <v-row class="space-y-4">
-            <v-col class="profile-field">
-              <label>Personality Description</label>
-              <textarea v-model="data.personalityDescription" :disabled="disabled" class="profile-textarea"></textarea>
-            </v-col>
-          </v-row>
+            <v-row class="space-y-4">
+              <v-col class="profile-field">
+                <label>Personality Description</label>
+                <textarea v-model="data.personalityDescription" :disabled="disabled" class="profile-textarea"></textarea>
+              </v-col>
+            </v-row>
 
             <v-row class="gap-4">
               <v-col class="profile-field">
@@ -127,26 +131,26 @@
               </v-col>
             </v-row>
 
-              <v-row class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <v-col class="profile-field">
-                  <label>Goals</label>
-                  <textarea v-model="data.goals" :disabled="disabled" class="profile-textarea"></textarea>
-                </v-col>
-                <v-col class="profile-field">
-                  <label>Dealbreakers</label>
-                  <textarea v-model="data.dealbreakers" :disabled="disabled" class="profile-textarea"></textarea>
-                </v-col>
-              </v-row>
+            <v-row class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <v-col class="profile-field">
+                <label>Goals</label>
+                <textarea v-model="data.goals" :disabled="disabled" class="profile-textarea"></textarea>
+              </v-col>
+              <v-col class="profile-field">
+                <label>Dealbreakers</label>
+                <textarea v-model="data.dealbreakers" :disabled="disabled" class="profile-textarea"></textarea>
+              </v-col>
+            </v-row>
 
-              <v-row class="profile-field">
-                <label>Hobbies</label>
-                <textarea v-model="data.hobbies" :disabled="disabled" class="profile-textarea"></textarea>
-              </v-row>
+            <v-row class="profile-field">
+              <label>Hobbies</label>
+              <textarea v-model="data.hobbies" :disabled="disabled" class="profile-textarea"></textarea>
+            </v-row>
 
-              <v-row v-if="!disabled">
-                <v-btn class="mt-2" text="Submit" type="submit" block>Submit</v-btn>
-              </v-row>
-            </v-form>
+            <v-row v-if="!disabled">
+              <v-btn class="mt-2" text="Submit" type="submit" block>Submit</v-btn>
+            </v-row>
+          </v-form>
         </div>
       </div>
     </div>
@@ -160,90 +164,85 @@ import Navbar from '../../components/Navbar.vue';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
-import {ref as firebaseRef} from "firebase/storage";
+import { ref as firebaseRef } from "firebase/storage";
 import { PencilSquareIcon } from '@heroicons/vue/24/solid';
 
 const router = useRouter();
 const auth = getAuth();
-let userData = ref()
+let userData = ref();
 
 const loading = ref(true);
-let disabled = ref(true)
-let overlay = ref(false)
+let disabled = ref(true);
+let overlay = ref(false);
 
 const storage = getStorage();
-  
 
-  // Create file metadata including the content type
-  /* @type {any} */
-  const metadata = {
-    contentType: 'image/jpg',
-  };
-  const file = ref()
-  // Upload the file and metadata
-
+const metadata = {
+  contentType: 'image/jpg',
+};
+const file = ref();
 
 let data = ref({
   "name": "",
-    "age": "",
-    "gender": "",
-    "hobbies": "",
-    "religion":"",
-    "lookingFor": "",
-    "introduction":"",
-    "personalityDescription":"",
-    "loves":"",
-    "hates":"",
-    "dealbreakers":"",
-    "goals":"",
-    "images":[],
-    "likes": [],
-    "matches": []
+  "age": "",
+  "gender": "",
+  "hobbies": "",
+  "religion": "",
+  "lookingFor": "",
+  "introduction": "",
+  "personalityDescription": "",
+  "loves": "",
+  "hates": "",
+  "dealbreakers": "",
+  "goals": "",
+  "images": [],
+  "likes": [],
+  "matches": []
 });
 
 onAuthStateChanged(auth, (user) => {
-  loading.value = true
+  loading.value = true;
   if (user) {
-    userData.value = user
-    axios.get('/user/'+user.uid)
+    userData.value = user;
+    axios.get('/user/' + user.uid)
       .then(function (response) {
         data.value = response.data;
         data.value.email = user.email;
-        loading.value = false
-    })
+        loading.value = false;
+      });
   } else {
     router.push('/login');
   }
 });
 
-const submit =  (() => {
-  if(userData){
-    loading.value = true; 
-    try{
-      axios.post('/user/'+userData.value.uid, data.value)
-      .then(function (response) {
-        console.log(response)
-      })
-    }catch(error){
-      console.log(error)
+const submit = (() => {
+  if (userData) {
+    loading.value = true;
+    try {
+      axios.post('/user/' + userData.value.uid, data.value)
+        .then(function (response) {
+          console.log(response);
+        });
+    } catch (error) {
+      console.log(error);
     }
     loading.value = false;
-    disabled.value = true; 
+    disabled.value = true;
     overlay.value = false;
   }
 });
 
 const uploadTask = () => {
-    if(file){
-      const storageRef = firebaseRef(storage, 'gs://wad2-g4-t15.appspot.com/'+file.value.name)
-      uploadBytes(storageRef, file.value, metadata).then((snapshot) => {
-        getDownloadURL(snapshot.ref).then((url) => {
-          data.value.images.unshift(url)
-          submit()
-        });
+  if (file.value) {
+    const storageRef = firebaseRef(storage, 'gs://wad2-g4-t15.appspot.com/' + file.value.name);
+    uploadBytes(storageRef, file.value, metadata).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        data.value.images.unshift(url);
+        submit();
       });
-    };
-  };
+    });
+  }
+};
 </script>
 
 <style scoped>
@@ -280,11 +279,24 @@ const uploadTask = () => {
   @apply w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none disabled:bg-gray-50 disabled:text-gray-500;
 }
 
-.profile-textarea   {
+.profile-textarea {
   @apply w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none disabled:bg-gray-50 disabled:text-gray-500 min-h-[100px] resize-none;
 }
 
 .navbar {
   z-index: 10;
+}
+
+.edit-icon {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.edit-icon:hover {
+  color: #FD0E42; /* Change the color on hover */
+}
+
+.edit-icon:active {
+  color: #C30F31; /* Darker color when clicked */
 }
 </style>
