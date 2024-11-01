@@ -19,7 +19,7 @@
             <div class="card-body">
               <h1 class="name">{{ name }}</h1>
               <Chip v-if="lookingFor === 'Love'" label="Looking for love" style="height: 1.2rem; background-color: pink; color: red;" />
-              <Chip v-if="lookingFor === 'Love'" label="Looking for friends" style="height: 1.2rem; background-color: lightblue;" />
+              <Chip v-if="lookingFor === 'Friends'" label="Looking for friends" style="height: 1.2rem; background-color: lightblue;" />
               
               <div class="quick-info">
                 <span>{{ age }} • {{ gender }} • {{ religion }}</span>

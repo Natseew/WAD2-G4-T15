@@ -137,6 +137,7 @@ store.subscribe((mutation, state) => {
   top: 0;
   left: 0;
   z-index: 1;
+  overflow: auto;
 }
 
 .red-background {

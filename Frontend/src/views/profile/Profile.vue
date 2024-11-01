@@ -80,9 +80,14 @@
                 <input type="text" v-model="data.age" :disabled="disabled" class="profile-input" />
               </div>
               
-              <div class="profile-field">
+              <div class="profile-field"  >
                 <label>Gender</label>
-                <input type="text" v-model="data.gender" :disabled="disabled" class="profile-input" />
+                <v-select
+                  :disabled="disabled"
+                  label="Gender"
+                  :items="['Male','Female']"
+                  v-model="data.gender"
+                ></v-select>
               </div>
             </v-col>
             <v-col cols="6">
@@ -93,7 +98,12 @@
 
               <div class="profile-field">
                 <label>Looking For</label>
-                <input type="text" v-model="data.lookingFor" :disabled="disabled" class="profile-input" />
+                <v-select
+                  :disabled="disabled"
+                  label="Gender"
+                  :items="['Love','Friends']"
+                  v-model="data.lookingFor"
+                ></v-select>
               </div>
             </v-col>
           </v-row>
