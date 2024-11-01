@@ -75,9 +75,9 @@ router.post('/populate_homepage/:uid', async (req, res) => {
 
     let oppositeGender;
     if (currentGender.toLowerCase() === 'male') {
-      oppositeGender = 'female';
+      oppositeGender = 'Female';
     } else if (currentGender.toLowerCase() === 'female') {
-      oppositeGender = 'male';
+      oppositeGender = 'Male';
     } else {
       return res.status(400).send('Unknown gender for current user');
     }

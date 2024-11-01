@@ -293,10 +293,10 @@ const uploadTask = () => {
 }
 
 .edit-icon:hover {
-  color: #FD0E42; /* Change the color on hover */
+  color: #FD0E42;
 }
 
 .edit-icon:active {
-  color: #C30F31; /* Darker color when clicked */
+  color: #C30F31;
 }
 </style>
