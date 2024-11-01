@@ -24,7 +24,10 @@
                                                     >
                                                         <v-img src="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" />
                                                     </Avatar>
-                                                    <span class="font-bold">{{ item.name }}</span>
+                                                    <div class="d-flex flex-column">
+                                                        <span class="font-bold">{{ item.name }}</span>
+                                                        <span>{{ latestMessages[item.chatName] }}</span>
+                                                    </div>
                                                 </div>
                                             </v-list-item>
                                         </div>
@@ -81,6 +84,7 @@ export default {
             isConnected: false,
             uid: "",
             matches:[],
+            latestMessages: {},
             showChatList: true,
             shownChatName: "",
             receiverName: "",
@@ -93,6 +97,25 @@ export default {
             const response = await fetch(`http://localhost:3000/chat/auth/${identity}`)
             const responseJson = await response.json()
             return responseJson.token
+        },
+
+        async fetchLatestMessage(match) {
+            try {
+                const conversation = await this.conversationsClient.getConversationByUniqueName(match.chatName);
+                const messages = await conversation.getMessages(1); // Get only the latest message
+                const latestMessage = messages.items.length > 0 ? messages.items[0].body : 'No messages yet';
+                
+                this.latestMessages = {
+                    ...this.latestMessages,
+                    [match.chatName]: latestMessage
+                };
+            } catch (error) {
+                console.error(`Error fetching latest message for ${match.chatName}:`, error);
+                this.latestMessages = {
+                    ...this.latestMessages,
+                    [match.chatName]: 'No messages yet'
+                };
+            }
         },
 
         initConversationsClient: async function() {
@@ -173,14 +196,12 @@ export default {
         },
         handleResize() {
             this.windowWidth = window.innerWidth;
-            console.log("Window resized to:", window.innerWidth);
             if(this.isScreenMediumOrLess()){
                 this.showChatList = !this.activeConversation;
             }
             else{
                 this.showChatList = true;
             }
-            console.log(this.showChatList);
         }
     },
     async mounted() {
@@ -201,6 +222,7 @@ export default {
                         this.name = response.data.name
                         for(var item of response.data.matches){
                             this.matches.push(item)
+                            this.fetchLatestMessage(item);
                         }
                     })
                 this.registerName()

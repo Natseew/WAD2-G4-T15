@@ -63,7 +63,7 @@ export default {
 },
 methods: {
     sendMessage: function() {
-      console.log(this.messageText)
+      console.log(this.activeConversation)
         if(!this.messageText.trim()){
           this.placeholderText = "Message cannot be empty";
           return;
