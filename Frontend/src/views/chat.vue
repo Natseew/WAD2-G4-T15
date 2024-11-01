@@ -24,9 +24,11 @@
                                                     >
                                                         <v-img src="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" />
                                                     </Avatar>
-                                                    <div class="d-flex flex-column">
+                                                    <div class="d-flex flex-column align-start">
                                                         <span class="font-bold">{{ item.name }}</span>
-                                                        <span>{{ latestMessages[item.chatName] }}</span>
+                                                        <span> 
+                                                            {{ latestMessages[item.chatName]?.sender || '' }}: {{ latestMessages[item.chatName]?.body || "" }} 
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </v-list-item>
@@ -103,17 +105,28 @@ export default {
             try {
                 const conversation = await this.conversationsClient.getConversationByUniqueName(match.chatName);
                 const messages = await conversation.getMessages(1); // Get only the latest message
-                const latestMessage = messages.items.length > 0 ? messages.items[0].body : 'No messages yet';
-                
-                this.latestMessages = {
-                    ...this.latestMessages,
-                    [match.chatName]: latestMessage
-                };
+
+                if (messages.items.length > 0) {
+                    const latestMessage = messages.items[0];
+                    const senderName = latestMessage.author === this.uid ? "You" : this.receiverName; 
+
+                    // Update the latestMessages object with both sender and message body
+                    this.latestMessages = {
+                        ...this.latestMessages,
+                        [match.chatName]: {
+                            body: latestMessage.body,
+                            sender: senderName
+                        }
+                    };
+                }
             } catch (error) {
                 console.error(`Error fetching latest message for ${match.chatName}:`, error);
                 this.latestMessages = {
                     ...this.latestMessages,
-                    [match.chatName]: 'No messages yet'
+                    [match.chatName]: {
+                        body: 'No messages yet',
+                        sender: ''
+                    }
                 };
             }
         },
