@@ -1,5 +1,4 @@
 <template>
-
   <div class="background">
     <Navbar class="navbar" />
     <div class="red-background"></div>
@@ -13,7 +12,10 @@
             :ref="getCardRef(index)"
             @swipe-right="handleSwipeRight(index)"
             @swipe-left="handleSwipeLeft(index)"
-            :style="{ zIndex: matches.length - index }"
+            :style="{ 
+              '--z-index': matches.length - index, 
+              '--animation-delay': `${index * 0.2}s` 
+            }"
           />
         </div>
         <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" class="mt-15 z-10" />
@@ -37,14 +39,12 @@ const store = useStore();
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    // User is signed in
-    if(user.name == "newUser"){
+    if (user.name === "newUser") {
       router.push('/editProfile');
     }
     store.dispatch('fetchMatches', user.uid);
     store.dispatch('populateMatches', user.uid);
   } else {
-    // User is signed out
     router.push('/login');
   }
 });
@@ -81,7 +81,6 @@ const swipeCard = (index, isRightSwipe) => {
     } else {
       dislikeUser(swipedMatch);
     }
-
     matches.value.splice(index, 1);
     cardRefs.value.splice(index, 1);
     cardRefs.value = cardRefs.value.slice();
@@ -93,16 +92,12 @@ const swipeCard = (index, isRightSwipe) => {
 const likeUser = (match) => {
   const uid = store.getters.getUser.uid;
   const likedUserId = match.uid;
-  console.log(uid)
-  console.log(likedUserId)
   store.dispatch('likeUser', { uid, likedUserId });
 };
 
 const dislikeUser = (match) => {
   const uid = store.getters.getUser.uid;
   const dislikedUserId = match.uid;
-  console.log(uid)
-  console.log(dislikedUserId)
   store.dispatch('dislikeUser', { uid, dislikedUserId });
 };
 
@@ -114,19 +109,16 @@ const handleSwipeRight = (index) => {
   swipeCard(index, true);
 };
 
-//Uncomment when ready to use Vuex for fetching matches
 onMounted(() => {
   matches.value = store.getters.getPopulateMatches;
-  console.log(matches.value)
 });
 
 store.subscribe((mutation, state) => {
   if (mutation.type === 'setPopulateMatches') {
-    matches.value = state.populateMatches; // Update matches when populated
+    matches.value = state.populateMatches;
   }
 });
 </script>
-
 
 <style scoped>
 .background {
@@ -151,45 +143,6 @@ store.subscribe((mutation, state) => {
   z-index: 1;
 }
 
-.flex {
-  display: flex;
-}
-
-.h-screen {
-  height: 100vh;
-}
-
-.items-center {
-  align-items: center;
-}
-
-.justify-center {
-  justify-content: center;
-}
-
-.max-w-sm {
-  max-width: 25rem;
-}
-
-.w-full {
-  width: 100%;
-}
-
-.h-full {
-  height: 100%;
-}
-
-.navbar {
-  position:fixed;
-  z-index: 10;
-}
-
-.cards-stack {
-  position: relative;
-  width: 24rem;
-  height: 40rem;
-}
-
 .cards-stack {
   position: relative;
   width: 24rem;
@@ -197,16 +150,13 @@ store.subscribe((mutation, state) => {
 }
 
 .cards-stack > * {
-  position: relative;
+  position: absolute;
   top: 0;
   left: 0;
-  transition: transform 0.3s ease;
-}
-
-.cards-stack > *:not(:first-child) {
-  top: 10px;
-  left: 10px;
-  transform: scale(0.95);
+  animation: stackAnimation 0.8s ease forwards;
+  opacity: 0;
+  z-index: var(--z-index);
+  animation-delay: var(--animation-delay);
 }
 
 @keyframes stackAnimation {
@@ -219,28 +169,4 @@ store.subscribe((mutation, state) => {
     opacity: 1;
   }
 }
-
-.cards-stack > * {
-  position: absolute;
-  top: 0;
-  left: 0;
-  animation: stackAnimation 0.8s ease forwards;
-  opacity: 0;
-}
-
-.cards-stack > *:nth-child(1) {
-  animation-delay: 0.2s;
-  z-index: 3;
-}
-
-.cards-stack > *:nth-child(2) {
-  animation-delay: 0.4s;
-  z-index: 2;
-}
-
-.cards-stack > *:nth-child(3) {
-  animation-delay: 0.6s;
-  z-index: 1;
-}
-
 </style>
