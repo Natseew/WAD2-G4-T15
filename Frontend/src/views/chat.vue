@@ -45,6 +45,7 @@
                                             :shownName = "shownChatName"
                                             :authorName = "name"
                                             :receiverName = "receiverName"
+                                            :userImage = "userImage"
                                             @reverse-chat-list="reverseChatList()"
                                         />
                                     </div>
@@ -85,6 +86,7 @@ export default {
             name: "",
             isConnected: false,
             uid: "",
+            userImage: "",
             matches:[],
             latestMessages: {},
             showChatList: true,
@@ -233,6 +235,7 @@ export default {
                         // handle success
                         console.log(response.data)
                         this.name = response.data.name
+                        this.userImage = response.data.images[0]
                         for(var item of response.data.matches){
                             this.matches.push(item)
                             this.fetchLatestMessage(item);

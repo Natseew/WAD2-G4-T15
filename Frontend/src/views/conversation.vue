@@ -22,8 +22,12 @@
             </div>
             <div class="flex items-end chat-profile" v-if="!shouldHideAvatar(message, index)">
               <v-avatar color="surface-variant" rounded="1">
-                <v-img
-                  src="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" 
+                <v-img v-if="message?.state?.author === name"
+                  :src="userImage" 
+                >
+                </v-img>
+                <v-img v-else
+                  src="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
                 >
                 </v-img>
               </v-avatar>
@@ -43,7 +47,7 @@ import "primeicons/primeicons.css";
 
 export default {
 
-    props: ["activeConversation", "name", "shownName", "authorName", "receiverName"],
+    props: ["activeConversation", "name", "shownName", "authorName", "receiverName", "userImage"],
     data() {
         return {
             messages: [],
