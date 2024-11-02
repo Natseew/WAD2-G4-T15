@@ -8,7 +8,7 @@
         <div class="shape shape-triangle"></div>
       </div>
       <div class="hero-overlay"></div>
-      
+
       <div class="hero-content">
         <h1 class="animate-fade-up-delay text-6xl">NeverAlone</h1>
         <p class="animate-fade-up-slower text-xl">Your companion in staying connected and finding support.</p>
@@ -44,7 +44,7 @@
         <div class="feature-card animate-slide-left">
           <i class="pi pi-calendar feature-icon"></i>
           <h3>Unbiased Matchmaking</h3>
-          <p>Matchmaking is done by calcilating game scores</p>
+          <p>Matchmaking is done by calculating game scores</p>
         </div>
       </div>
     </section>
@@ -69,7 +69,7 @@ import Button from 'primevue/button';
   align-items: center;
   text-align: center;
   color: white;
-  background: linear-gradient(120deg, #ff7676, #f54ea2, #ffb3b3);
+  background: linear-gradient(to bottom, #B0190F, #c58550);
   background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
   overflow: hidden;
@@ -274,7 +274,7 @@ import Button from 'primevue/button';
 
 .feature-card h3 {
   margin: 1rem 0;
-  color: #f54ea2;
+  color: #B0190F;
 }
 
 .feature-card p {
@@ -283,6 +283,6 @@ import Button from 'primevue/button';
 
 .feature-icon {
   font-size: 3rem;
-  color: #f54ea2;
+  color: #B0190F;
 }
 </style>

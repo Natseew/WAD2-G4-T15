@@ -257,7 +257,7 @@ const uploadTask = () => {
 }
 
 .red-background {
-  background: linear-gradient(to bottom, #FD0E42, #C30F31);
+  background: linear-gradient(to bottom, #B0190F, #c58550);
   height: 40vh;
   width: 100%;
   position: absolute;
