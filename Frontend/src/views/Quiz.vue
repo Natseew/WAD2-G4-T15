@@ -21,7 +21,7 @@
           </div>
   
           <div v-if="quizStarted && currentQuestionIndex >= questions.length" class="quiz-complete scale-up">
-            <h1 v-if="loading">Finding the best matches for you...</h1>
+            <h1 v-if="loading">Redirecting back to your match...</h1>
             <div v-if="loading" class="loading-spinner"></div>
           </div>
         </div>
@@ -86,7 +86,7 @@
     const redirectAfterQuiz = () => {
     loading.value = true;
     setTimeout(() => {
-        router.push("/");
+        router.push("/chat");
     }, 2000);
     };
 </script>
