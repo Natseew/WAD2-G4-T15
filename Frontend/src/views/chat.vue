@@ -24,7 +24,12 @@
                                                     >
                                                         <v-img src="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" />
                                                     </Avatar>
-                                                    <span class="font-bold">{{ item.name }}</span>
+                                                    <div class="d-flex flex-column align-start">
+                                                        <span class="font-bold">{{ item.name }}</span>
+                                                        <span> 
+                                                            {{ latestMessages[item.chatName]?.sender || '' }}: {{ latestMessages[item.chatName]?.body || "" }} 
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </v-list-item>
                                         </div>
@@ -81,6 +86,7 @@ export default {
             isConnected: false,
             uid: "",
             matches:[],
+            latestMessages: {},
             showChatList: true,
             shownChatName: "",
             receiverName: "",
@@ -93,6 +99,36 @@ export default {
             const response = await fetch(`http://localhost:3000/chat/auth/${identity}`)
             const responseJson = await response.json()
             return responseJson.token
+        },
+
+        async fetchLatestMessage(match) {
+            try {
+                const conversation = await this.conversationsClient.getConversationByUniqueName(match.chatName);
+                const messages = await conversation.getMessages(1); // Get only the latest message
+
+                if (messages.items.length > 0) {
+                    const latestMessage = messages.items[0];
+                    const senderName = latestMessage.author === this.uid ? "You" : this.receiverName; 
+
+                    // Update the latestMessages object with both sender and message body
+                    this.latestMessages = {
+                        ...this.latestMessages,
+                        [match.chatName]: {
+                            body: latestMessage.body,
+                            sender: senderName
+                        }
+                    };
+                }
+            } catch (error) {
+                console.error(`Error fetching latest message for ${match.chatName}:`, error);
+                this.latestMessages = {
+                    ...this.latestMessages,
+                    [match.chatName]: {
+                        body: 'No messages yet',
+                        sender: ''
+                    }
+                };
+            }
         },
 
         initConversationsClient: async function() {
@@ -173,14 +209,12 @@ export default {
         },
         handleResize() {
             this.windowWidth = window.innerWidth;
-            console.log("Window resized to:", window.innerWidth);
             if(this.isScreenMediumOrLess()){
                 this.showChatList = !this.activeConversation;
             }
             else{
                 this.showChatList = true;
             }
-            console.log(this.showChatList);
         }
     },
     async mounted() {
@@ -201,6 +235,7 @@ export default {
                         this.name = response.data.name
                         for(var item of response.data.matches){
                             this.matches.push(item)
+                            this.fetchLatestMessage(item);
                         }
                     })
                 this.registerName()
@@ -250,7 +285,7 @@ export default {
 }
 
 #chat {
-    background: linear-gradient(to bottom, #FD0E42, #C30F31);
+    background: linear-gradient(to bottom, #B0190F, #c58550);
 }
 
 .v-col {
@@ -315,10 +350,10 @@ export default {
     padding: 3px; /* Border width */
     background: conic-gradient(
       from var(--angle),
-      #ff7676 25%,
-      #f54ea2,
-      #ffb3b3 75%,
-      #ff7676 
+      #c58550 25%,
+      #ffb3b3,
+      #B0190F 75%,
+      #c58550 
     );
     -webkit-mask: 
       linear-gradient(#fff 0 0) content-box,
@@ -359,7 +394,7 @@ export default {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 20px;
-  background: linear-gradient(to bottom, #FD0E42, #C30F31);
+  background: linear-gradient(to bottom, #B0190F, #c58550);
   border: 2px solid transparent;
   background-clip: content-box;
 }
