@@ -6,10 +6,7 @@
 
     <div class="container mx-auto px-4 pt-20 pb-8 relative z-10">
       <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6">
-        <v-overlay
-          v-model="overlay"
-          class="align-center justify-center"
-        >
+        <v-overlay v-model="overlay" class="align-center justify-center">
           <v-card width="450" align-center justify-center class="pa-4">
             <v-row>
               <v-col sm="8">
@@ -33,8 +30,9 @@
             </v-row>
           </v-card>
         </v-overlay>
+
         <!-- Profile Header -->
-        <div v-if="loading == true">
+        <div v-if="loading">
           <v-progress-circular color="blue-lighten-3" indeterminate :size="56"></v-progress-circular>
         </div>
         <div v-else>
@@ -59,7 +57,6 @@
           <!-- Profile Information -->
           <v-form validate-on="submit lazy" @submit.prevent="submit" class="relative">
             <v-row v-if="!disabled">
-              <!-- Introduction Section -->
               <v-col cols="12">
                 <div class="profile-field">
                   <label>Name</label>
@@ -68,7 +65,6 @@
               </v-col>
             </v-row>
             <v-row>
-              <!-- Introduction Section -->
               <v-col cols="12">
                 <div class="profile-field">
                   <label>Introduction</label>
@@ -77,13 +73,11 @@
               </v-col>
             </v-row>
             <v-row>
-              <!-- Basic Info Section -->
               <v-col cols="6">
                 <div class="profile-field">
                   <label>Age</label>
                   <input type="text" v-model="data.age" :disabled="disabled" class="profile-input" />
                 </div>
-
                 <div class="profile-field">
                   <label>Gender</label>
                   <v-select
@@ -99,7 +93,6 @@
                   <label>Religion</label>
                   <input type="text" v-model="data.religion" :disabled="disabled" class="profile-input" />
                 </div>
-
                 <div class="profile-field">
                   <label>Looking For</label>
                   <v-select
@@ -112,7 +105,6 @@
               </v-col>
             </v-row>
 
-            <!-- Full Width Sections -->
             <v-row class="space-y-4">
               <v-col class="profile-field">
                 <label>Personality Description</label>
@@ -152,6 +144,13 @@
             </v-row>
           </v-form>
         </div>
+
+        <v-snackbar v-model="snackbar" :timeout="3000" multi-line>
+          {{ snackbarMessage }}
+          <template #action>
+            <v-btn color="pink" text @click="snackbar = false">Close</v-btn>
+          </template>
+        </v-snackbar>
       </div>
     </div>
   </div>
@@ -162,7 +161,7 @@ import axios from 'axios';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Navbar from '../../components/Navbar.vue';
 import { useRouter } from 'vue-router';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
 import { ref as firebaseRef } from "firebase/storage";
 import { PencilSquareIcon } from '@heroicons/vue/24/solid';
@@ -174,6 +173,8 @@ let userData = ref();
 const loading = ref(true);
 let disabled = ref(true);
 let overlay = ref(false);
+let snackbar = ref(false);
+let snackbarMessage = ref("");
 
 const storage = getStorage();
 
@@ -213,6 +214,22 @@ onAuthStateChanged(auth, (user) => {
   } else {
     router.push('/login');
   }
+});
+
+const handleRouteLeave = (to, from, next) => {
+  if (!data.value.gender.trim() || !data.value.lookingFor.trim()) {
+    snackbarMessage.value = "Please fill in both Gender and Looking For fields.";
+    snackbar.value = true;
+    next(false);
+  } else {
+    next();
+  }
+};
+
+onMounted(() => {
+  router.beforeEach((to, from, next) => {
+    handleRouteLeave(to, from, next);
+  });
 });
 
 const submit = (() => {
