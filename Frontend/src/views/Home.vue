@@ -1,12 +1,13 @@
 <template>
   <div class="background">
     <Navbar class="navbar" />
+    <div>Hello</div>
     <div class="red-background"></div>
     <div class="flex justify-center items-center flex-col mt-15">
       <div class="flex flex-col items-center w-full">
         <div class="cards-stack">
           <NewMatchCard 
-            v-for="(match, index) in matches" 
+            v-for="(match, index) in filteredMatches" 
             :key="match.id" 
             v-bind="match" 
             :ref="getCardRef(index)"
@@ -18,14 +19,14 @@
             }"
           />
         </div>
-        <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" class="mt-15 z-10" />
+        <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" @filter-clicked="handleFilterClick" class="mt-15 z-10" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
@@ -53,12 +54,20 @@ const matches = ref([]);
 
 const cardRefs = ref([]);
 
+const showingLove = ref(true);
+
+const filteredMatches = computed(() => {
+  return matches.value.filter(match => 
+    showingLove.value ? match.lookingFor === 'Love' : match.lookingFor === 'Friends'
+  );
+});
+
 const getCardRef = (index) => (el) => {
   cardRefs.value[index] = el;
 };
 
 const handleHeartClick = () => {
-  if (matches.value.length === 0) return;
+  if (filteredMatches.value.length === 0) return;
   const topCard = cardRefs.value[0];
   if (topCard) {
     topCard.swipeRight();
@@ -66,15 +75,24 @@ const handleHeartClick = () => {
 };
 
 const handleTimesClick = () => {
-  if (matches.value.length === 0) return;
+  if (filteredMatches.value.length === 0) return;
   const topCard = cardRefs.value[0];
   if (topCard) {
     topCard.swipeLeft();
   }
 };
 
+const handleFilterClick = () => {
+  showingLove.value = !showingLove.value;
+  console.log({
+    showingLove: showingLove.value,
+    allMatches: matches.value,
+    filteredMatches: filteredMatches.value
+  });
+};
+
 const swipeCard = (index, isRightSwipe) => {
-  const swipedMatch = matches.value[index];
+  const swipedMatch = filteredMatches.value[index];
   if (swipedMatch) {
     if (isRightSwipe) {
       likeUser(swipedMatch);

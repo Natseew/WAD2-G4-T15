@@ -3,6 +3,15 @@
     <Button icon="pi pi-times" severity="secondary" text raised rounded class="round-button" @click="onTimesClick" />
     <!-- <Button icon="pi pi-star" severity="info" text raised rounded />
     <Button icon="pi pi-thumbs-up" severity="success" text raised rounded /> -->
+    <Button 
+      raised 
+      rounded 
+      :severity="isFriends ? 'warn': 'danger'" 
+      class="px-10" 
+      @click="onFilterClick"
+    >
+      {{ isFriends ? "Friend" : "Love" }}
+    </Button>
     <Button icon="pi pi-heart" severity="danger" text raised rounded @click="onHeartClick" />
   </div>
 </template>
@@ -15,12 +24,21 @@ export default {
   components: {
     Button,
   },
+  data() {
+    return {
+      isFriends: false
+    };
+  },
   methods: {
     onHeartClick() {
       this.$emit('heart-clicked');
     },
     onTimesClick() {
       this.$emit('times-clicked');
+    },
+    onFilterClick(){
+      this.isFriends = !this.isFriends;
+      this.$emit('filter-clicked');
     }
   }
 };
