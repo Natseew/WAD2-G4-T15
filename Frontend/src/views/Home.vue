@@ -54,6 +54,7 @@ onAuthStateChanged(auth, (user) => {
 });
 
 const matches = ref([]);
+
 const cardRefs = ref([]);
 
 const showingLove = ref(true);
@@ -101,7 +102,12 @@ const swipeCard = (index, isRightSwipe) => {
     } else {
       dislikeUser(swipedMatch);
     }
-    matches.value.splice(index, 1);
+
+    const matchIndex = matches.value.findIndex(match => match.uid === swipedMatch.uid);
+    if (matchIndex !== -1) {
+      matches.value.splice(matchIndex, 1); 
+    }
+
     cardRefs.value.splice(index, 1);
     cardRefs.value = cardRefs.value.slice();
 
