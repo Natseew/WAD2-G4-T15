@@ -22,6 +22,8 @@
         <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" @filter-clicked="handleFilterClick" class="mt-15 z-10" />
       </div>
     </div>
+
+    <MatchNotification v-if="showNotification" />
   </div>
 </template>
 
@@ -33,6 +35,7 @@ import { useRouter } from 'vue-router';
 import NewMatchCard from "../components/NewMatchCard.vue";
 import ButtonGroup from "../components/ButtonGroup.vue";
 import Navbar from "../components/Navbar.vue";
+import MatchNotification from '../components/MatchNotification.vue';
 
 const router = useRouter();
 const auth = getAuth();
@@ -51,7 +54,6 @@ onAuthStateChanged(auth, (user) => {
 });
 
 const matches = ref([]);
-
 const cardRefs = ref([]);
 
 const showingLove = ref(true);
@@ -136,6 +138,9 @@ store.subscribe((mutation, state) => {
     matches.value = state.populateMatches;
   }
 });
+
+const showNotification = computed(() => !!store.getters.getMatchNotification);
+
 </script>
 
 <style scoped>

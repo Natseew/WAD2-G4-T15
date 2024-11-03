@@ -6,7 +6,8 @@ const store = createStore({
   state() {
     return {
       user: {},
-      populateMatches: []
+      populateMatches: [],
+      matchNotification: null
     }
   },
   getters: {
@@ -15,6 +16,9 @@ const store = createStore({
     },
     getPopulateMatches(state) {
       return state.populateMatches;
+    },
+    getMatchNotification(state) {
+      return state.matchNotification;
     }
   },
   mutations: {
@@ -23,6 +27,12 @@ const store = createStore({
     },
     setPopulateMatches(state, populateMatchesData) {
       state.populateMatches = populateMatchesData;
+    },
+    setMatchNotification(state, matchData) {
+      state.matchNotification = matchData;
+    },
+    clearMatchNotification(state) {
+      state.matchNotification = null;
     },
     addLikeToUser(state, likedUser) {
       if (!state.user.likes) {
@@ -90,6 +100,27 @@ const store = createStore({
         console.error("Failed to dislike user:", error);
       }
     },
+
+    async likeUser({ commit }, { uid, likedUserId }) {
+      try {
+        const response = await axios.post(`${base_url}/user/like/${uid}/${likedUserId}`);
+        
+        if (response.status === 200) {
+          commit('addLikeToUser', { uid: likedUserId });
+          
+          if (response.data === 'Match created') {
+            const matchedUserData = { uid: likedUserId, name: response.data.name };
+            commit('setMatchNotification', matchedUserData);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to like user:", error);
+      }
+    },
+
+    clearMatchNotification({ commit }) {
+      commit('setMatchNotification', null);
+    }
   }
 });
 
