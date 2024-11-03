@@ -27,69 +27,91 @@
         </div>
       </div>
     </div>
-</template>
+  </template>
   
-<script setup>
-    import { ref, onMounted } from 'vue';
-    import { useRouter } from 'vue-router';
-    import Button from 'primevue/button';
+  <script setup>
+  import { ref, onMounted } from 'vue';
+  import { useRouter } from 'vue-router';
+  import Button from 'primevue/button';
+  
+  const router = useRouter();
+  const quizStarted = ref(false);
+  const currentQuestionIndex = ref(0);
+  const timeLeft = ref(5);
+  const score = ref(0);
+  const interval = ref(null);
+  const loading = ref(false);
+  const questions = ref([]);
+  
+  const decodeHtmlEntities = (text) => {
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = text;
+  return textarea.value;
+};
 
-    const router = useRouter();
-    const quizStarted = ref(false);
-    const currentQuestionIndex = ref(0);
-    const timeLeft = ref(5);
-    const score = ref(0);
-    const interval = ref(null);
-    const loading = ref(false);
-
-    const questions = ref([
-        { text: "What's the capital of France?", options: ["Paris", "London", "Berlin", "Rome"], correct: 0 },
-        { text: "Who painted the Mona Lisa?", options: ["Van Gogh", "Leonardo da Vinci", "Picasso", "Rembrandt"], correct: 1 },
-        { text: "What's the largest planet?", options: ["Earth", "Mars", "Jupiter", "Saturn"], correct: 2 },
-    ]);
-
-    const startQuiz = () => {
-        quizStarted.value = true;
-        startTimer();
-    };
-
-    const startTimer = () => {
-        timeLeft.value = 5;
-        clearInterval(interval.value);
-
-        interval.value = setInterval(() => {
-            if (timeLeft.value > 0) {
-                timeLeft.value -= 1;
-            } else {
-                nextQuestion();
-            }
-        }, 1000);
-    };
-
-    const selectAnswer = (index) => {
-        if (index === questions.value[currentQuestionIndex.value].correct) {
-            score.value += 1;
-        }
+const fetchQuestions = async () => {
+  try {
+    const response = await fetch('https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple');
+    const data = await response.json();
+    questions.value = data.results.map((item) => {
+      const options = [...item.incorrect_answers, item.correct_answer];
+      return {
+        text: decodeHtmlEntities(item.question),
+        options: options.map(option => decodeHtmlEntities(option)).sort(() => Math.random() - 0.5),
+        correct: options.indexOf(item.correct_answer),
+      };
+    });
+  } catch (error) {
+    console.error("Failed to fetch questions:", error);
+  }
+};
+  
+  const startQuiz = () => {
+    quizStarted.value = true;
+    startTimer();
+  };
+  
+  const startTimer = () => {
+    timeLeft.value = 5;
+    clearInterval(interval.value);
+  
+    interval.value = setInterval(() => {
+      if (timeLeft.value > 0) {
+        timeLeft.value -= 1;
+      } else {
         nextQuestion();
-    };
-
-    const nextQuestion = () => {
-        currentQuestionIndex.value += 1;
-        if (currentQuestionIndex.value < questions.value.length) {
-            startTimer();
-        } else {
-            clearInterval(interval.value);
-            redirectAfterQuiz();
-        }
-    };
-
-    const redirectAfterQuiz = () => {
-        loading.value = true;
-        setTimeout(() => {
-            router.push("/chat");
-        }, 2000);
-    };
-</script>
+      }
+    }, 1000);
+  };
+  
+  const selectAnswer = (index) => {
+    if (index === questions.value[currentQuestionIndex.value].correct) {
+      score.value += 1;
+    }
+    nextQuestion();
+  };
+  
+  const nextQuestion = () => {
+    currentQuestionIndex.value += 1;
+    if (currentQuestionIndex.value < questions.value.length) {
+      startTimer();
+    } else {
+      clearInterval(interval.value);
+      redirectAfterQuiz();
+    }
+  };
+  
+  const redirectAfterQuiz = () => {
+    loading.value = true;
+    setTimeout(() => {
+      router.push("/chat");
+    }, 2000);
+  };
+  
+  onMounted(() => {
+    fetchQuestions();
+  });
+  </script>
 
 <style scoped>
     @keyframes gradient-animation {
