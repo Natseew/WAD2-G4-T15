@@ -5,7 +5,16 @@
     <div class="red-background"></div>
     <div class="flex justify-center items-center flex-col mt-15">
       <div class="flex flex-col items-center w-full">
-        <div class="cards-stack">
+        <div class="cards-stack relative">
+
+          <div v-if="showingLove && filteredMatches.length === 0" class="no-matches-message">
+            No more users looking for love.
+          </div>
+          
+          <div v-if="!showingLove && filteredMatches.length === 0" class="no-matches-message">
+            No more users looking for friends.
+          </div>
+
           <NewMatchCard 
             v-for="(match, index) in filteredMatches" 
             :key="match.id" 
@@ -54,15 +63,16 @@ onAuthStateChanged(auth, (user) => {
 });
 
 const matches = ref([]);
-
 const cardRefs = ref([]);
-
 const showingLove = ref(true);
 
 const filteredMatches = computed(() => {
-  return matches.value.filter(match => 
-    showingLove.value ? match.lookingFor === 'Love' : match.lookingFor === 'Friends'
-  );
+  const result = matches.value.filter(match => {
+    console.log('Match:', match); // Log each match object
+    return showingLove.value ? match.lookingFor === 'Love' : match.lookingFor === 'Friends';
+  });
+  console.log('Filtered Matches:', result); // Log filtered matches
+  return result;
 });
 
 const getCardRef = (index) => (el) => {
@@ -87,11 +97,7 @@ const handleTimesClick = () => {
 
 const handleFilterClick = () => {
   showingLove.value = !showingLove.value;
-  console.log({
-    showingLove: showingLove.value,
-    allMatches: matches.value,
-    filteredMatches: filteredMatches.value
-  });
+  console.log('Showing Love:', showingLove.value); // Log state change
 };
 
 const swipeCard = (index, isRightSwipe) => {
@@ -197,5 +203,20 @@ const showNotification = computed(() => !!store.getters.getMatchNotification);
     transform: translateY(0) scale(1);
     opacity: 1;
   }
+}
+
+.no-matches-message {
+  color: #555;
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
 }
 </style>
