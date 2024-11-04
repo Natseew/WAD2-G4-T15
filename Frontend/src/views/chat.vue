@@ -26,8 +26,11 @@
                                                     </Avatar>
                                                     <div class="d-flex flex-column align-start">
                                                         <span class="font-bold">{{ item.name }}</span>
-                                                        <span> 
-                                                            {{ latestMessages[item.chatName]?.sender || '' }}: {{ latestMessages[item.chatName]?.body || "" }} 
+                                                        <span v-if="latestMessages[item.chatName]"> 
+                                                            {{ latestMessages[item.chatName]?.sender }}: {{ latestMessages[item.chatName]?.body }} 
+                                                        </span>
+                                                        <span v-else>
+                                                            No Message Yet
                                                         </span>
                                                     </div>
                                                 </div>
@@ -59,10 +62,7 @@
                 </v-col>
 
                 <v-col cols="12" v-else class="h-screen w-full flex flex-col items-center justify-center">
-                    <div>
-                        <h1>Connecting Client to Server!</h1>
-                        <p>{{ statusString }}</p>
-                    </div>       
+                    <div class="heart">hello</div>
                 </v-col>
             </v-row>
         </v-container>
@@ -75,6 +75,7 @@ import Conversation from "./conversation.vue"
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Navbar from "../components/Navbar.vue";
 import Avatar from 'primevue/avatar';
+import "primeicons/primeicons.css";
 import axios from 'axios'
 
 export default {
@@ -388,6 +389,53 @@ export default {
     align-items: center;
     justify-content: center;
     color: rgba(0, 0, 0, 0.6);
+}
+
+/* Heart Loading*/
+.heart {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: white;
+    height: 50px;
+    width: 50px;
+    transform: rotate(-45deg);
+    animation-name: beat;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+
+.heart:after {
+    background-color: white;
+    content: "";
+    border-radius: 50%;
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 0px;
+    left: 25px;
+}
+  .heart:before {
+    background-color: white;
+    content: "";
+    border-radius: 50%;
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: -25px;
+    left: 0px;
+}
+
+@keyframes beat {
+    0% {
+      transform: scale(1) rotate(-45deg);
+    }
+    50% {
+      transform: scale(0.6) rotate(-45deg);
+    }
 }
 
 /* Custom scrollbar styling */
