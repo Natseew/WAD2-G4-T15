@@ -219,5 +219,42 @@ router.post('/dislike/:uid/:dislikedUserId', async (req, res) => {
 
 });
 
+router.get('/matches/:uid', async (req, res) => {
+  try {
+    const { uid } = req.params;
+
+    const userDoc = await ref.doc(uid).get();
+
+    if (!userDoc.exists) {
+      return res.status(404).send('User not found');
+    }
+
+    const userData = userDoc.data();
+    const matchedUsersIds = userData.matches.map(match => match.uid);
+
+    if (matchedUsersIds.length === 0) {
+      return res.status(200).send([]);
+    }
+
+    const matchedUsersPromises = matchedUsersIds.map(async (matchedUserId) => {
+      const matchedUserDoc = await ref.doc(matchedUserId).get();
+      if (matchedUserDoc.exists) {
+        return { id: matchedUserDoc.id, ...matchedUserDoc.data() };
+      }
+      return null;
+    });
+
+    const matchedUsers = await Promise.all(matchedUsersPromises);
+
+    const validMatchedUsers = matchedUsers.filter(user => user !== null);
+
+    res.status(200).send(validMatchedUsers);
+    
+  } catch (error) {
+    console.error('Error retrieving matched users:', error);
+    return res.sendStatus(500);
+  }
+});
+
 
 module.exports = router

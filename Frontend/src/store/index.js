@@ -7,6 +7,7 @@ const store = createStore({
     return {
       user: {},
       populateMatches: [],
+      matchedUsers: [],
       matchNotification: null
     }
   },
@@ -16,6 +17,9 @@ const store = createStore({
     },
     getPopulateMatches(state) {
       return state.populateMatches;
+    },
+    getMatchedUsers(state) {
+      return state.matchedUsers;
     },
     getMatchNotification(state) {
       return state.matchNotification;
@@ -33,6 +37,9 @@ const store = createStore({
     },
     clearMatchNotification(state) {
       state.matchNotification = null;
+    },
+    setMatchedUsers(state, matchedUsersData) {
+      state.matchedUsers = matchedUsersData;
     },
     addLikeToUser(state, likedUser) {
       if (!state.user.likes) {
@@ -115,6 +122,17 @@ const store = createStore({
         }
       } catch (error) {
         console.error("Failed to like user:", error);
+      }
+    },
+
+    async fetchMatchedUsers({ commit }, uid) {
+      try {
+        const response = await axios.get(`${base_url}/user/matches/${uid}`);
+        const userData = response.data;
+        const matchedUsers = userData || [];
+        commit('setMatchedUsers', matchedUsers);
+      } catch (error) {
+        console.error("Failed to fetch matched users:", error);
       }
     },
 

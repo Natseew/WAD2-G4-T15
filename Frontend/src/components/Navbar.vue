@@ -22,6 +22,14 @@
             </span>
             <span
               class="nav-link"
+              :class="{ active: isActive('Matches') }"
+              @click="navigateTo('Matches')"
+            >
+              <HeartIcon class="nav-icon" style="width: 1.2rem; height: 1.2rem;"/>
+              <span class="ml-0.5 link-text">Matches</span>
+            </span>
+            <span
+              class="nav-link"
               :class="{ active: isActive('chat') }"
               @click="navigateTo('chat')"
             >
@@ -51,7 +59,7 @@
 import Toolbar from 'primevue/toolbar';
 import Avatar from 'primevue/avatar';
 import { useRouter, useRoute } from 'vue-router';
-import { HomeIcon, UserIcon, ChatBubbleBottomCenterIcon } from '@heroicons/vue/24/solid';
+import { HomeIcon, UserIcon, ChatBubbleBottomCenterIcon, HeartIcon } from '@heroicons/vue/24/solid';
 
 const router = useRouter();
 const route = useRoute();

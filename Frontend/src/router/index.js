@@ -11,6 +11,7 @@ const router = createRouter({
         { path: "/editProfile", component: () => import("../views/profile/CardEdit.vue")},
         { path: "/chat", component: () => import("../views/chat.vue")},
         { path: "/quiz", component: () => import("../views/Quiz.vue")},
+        { path: "/matches", component: () => import("../views/Matches.vue")},
     ],
 });
 

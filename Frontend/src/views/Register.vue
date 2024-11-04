@@ -61,7 +61,7 @@ const register = () => {
       axios.post('/user/'+ response.user.uid, {"name":"newUser", "uid":response.user.uid})
       run(response.user.uid)
       console.log("Successfully registered!");
-      router.push("/editProfile")
+      router.push("/Profile")
     })
     .catch((error) => {
       console.log(error.code);

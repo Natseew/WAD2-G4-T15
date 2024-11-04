@@ -1,7 +1,6 @@
 <template>
   <div class="background">
     <Navbar class="navbar" />
-    <div>Hello</div>
     <div class="red-background"></div>
     <div class="flex justify-center items-center flex-col mt-15">
       <div class="flex flex-col items-center w-full">
