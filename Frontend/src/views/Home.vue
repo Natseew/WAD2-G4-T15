@@ -155,6 +155,13 @@ const showNotification = computed(() => !!store.getters.getMatchNotification);
 </script>
 
 <style scoped>
+
+@media (max-width: 768px) {
+  ::v-deep .main-content {
+        display:none;
+    }
+}
+
 .background {
   background: linear-gradient(to bottom, rgba(255, 118, 118, 0.1), rgba(245, 78, 162, 0.1));
   height: 100vh;
