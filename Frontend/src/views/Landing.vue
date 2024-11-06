@@ -14,7 +14,7 @@
         <h1 class="animate-fade-up-delay text-6xl">NeverAlone</h1>
         <p class="animate-fade-up-slower text-xl">Your companion in staying connected and finding support.</p>
         <router-link to="/login">
-          <Button
+          <Button style="background-color: #00B0C7; outline:none;"
             label="Get Started"
             icon="pi pi-arrow-right"
             class="p-button-rounded w-48 md:w-2/3 animate-scale-up hover-scale"
