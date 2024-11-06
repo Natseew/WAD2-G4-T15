@@ -145,7 +145,11 @@
           </v-form>
         </div>
 
-        <v-snackbar v-model="snackbar" :timeout="3000" multi-line>
+        <v-snackbar v-model="snackbar" 
+          :timeout="3000" 
+          rounded="pill"
+          color="deep-orange-darken-2"
+        multi-line>
           {{ snackbarMessage }}
           <template #action>
             <v-btn color="pink" text @click="snackbar = false">Close</v-btn>

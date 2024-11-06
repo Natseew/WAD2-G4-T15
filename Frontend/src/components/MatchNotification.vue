@@ -1,8 +1,9 @@
 <template>
     <div class="match-notification" @click.self="closeNotification">
       <div class="content">
-        <img src="https://img.icons8.com/fluent/48/000000/filled-like.png" alt="match-icon" class="icon" />
+        <!-- <img src="https://img.icons8.com/fluent/48/000000/filled-like.png" alt="match-icon" class="icon" /> -->
         <p class="message">It's a match with {{ matchedUser?.name || 'someone special' }}!</p>
+        <div class="heart" :class="{'matching': isMatching, 'popped': isPopped}"></div>
         <button @click="closeNotification" class="close-button">Keep Swiping</button>
       </div>
     </div>
@@ -13,6 +14,23 @@
   import { computed } from 'vue';
   
   export default {
+    data() {
+      return {
+        isMatching: false,  
+        isPopped: false
+      };
+    },
+    mounted() {
+      this.triggerHeartAnimation(); // Trigger animation only once when the component mounts
+    },
+    methods: {
+      triggerHeartAnimation() {
+        setTimeout(() => {
+          this.isMatching = true;  
+          this.isPopped = true;    
+        }, 200); // Delay before starting the animation
+      },
+    },
     setup() {
       const store = useStore();
   
@@ -52,9 +70,11 @@
   }
   
   .content {
-    background-color: #ff4f5a;
-    color: white;
+    border-left: 1px solid rgba(255,255,255,0.4);
+    border-top: 1px solid rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.3);
     padding: 2rem;
+    backdrop-filter: blur(10px);
     border-radius: 12px;
     text-align: center;
     width: 90%;
@@ -81,20 +101,67 @@
     animation: pulse 1.2s infinite;
     filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5)); /* Glowing effect */
   }
-  
-  @keyframes pulse {
-    0%, 100% {
-      transform: scale(1);
+
+  .heart {
+    position: relative; 
+    margin: auto;
+    background-color: white;
+    height: 30px; 
+    width: 30px;  
+    transform: rotate(-45deg);
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  .heart:after {
+      background-color: white;
+      content: "";
+      border-radius: 50%;
+      position: absolute;
+      width: 30px; 
+      height: 30px; 
+      top: 0px;
+      left: 15px;
+      transition: background-color 1s ease-in-out;
+  }
+
+  .heart:before {
+      background-color: white;
+      content: "";
+      border-radius: 50%;
+      position: absolute;
+      width: 30px; 
+      height: 30px; 
+      top: -15px;
+      left: 0px;
+      transition: background-color 1s ease-in-out;
+  }
+
+  .heart.matching,
+  .heart.matching:before,
+  .heart.matching:after {
+    background-color: red;
+  }
+
+  .heart.popped {
+    animation: beat 1s cubic-bezier(0.17, 0.89, 0.32, 1.49);
+  }
+
+  @keyframes beat {
+    0% {
+      transform: scale(1) rotate(-45deg);
     }
     50% {
-      transform: scale(1.15);
+      transform: scale(0.6) rotate(-45deg);
+    }
+    100% {
+      transform: scale(1) rotate(-45deg);
     }
   }
   
   .message {
     font-size: 1.5rem;
     font-weight: bold;
-    margin: 0.5rem 0;
+    margin: 1rem 0 2rem 0;
     color: #ffecec;
   }
   
@@ -106,7 +173,7 @@
     border-radius: 8px;
     font-weight: bold;
     font-size: 1rem;
-    margin-top: 1.5rem;
+    margin-top: 3rem;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
   }
@@ -114,6 +181,7 @@
   .close-button:hover {
     background-color: #ff6f61;
     transform: scale(1.05); /* Slight scaling on hover */
+    color: white;
   }
   </style>
   

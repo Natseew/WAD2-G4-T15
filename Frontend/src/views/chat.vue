@@ -26,10 +26,10 @@
                                                     </Avatar>
                                                     <div class="d-flex flex-column align-start">
                                                         <span class="font-bold">{{ item.name }}</span>
-                                                        <span v-if="latestMessages[item.chatName]"> 
+                                                        <span v-if="latestMessages[item.chatName]" class="message-text"> 
                                                             {{ latestMessages[item.chatName]?.sender }}: {{ latestMessages[item.chatName]?.body }} 
                                                         </span>
-                                                        <span v-else>
+                                                        <span v-else class="message-text">
                                                             No Message Yet
                                                         </span>
                                                     </div>
@@ -62,7 +62,7 @@
                 </v-col>
 
                 <v-col cols="12" v-else class="h-screen w-full flex flex-col items-center justify-center">
-                    <div class="heart">hello</div>
+                    <div class="heart"></div>
                 </v-col>
             </v-row>
         </v-container>
@@ -335,6 +335,14 @@ export default {
 .chat-list .v-list-item {
     border-radius: 10px !important;
     margin-bottom: 10px !important;
+}
+
+.chat-list .v-list-item .message-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 16rem;
+    font-size: 15px; 
 }
 
 .chat-list .v-list-item:hover {

@@ -9,15 +9,20 @@
         <div class="quiz-form">
           <h1 class="text-3xl title-text" v-if="!quizStarted">Answer some questions for us to evaluate your preferences!</h1>
           <p v-if="!quizStarted">
-            <Button label="Start Quiz" icon="pi pi-play" class="p-button-rounded w-48 start-btn" @click="startQuiz" />
+            <Button label="Start Quiz" icon="pi pi-play" severity="warn" class="btn-start p-button-rounded w-48 start-btn" @click="startQuiz" />
           </p>
-  
+
           <div v-if="quizStarted && currentQuestionIndex < questions.length" class="quiz-section fade-in">
             <h2 class="question-text fade-in">{{ questions[currentQuestionIndex].text }}</h2>
-            <div v-for="(option, index) in questions[currentQuestionIndex].options" :key="index" class="answer-option fade-in">
-              <Button :label="option" class="p-button-outlined option-btn" @click="selectAnswer(index)" />
+            <div class="circle">
+              <div class='wave -one' :class="{ 'animate': isAnimating }"></div>
+              <div class='wave -two' :class="{ 'animate': isAnimating }"></div>
+              <div class='wave -three' :class="{ 'animate': isAnimating }"></div>
+              <span class="timer-text">{{ timeLeft }}</span>
             </div>
-            <p class="timer-text pulse">{{ timeLeft }} seconds remaining</p>
+            <div v-for="(option, index) in questions[currentQuestionIndex].options" :key="index" class="answer-option fade-in">
+              <Button :label="option" class="option-btn w-full" severity="warn" @click="selectAnswer(index)" raised/>
+            </div>
           </div>
   
           <div v-if="quizStarted && currentQuestionIndex >= questions.length" class="quiz-complete scale-up">
@@ -42,6 +47,7 @@
   const interval = ref(null);
   const loading = ref(false);
   const questions = ref([]);
+  const isAnimating = ref(false);
   
   const decodeHtmlEntities = (text) => {
   const textarea = document.createElement('textarea');
@@ -74,6 +80,11 @@ const fetchQuestions = async () => {
   const startTimer = () => {
     timeLeft.value = 5;
     clearInterval(interval.value);
+
+    isAnimating.value = false;
+    requestAnimationFrame(() => {
+      isAnimating.value = true;
+    });
   
     interval.value = setInterval(() => {
       if (timeLeft.value > 0) {
@@ -239,10 +250,12 @@ const fetchQuestions = async () => {
         z-index: 1;
         width: 100%;
         max-width: 400px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        box-shadow: 20px 20px 40px -6px rgba(0,0,0,0.2);
         padding: 50px 30px 30px;
         border-radius: 25px;
-        background: rgba(255, 255, 255, 0.8);
+        border-left: 1px solid rgba(255,255,255,0.4);
+        border-top: 1px solid rgba(255,255,255,0.4);
+        background: rgba(255,255,255,0.4);
         backdrop-filter: blur(10px);
         text-align: center;
     }
@@ -259,12 +272,14 @@ const fetchQuestions = async () => {
     }
 
     .answer-option {
-        margin: 10px 0;
+        margin: 20px 0;
     }
 
     .question-text {
         font-size: 1.5rem;
         margin-bottom: 2rem;
+        text-align: left;
+        font-weight: bold;
     }
 
     .fade-in {
@@ -279,17 +294,27 @@ const fetchQuestions = async () => {
         animation: scale-up 0.8s ease-out;
     }
 
-    .option-btn:hover {
-        background-color: #f0f0f0;
-        color: #000;
-        transition: all 0.3s ease-in-out;
+    .option-btn {
+      padding: 17px 20px; 
+      border-radius: 15px; 
+      cursor: pointer; 
+      transition: background 0.3s, transform 0.3s, box-shadow 0.3s; /* Add transform and box-shadow to transition */
+    }
+
+    .option-btn:hover,
+    .option-btn:focus {
+      box-shadow: 0 0.5em 1em -0.4em rgba(255, 150, 50);
+      transform: translateY(-0.25em);
     }
 
     .timer-text {
         font-weight: bold;
-        margin-top: 20px;
         color: #ff4747;
         font-size: 1.2rem;
+    }
+
+    .btn-start{
+      border: 1px solid rgb(255,255,255,0.3);
     }
 
     .loading-spinner {
@@ -300,5 +325,73 @@ const fetchQuestions = async () => {
         height: 60px;
         margin: 20px auto;
         animation: spin 1s linear infinite;
+    }
+
+    .circle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: auto;
+      aspect-ratio: 1/1;
+      max-width: 120px;
+      max-height: 120px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.4);
+      background: white;
+      position: relative;
+      overflow: hidden;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .wave.animate {
+      opacity: 0.4;
+      position: absolute;
+      left: 50%;
+      background: linear-gradient(to bottom, #B0190F, #c58550);
+      width: 200px;
+      height: 200px;
+      margin-left: -100px;
+      transform-origin: 50% 48%;
+      border-radius: 43%;
+      animation: fillUpTimer 10s linear forwards;
+      bottom: -200px; /* Completely hidden initially */
+    }
+
+    .wave.-two.animate {
+      animation: fillUpTimer 10s linear forwards 0.4s;
+      opacity: 0.1;
+      background: yellow;
+    }
+
+    .wave.-three.animate {
+      animation: fillUpTimer 10s linear forwards 0.2s;
+      opacity: 0.3;
+    }
+
+    @keyframes fillUpTimer {
+      0% {
+        bottom: -200px; 
+        transform: rotate(0deg);
+      }
+      20% {
+        bottom: -160px; 
+        transform: rotate(72deg);
+      }
+      40% {
+        bottom: -120px;
+        transform: rotate(144deg);
+      }
+      60% {
+        bottom: -80px;  
+        transform: rotate(216deg);
+      }
+      80% {
+        bottom: -40px; 
+        transform: rotate(288deg);
+      }
+      100% {
+        bottom: 0px;   
+        transform: rotate(360deg);
+      }
     }
 </style>
