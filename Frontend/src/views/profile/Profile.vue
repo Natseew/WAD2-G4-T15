@@ -289,7 +289,9 @@ const uploadTask = () => {
 }
 
 .red-background {
-  background: linear-gradient(to bottom, #B0190F, #c58550);
+  background: linear-gradient(180deg, #ffa578, rgb(255, 128, 192), #a67bf5);
+  background-size: 400% 400%;
+  animation: spin-gradient 15s ease infinite;
   height: 40vh;
   width: 100%;
   position: absolute;
@@ -298,6 +300,24 @@ const uploadTask = () => {
   border-bottom-right-radius: 1.5rem;
   z-index: 1;
 }
+
+@keyframes spin-gradient {
+            0% {
+                background-position: 0% 50%; /* Start from the left */
+            }
+            25% {
+                background-position: 100% 50%; /* Move to the right */
+            }
+            50% {
+                background-position: 100% 0%; /* Move to the top */
+            }
+            75% {
+                background-position: 0% 0%; /* Move to the left */
+            }
+            100% {
+                background-position: 0% 50%; /* Move back to the original position */
+            }
+        }
 
 .profile-field {
   @apply space-y-2;
