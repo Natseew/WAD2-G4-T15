@@ -157,6 +157,8 @@ methods: {
   min-width: 80px;
   max-width: 230px;
   text-align: left;
+  word-wrap: break-word; 
+  white-space: normal;
 }
 
 /* Styling for the sender's own messages */
