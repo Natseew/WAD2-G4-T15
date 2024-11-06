@@ -9,7 +9,8 @@
       </div>
       <div class="hero-overlay"></div>
 
-      <div class="hero-content">
+      <div class="hero-content">        
+        <img src="../assets/NeverAloneHandsOnly.png" alt="Never Alone App Logo" class="app-logo" />
         <h1 class="animate-fade-up-delay text-6xl">NeverAlone</h1>
         <p class="animate-fade-up-slower text-xl">Your companion in staying connected and finding support.</p>
         <router-link to="/login">
@@ -21,15 +22,15 @@
         </router-link>
       </div>
 
-      <div class="scroll-indicator">
+      <div class="scroll-indicator" @click="scrollToFeatures">
         <span class="scroll-text">See more</span>
         <i class="pi pi-arrow-down animate-bounce"></i>
       </div>
     </section>
 
     <!-- Features Section -->
-    <section class="features-section">
-      <h2 class="section-title">Features</h2>
+    <section ref="featuresSection" class="features-section">
+      <h2 class="section-title animate-pop-in">Features</h2>
       <div class="features-list">
         <div class="feature-card animate-slide-left">
           <i class="pi pi-comments feature-icon"></i>
@@ -53,6 +54,13 @@
 
 <script setup>
 import Button from 'primevue/button';
+import { ref } from 'vue';
+
+const featuresSection = ref(null);
+
+const scrollToFeatures = () => {
+  featuresSection.value.scrollIntoView({ behavior: 'smooth' });
+};
 </script>
 
 <style scoped>
@@ -69,9 +77,9 @@ import Button from 'primevue/button';
   align-items: center;
   text-align: center;
   color: white;
-  background: linear-gradient(to bottom, #B0190F, #c58550);
-  background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
+  background: linear-gradient(90deg, #ff7676, #f54ea2, #ffb3b3);
+  background-size: 600% 600%;
+  animation: gradient-animation 25s ease infinite;
   overflow: hidden;
 }
 
@@ -85,6 +93,24 @@ import Button from 'primevue/button';
   margin-bottom: 1rem;
 }
 
+.app-logo {
+  width: 200px; 
+  height: auto; 
+  margin-bottom: 1rem;
+  animation: fadeIn 1s ease; 
+  margin:auto
+}
+
+h2.section-title {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: rgb(219, 115, 132);
+  animation: popIn 1.5s ease-out;
+}
+
+h3{
+  font-weight: bold;
+}
 .hero-content p {
   font-size: 1.5rem;
   margin-bottom: 2rem;
@@ -109,7 +135,7 @@ import Button from 'primevue/button';
   background: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   opacity: 0.7;
-  animation: float 10s ease-in-out infinite;
+  animation: float 12s ease-in-out infinite;
 }
 
 .shape-circle {
@@ -151,6 +177,7 @@ import Button from 'primevue/button';
   flex-direction: column;
   align-items: center;
   color: #fff;
+  cursor: pointer;
 }
 
 .scroll-text {
@@ -163,42 +190,44 @@ import Button from 'primevue/button';
   font-size: 2rem;
 }
 
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+.features-section {
+  padding: 2rem;
 }
 
-.animate-bounce {
-  animation: bounce 1.5s infinite;
+.features-list {
+  display: flex;
+  gap: 2rem;
+  overflow-x: auto;
+  padding: 1rem;
 }
 
-@keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
+.feature-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  flex: 0 0 auto;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.hero-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(255,255,255,0.2), rgba(0,0,0,0.2));
-  z-index: 1;
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
 }
 
-@keyframes gradientShift {
+.feature-icon {
+  font-size: 3rem;
+  color: rgb(219, 115, 132);
+  margin-bottom: 25px;
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+@keyframes gradient-animation {
   0% {
     background-position: 0% 50%;
   }
@@ -210,79 +239,32 @@ import Button from 'primevue/button';
   }
 }
 
-.hover-scale:hover {
-  transform: scale(1.1);
-  transition: transform 0.3s ease-in-out;
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes scaleUp {
-  from {
+@keyframes popIn {
+  0% {
     transform: scale(0.8);
     opacity: 0;
   }
-  to {
+  100% {
     transform: scale(1);
     opacity: 1;
   }
 }
 
-.animate-fade-up-delay {
-  animation: fadeUp 1.5s ease-in-out;
-}
-
-.animate-fade-up-slower {
-  animation: fadeUp 2s ease-in-out;
-}
-
-.features-section {
-  padding: 4rem 2rem;
-  background-color: #f9f9f9;
-  text-align: center;
-}
-
-.section-title {
-  font-size: 2.5rem;
-  margin-bottom: 3rem;
-}
-
-.features-list {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-}
-
-.feature-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 15px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  width: 300px;
-  margin-bottom: 2rem;
-  animation: slideUp 1s ease;
-}
-
-.feature-card h3 {
-  margin: 1rem 0;
-  color: #B0190F;
-}
-
-.feature-card p {
-  color: #777;
-}
-
-.feature-icon {
-  font-size: 3rem;
-  color: #B0190F;
+@keyframes float {
+  0% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-30px) translateX(10px) rotate(120deg);
+  }
+  50% {
+    transform: translateY(-20px) translateX(-20px) rotate(240deg);
+  }
+  75% {
+    transform: translateY(30px) translateX(20px) rotate(360deg);
+  }
+  100% {
+    transform: translateY(0px) translateX(0px) rotate(480deg);
+  }
 }
 </style>
