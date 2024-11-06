@@ -27,7 +27,7 @@
             }"
           />
         </div>
-        <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" @filter-clicked="handleFilterClick" class="mt-15 z-10" />
+        <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" @filter-clicked="handleFilterClick" class="button-group mt-15 z-10" />
       </div>
     </div>
 
@@ -222,6 +222,11 @@ const showNotification = computed(() => !!store.getters.getMatchNotification);
     transform: translateY(0) scale(1);
     opacity: 1;
   }
+}
+
+.button-group {
+  position: relative;
+  z-index: 20;
 }
 
 .no-matches-message {
