@@ -28,9 +28,11 @@
       </div>
     </section>
 
-    <!-- Features Section -->
-    <section ref="featuresSection" class="features-section">
+      <!-- Features Section -->
+      <section ref="featuresSection" class="features-section">
+      <!-- Title above the cards -->
       <h2 class="section-title animate-pop-in">Features</h2>
+
       <div class="features-list">
         <div class="feature-card animate-slide-left">
           <i class="pi pi-comments feature-icon"></i>
@@ -192,13 +194,27 @@ h3{
 
 .features-section {
   padding: 2rem;
+  display: flex;
+  flex-direction: column; /* Stack title and cards vertically */
+  align-items: center; /* Center everything horizontally */
+  height: 100vh; /* Ensure the section takes full height */
+}
+
+.section-title {
+  font-size: 2rem;
+  margin-bottom: 20px; /* Space between title and cards */
+  color: rgb(219, 115, 132);
+  animation: popIn 1.5s ease-out;
+  text-align: center;
 }
 
 .features-list {
   display: flex;
-  gap: 2rem;
-  overflow-x: auto;
+  justify-content: center; /* Center the cards horizontally */
+  gap: 2rem; /* Space between each card */
+  width: 100%;
   padding: 1rem;
+  flex-wrap: nowrap; /* Prevent cards from wrapping to the next line */
 }
 
 .feature-card {
@@ -207,8 +223,9 @@ h3{
   border-radius: 15px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   width: 300px;
-  flex: 0 0 auto;
+  flex: 0 0 auto; /* Prevent shrinking */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
 }
 
 .feature-card:hover {
