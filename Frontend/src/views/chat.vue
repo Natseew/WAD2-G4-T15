@@ -4,7 +4,7 @@
             <Navbar class="navbar"/>
             <v-row>
                 <v-col cols="12" v-if="isConnected">
-                    <div class="chat-container">
+                    <div class="chat-container" v-if="matches.length > 0">
                         <v-row>
                             <transition name="slide-x-reverse-transition" mode="out-in">
                                 <v-col cols="12" md="4" sm="12" class="chat-list-col" v-if="showList()">
@@ -58,6 +58,9 @@
                                 </transition>
                             </v-col>
                         </v-row>
+                    </div>
+                    <div v-else class="no-matches-message">
+                        Keep looking for love.
                     </div>
                 </v-col>
 
@@ -435,6 +438,28 @@ export default {
     height: 50px;
     top: -25px;
     left: 0px;
+}
+
+.no-matches-message {
+    color: #fff;
+    font-size: 1.5rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; 
+    animation: stackAnimation 0.8s ease forwards;
+}
+
+@keyframes stackAnimation {
+  from {
+    transform: translateY(100%) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes beat {
