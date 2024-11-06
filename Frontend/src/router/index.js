@@ -12,6 +12,7 @@ const router = createRouter({
         { path: "/chat", component: () => import("../views/chat.vue")},
         { path: "/quiz", component: () => import("../views/Quiz.vue")},
         { path: "/matches", component: () => import("../views/Matches.vue")},
+        { path: "/gallery", component: () => import("../views/gallery/gallery.vue")},
     ],
 });
 
