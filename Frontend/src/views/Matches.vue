@@ -106,6 +106,8 @@
     max-width: 500px;
     gap: 0.01rem;
     padding-bottom: 20px;
+    align-items: center;
+    margin: 0 auto;
   }
   
   .match-card {
