@@ -1,113 +1,428 @@
 <template>
-    <div class="photo-gallery">
-      <h2 class="mb-8 text-2xl font-bold text-center text-gray-800">Upload Your Photos</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-h-[75vh] overflow-y-auto">
-        <div
-          v-for="(photo, index) in photos"
-          :key="index"
-          class="bg-white shadow-lg rounded-md overflow-hidden"
-        >
-          <div v-if="!photo.file" class="p-4 flex justify-center items-center h-48 bg-gray-100">
+  <div class="photo-gallery">
+    <h2 class="title">Upload Your Photos</h2>
+    
+    <div v-if="error" class="error-alert">
+      {{ error }}
+      <button @click="error = ''" class="error-close">&times;</button>
+    </div>
+
+    <div class="photo-grid">
+      <div
+        v-for="(photo, index) in photos"
+        :key="index"
+        class="photo-box"
+        :class="{ 'is-loading': photo.isLoading }"
+      >
+        <div v-if="!photo.file" class="upload-box">
+          <div class="upload-placeholder">
             <button
-              @click="triggerFileUpload(index)"
-              class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md"
+              @click="() => onUploadClick(index)"
+              class="upload-button"
+              :disabled="photo.isLoading"
             >
-              Upload Photo
+              <span v-if="!photo.isLoading">
+                <span class="upload-icon">📸</span>
+                Upload Photo
+              </span>
+              <span v-else>Loading...</span>
             </button>
-            <input
-              :ref="`photo-input-${index}`"
-              :id="`photo-input-${index}`"
-              type="file"
-              accept="image/*"
-              @change="handleFileUpload($event, index)"
-              class="hidden"
-            />
+            <p class="upload-help">Max size: 5MB</p>
           </div>
-          <div v-else>
-            <img
-              :src="photo.preview"
-              :alt="`Uploaded Photo ${index + 1}`"
-              class="w-full h-48 object-cover"
+          <input
+            :ref="el => fileInputs[index] = el"
+            type="file"
+            accept="image/*"
+            @change="(event) => handleFileUpload(event, index)"
+            class="hidden"
+          />
+        </div>
+        
+        <div v-else class="photo-container">
+          <div class="photo-overlay">
+            <button 
+              @click="() => deletePhoto(index)" 
+              class="delete-button"
+              title="Delete photo"
+            >
+              &times;
+            </button>
+          </div>
+          <img
+            :src="photo.preview"
+            :alt="`Uploaded Photo ${index + 1}`"
+            class="photo-image"
+            @error="() => handleImageError(index)"
+          />
+          <div class="caption-box">
+            <input
+              type="text"
+              :placeholder="'Add a caption (optional)'"
+              v-model="photo.caption"
+              class="caption-input"
+              maxlength="100"
             />
-            <div class="p-4">
-              <input
-                type="text"
-                placeholder="Add a caption"
-                v-model="photo.caption"
-                class="w-full border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
+            <div class="photo-actions">
               <button
-                @click="triggerFileUpload(index)"
-                class="mt-2 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md"
+                @click="() => onUploadClick(index)"
+                class="overwrite-button"
+                :disabled="photo.isLoading"
               >
-                Overwrite Photo
+                Replace
               </button>
+              <span class="caption-count">{{ photo.caption.length }}/100</span>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        photos: [
-          { file: null, caption: '', preview: '' },
-          { file: null, caption: '', preview: '' },
-          { file: null, caption: '', preview: '' },
-          { file: null, caption: '', preview: '' },
-          { file: null, caption: '', preview: '' },
-          { file: null, caption: '', preview: '' },
-        ],
-      };
-    },
-    methods: {
-      handleFileUpload(event, index) {
-        const file = event.target.files[0];
-        if (file && file.type.startsWith('image/')) {
-          const preview = URL.createObjectURL(file);
-          this.$set(this.photos, index, { file, preview, caption: this.photos[index].caption });
-        } else {
-          alert('Please upload a valid image file');
-        }
-      },
-      triggerFileUpload(index) {
-        this.$refs[`photo-input-${index}`].click();
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  .photo-gallery {
-    max-width: 1024px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: 'Montserrat', sans-serif;
+
+    <div class="save-container">
+      <button 
+        @click="savePhotos" 
+        class="save-button"
+        :disabled="!hasUnsavedChanges || isSaving"
+      >
+        {{ isSaving ? 'Saving...' : 'Save Changes' }}
+      </button>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, reactive } from 'vue'
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+const fileInputs = reactive({})
+const error = ref('')
+const isSaving = ref(false)
+const hasUnsavedChanges = ref(false)
+
+const photos = ref(Array(6).fill().map(() => ({
+  file: null,
+  caption: '',
+  preview: '',
+  isLoading: false,
+  error: null
+})))
+
+const handleError = (message) => {
+  error.value = message
+  setTimeout(() => {
+    if (error.value === message) {
+      error.value = ''
+    }
+  }, 5000)
+}
+
+const validateFile = (file) => {
+  if (!file.type.startsWith('image/')) {
+    handleError('Please upload a valid image file')
+    return false
   }
-  
-  .grid {
-    margin-bottom: 2rem;
+
+  if (file.size > MAX_FILE_SIZE) {
+    handleError('File size must be less than 5MB')
+    return false
   }
-  
-  button {
-    transition: all 0.2s ease-in-out;
+
+  return true
+}
+
+const createImagePreview = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = (e) => resolve(e.target.result)
+    reader.onerror = () => reject(new Error('Failed to read file'))
+    reader.readAsDataURL(file)
+  })
+}
+
+const handleFileUpload = async (event, index) => {
+  const file = event.target.files[0]
+  if (!file) return
+
+  if (!validateFile(file)) return
+
+  try {
+    photos.value[index].isLoading = true
+    
+    // Simulate upload delay
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    
+    const preview = await createImagePreview(file)
+    
+    photos.value[index] = {
+      file,
+      preview,
+      caption: photos.value[index].caption,
+      isLoading: false,
+      error: null
+    }
+    
+    hasUnsavedChanges.value = true
+  } catch (err) {
+    handleError(err.message)
+    photos.value[index].isLoading = false
   }
-  
-  button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+}
+
+const onUploadClick = (index) => {
+  if (fileInputs[index]) {
+    fileInputs[index].value = '' // Reset input
+    fileInputs[index].click()
   }
-  
-  input[type="text"] {
-    transition: all 0.2s ease-in-out;
+}
+
+const deletePhoto = (index) => {
+  photos.value[index] = {
+    file: null,
+    caption: '',
+    preview: '',
+    isLoading: false,
+    error: null
   }
-  
-  input[type="text"]:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  hasUnsavedChanges.value = true
+}
+
+const handleImageError = (index) => {
+  deletePhoto(index)
+  handleError('Failed to load image')
+}
+
+const savePhotos = async () => {
+  try {
+    isSaving.value = true
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1500))
+    
+    hasUnsavedChanges.value = false
+    // You can emit an event here if needed
+    // emit('save', photos.value.filter(p => p.file))
+  } catch (err) {
+    handleError('Failed to save photos')
+  } finally {
+    isSaving.value = false
   }
-  </style>
+}
+</script>
+
+<style scoped>
+.photo-gallery {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: system-ui, -apple-system, sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  color: #374151;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+}
+
+.error-alert {
+  background-color: #fee2e2;
+  border: 1px solid #ef4444;
+  color: #991b1b;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.error-close {
+  background: none;
+  border: none;
+  color: #991b1b;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1rem;
+  flex: 1;
+  min-height: 0;
+  margin-bottom: 1rem;
+}
+
+.photo-box {
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.photo-box:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.upload-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6;
+  padding: 1rem;
+}
+
+.upload-placeholder {
+  text-align: center;
+}
+
+.upload-icon {
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.upload-help {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.photo-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.photo-overlay {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 10;
+}
+
+.delete-button {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 9999px;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.delete-button:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.photo-image {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  min-height: 0;
+}
+
+.caption-box {
+  padding: 0.75rem;
+  background-color: white;
+  flex-shrink: 0;
+}
+
+.caption-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  transition: border-color 0.2s;
+}
+
+.caption-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.photo-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.caption-count {
+  color: #6b7280;
+  font-size: 0.75rem;
+}
+
+.upload-button,
+.overwrite-button {
+  background-color: #3b82f6;
+  color: white;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.upload-button:hover,
+.overwrite-button:hover {
+  background-color: #2563eb;
+}
+
+.upload-button:disabled,
+.overwrite-button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.hidden {
+  display: none;
+}
+
+.is-loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.save-container {
+  padding: 1rem 0;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.save-button {
+  background-color: #059669;
+  color: white;
+  font-weight: 500;
+  padding: 0.75rem 2rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.save-button:hover {
+  background-color: #047857;
+}
+
+.save-button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+</style>
