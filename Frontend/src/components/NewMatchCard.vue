@@ -341,7 +341,7 @@
     position: absolute;
     width: 650px;
     height: 650px;
-    background-image: linear-gradient(to bottom left, #ffe598, #ffac6c);
+    background-image: linear-gradient(180deg, #ffa578, rgb(255, 128, 192), #a67bf5);
     transform: translateX(-50%);
   }
   
