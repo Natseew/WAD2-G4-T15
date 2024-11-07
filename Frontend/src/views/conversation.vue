@@ -21,7 +21,7 @@
               <div class="message">{{ message?.state?.body }}</div>
             </div>
             <div class="flex items-end chat-profile" v-if="!shouldHideAvatar(message, index)">
-              <v-avatar color="surface-variant" rounded="1">
+              <v-avatar color="surface-variant" rounded="1"  @click.stop="goToMatchProfile(message?.state?.author)">
                 <v-img v-if="message?.state?.author === name"
                   :src="userImage" 
                 >
@@ -85,7 +85,11 @@ methods: {
         // Hide avatar if next message is also from the current user
         return nextMessage && nextMessage.state.author === message.state.author;
 
-    }
+    },
+    goToMatchProfile(uid) {
+        this.$store.dispatch('selectMatch', uid);
+        this.$router.push('/matches');
+    },
   }
 }
 </script>
