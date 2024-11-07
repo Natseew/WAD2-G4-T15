@@ -324,7 +324,7 @@ const uploadTask = () => {
 }
 
 .profile-field label {
-  @apply block text-sm font-medium text-gray-700;
+  @apply block text-sm font-medium text-gray-700 text-left;
 }
 
 .profile-input {
