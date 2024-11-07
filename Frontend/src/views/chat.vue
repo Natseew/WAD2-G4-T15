@@ -22,7 +22,11 @@
                                                         class="mr-5" 
                                                         size="large" 
                                                     >
-                                                        <v-img src="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" />
+                                                        <v-img 
+                                                            :src="latestMessages[item.chatName]?.receiverProfile || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
+                                                            cover
+                                                            class="align-center"
+                                                        />
                                                     </Avatar>
                                                     <div class="d-flex flex-column align-start">
                                                         <span class="font-bold">{{ item.name }}</span>
@@ -49,6 +53,7 @@
                                             :authorName = "name"
                                             :receiverName = "receiverName"
                                             :userImage = "userImage"
+                                            :receiverImage = "latestMessages[activeConversation.uniqueName]?.receiverProfile"
                                             @reverse-chat-list="reverseChatList()"
                                         />
                                     </div>
@@ -109,6 +114,11 @@ export default {
 
         async fetchLatestMessage(match) {
             try {
+                const userResponse = await axios.get('/user/' + match.uid);
+                const receiverProfile = userResponse.data.images?.length > 0 ? 
+                    userResponse.data.images[0] : 
+                    "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png";
+                
                 const conversation = await this.conversationsClient.getConversationByUniqueName(match.chatName);
                 const messages = await conversation.getMessages(1); // Get only the latest message
 
@@ -121,7 +131,8 @@ export default {
                         ...this.latestMessages,
                         [match.chatName]: {
                             body: latestMessage.body,
-                            sender: senderName
+                            sender: senderName,
+                            receiverProfile: receiverProfile
                         }
                     };
                 }
@@ -131,7 +142,8 @@ export default {
                     ...this.latestMessages,
                     [match.chatName]: {
                         body: 'No messages yet',
-                        sender: ''
+                        sender: '',
+                        receiverProfile: "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
                     }
                 };
             }
@@ -232,7 +244,6 @@ export default {
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 // User is signed in
-                
                 this.uid = user.uid
                 axios.get('/user/'+user.uid)
                     .then(response =>{
