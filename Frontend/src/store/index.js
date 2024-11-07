@@ -8,7 +8,8 @@ const store = createStore({
       user: {},
       populateMatches: [],
       matchedUsers: [],
-      matchNotification: null
+      matchNotification: null,
+      selectedMatchUid: null
     }
   },
   getters: {
@@ -40,6 +41,9 @@ const store = createStore({
     },
     setMatchedUsers(state, matchedUsersData) {
       state.matchedUsers = matchedUsersData;
+    },
+    setSelectedMatchUid(state, uid) {
+      state.selectedMatchUid = uid;
     },
     addLikeToUser(state, likedUser) {
       if (!state.user.likes) {
@@ -138,6 +142,10 @@ const store = createStore({
 
     clearMatchNotification({ commit }) {
       commit('setMatchNotification', null);
+    },
+
+    selectMatch({ commit }, uid) {
+      commit('setSelectedMatchUid', uid);
     }
   }
 });

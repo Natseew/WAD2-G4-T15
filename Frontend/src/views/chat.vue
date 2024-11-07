@@ -21,6 +21,7 @@
                                                         shape="circle"
                                                         class="mr-5" 
                                                         size="large" 
+                                                        @click.stop="goToMatchProfile(item.uid)"
                                                     >
                                                         <v-img 
                                                             :src="latestMessages[item.chatName]?.receiverProfile || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
@@ -231,7 +232,11 @@ export default {
             else{
                 this.showChatList = true;
             }
-        }
+        },
+        goToMatchProfile(uid) {
+            this.$store.dispatch('selectMatch', uid);
+            this.$router.push('/matches');
+        },
     },
     async mounted() {
 
