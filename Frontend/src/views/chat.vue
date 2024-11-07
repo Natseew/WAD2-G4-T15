@@ -24,8 +24,6 @@
                                                     >
                                                         <v-img 
                                                             :src="latestMessages[item.chatName]?.receiverProfile || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
-                                                            cover
-                                                            class="align-center"
                                                         />
                                                     </Avatar>
                                                     <div class="d-flex flex-column align-start">
