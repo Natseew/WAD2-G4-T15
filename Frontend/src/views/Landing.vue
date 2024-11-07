@@ -88,19 +88,20 @@ const scrollToFeatures = () => {
 .hero-content {
   z-index: 2;
   position: relative;
+  padding: 0 1rem;
 }
 
 .hero-content h1 {
   font-size: 4rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .app-logo {
   width: 200px; 
   height: auto; 
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   animation: fadeIn 1s ease; 
-  margin:auto
+  margin: auto;
 }
 
 h2.section-title {
@@ -110,9 +111,10 @@ h2.section-title {
   animation: popIn 1.5s ease-out;
 }
 
-h3{
+h3 {
   font-weight: bold;
 }
+
 .hero-content p {
   font-size: 1.5rem;
   margin-bottom: 2rem;
@@ -183,26 +185,24 @@ h3{
 }
 
 .scroll-text {
-  margin-bottom: 8px;
-  font-size: 1.2rem;
-  opacity: 0.7;
+  font-size: 1rem;
 }
 
 .pi-arrow-down {
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .features-section {
   padding: 2rem;
   display: flex;
-  flex-direction: column; /* Stack title and cards vertically */
-  align-items: center; /* Center everything horizontally */
-  height: 100vh; /* Ensure the section takes full height */
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
 }
 
 .section-title {
   font-size: 2rem;
-  margin-bottom: 20px; /* Space between title and cards */
+  margin-bottom: 20px;
   color: rgb(219, 115, 132);
   animation: popIn 1.5s ease-out;
   text-align: center;
@@ -210,11 +210,11 @@ h3{
 
 .features-list {
   display: flex;
-  justify-content: center; /* Center the cards horizontally */
-  gap: 2rem; /* Space between each card */
+  justify-content: center;
+  gap: 2rem;
   width: 100%;
   padding: 1rem;
-  flex-wrap: wrap; /* Prevent cards from wrapping to the next line */
+  flex-wrap: wrap;
 }
 
 .feature-card {
@@ -223,9 +223,9 @@ h3{
   border-radius: 15px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   width: 300px;
-  flex: 0 0 auto; /* Prevent shrinking */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-align: center;
+  margin:auto;
 }
 
 .feature-card:hover {
@@ -244,6 +244,57 @@ h3{
   transform: scale(1.1) rotate(5deg);
 }
 
+/* Responsive Layouts */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-content p {
+    font-size: 1.2rem;
+  }
+
+  .app-logo {
+    width: 150px;
+  }
+
+  .features-list {
+    flex-direction: column;
+  }
+
+  .feature-card {
+    width: 80%;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
+  .app-logo {
+    width: 100px;
+  }
+
+  .scroll-text {
+    font-size: 0.8rem;
+  }
+
+  .pi-arrow-down {
+    font-size: 1.2rem;
+  }
+
+  .features-section {
+    padding: 1rem;
+  }
+}
+
+/* Animations */
 @keyframes gradient-animation {
   0% {
     background-position: 0% 50%;
