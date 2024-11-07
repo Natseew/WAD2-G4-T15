@@ -24,4 +24,6 @@ app.listen(port, () => {
 });
 
 // Correctly export as Vercel expects a function handler
-module.exports = app;
+module.exports = (req, res) => {
+  app(req, res);
+};
