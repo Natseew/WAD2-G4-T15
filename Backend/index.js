@@ -22,3 +22,6 @@ app.get('/', (req,res) => {
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)
 });
+
+// Correctly export as Vercel expects a function handler
+module.exports = app;
