@@ -27,7 +27,7 @@
             }"
           />
         </div>
-        <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" @filter-clicked="handleFilterClick" class="mt-15 z-10" />
+        <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" @filter-clicked="handleFilterClick" class="button-group mt-15 z-10" />
       </div>
     </div>
 
@@ -155,6 +155,13 @@ const showNotification = computed(() => !!store.getters.getMatchNotification);
 </script>
 
 <style scoped>
+
+@media (max-width: 768px) {
+  ::v-deep .main-content {
+        display:none;
+    }
+}
+
 .background {
   background: linear-gradient(to bottom, rgba(255, 118, 118, 0.1), rgba(245, 78, 162, 0.1));
   height: 100vh;
@@ -167,7 +174,9 @@ const showNotification = computed(() => !!store.getters.getMatchNotification);
 }
 
 .red-background {
-  background: linear-gradient(to bottom, #B0190F, #c58550);
+  background: linear-gradient(180deg, #ffa578, rgb(255, 128, 192), #a67bf5);
+  background-size: 400% 400%;
+  animation: spin-gradient 15s ease infinite;
   height: 40vh;
   width: 100%;
   position: absolute;
@@ -176,6 +185,24 @@ const showNotification = computed(() => !!store.getters.getMatchNotification);
   border-bottom-right-radius: 1.5rem;
   z-index: 1;
 }
+
+@keyframes spin-gradient {
+            0% {
+                background-position: 0% 50%; /* Start from the left */
+            }
+            25% {
+                background-position: 100% 50%; /* Move to the right */
+            }
+            50% {
+                background-position: 100% 0%; /* Move to the top */
+            }
+            75% {
+                background-position: 0% 0%; /* Move to the left */
+            }
+            100% {
+                background-position: 0% 50%; /* Move back to the original position */
+            }
+        }
 
 .cards-stack {
   position: relative;
@@ -202,6 +229,11 @@ const showNotification = computed(() => !!store.getters.getMatchNotification);
     transform: translateY(0) scale(1);
     opacity: 1;
   }
+}
+
+.button-group {
+  position: relative;
+  z-index: 20;
 }
 
 .no-matches-message {

@@ -27,7 +27,7 @@
                 >
                 </v-img>
                 <v-img v-else
-                  src="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
+                  :src="receiverImage || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
                 >
                 </v-img>
               </v-avatar>
@@ -46,8 +46,7 @@
 import "primeicons/primeicons.css";
 
 export default {
-
-    props: ["activeConversation", "name", "shownName", "authorName", "receiverName", "userImage"],
+    props: ["activeConversation", "name", "shownName", "authorName", "receiverName", "userImage", "receiverImage"],
     data() {
         return {
             messages: [],
@@ -67,7 +66,6 @@ export default {
 },
 methods: {
     sendMessage: function() {
-      console.log(this.activeConversation)
         if(!this.messageText.trim()){
           this.placeholderText = "Message cannot be empty";
           return;

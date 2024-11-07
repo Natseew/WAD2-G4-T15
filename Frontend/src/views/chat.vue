@@ -4,7 +4,7 @@
             <Navbar class="navbar"/>
             <v-row>
                 <v-col cols="12" v-if="isConnected">
-                    <div class="chat-container">
+                    <div class="chat-container" v-if="matches.length > 0">
                         <v-row>
                             <transition name="slide-x-reverse-transition" mode="out-in">
                                 <v-col cols="12" md="4" sm="12" class="chat-list-col" v-if="showList()">
@@ -22,7 +22,9 @@
                                                         class="mr-5" 
                                                         size="large" 
                                                     >
-                                                        <v-img src="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" />
+                                                        <v-img 
+                                                            :src="latestMessages[item.chatName]?.receiverProfile || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
+                                                        />
                                                     </Avatar>
                                                     <div class="d-flex flex-column align-start">
                                                         <span class="font-bold">{{ item.name }}</span>
@@ -49,6 +51,7 @@
                                             :authorName = "name"
                                             :receiverName = "receiverName"
                                             :userImage = "userImage"
+                                            :receiverImage = "latestMessages[activeConversation.uniqueName]?.receiverProfile"
                                             @reverse-chat-list="reverseChatList()"
                                         />
                                     </div>
@@ -58,6 +61,9 @@
                                 </transition>
                             </v-col>
                         </v-row>
+                    </div>
+                    <div v-else class="no-matches-message">
+                        Keep looking for love.
                     </div>
                 </v-col>
 
@@ -106,6 +112,11 @@ export default {
 
         async fetchLatestMessage(match) {
             try {
+                const userResponse = await axios.get('/user/' + match.uid);
+                const receiverProfile = userResponse.data.images?.length > 0 ? 
+                    userResponse.data.images[0] : 
+                    "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png";
+                
                 const conversation = await this.conversationsClient.getConversationByUniqueName(match.chatName);
                 const messages = await conversation.getMessages(1); // Get only the latest message
 
@@ -118,7 +129,8 @@ export default {
                         ...this.latestMessages,
                         [match.chatName]: {
                             body: latestMessage.body,
-                            sender: senderName
+                            sender: senderName,
+                            receiverProfile: receiverProfile
                         }
                     };
                 }
@@ -128,7 +140,8 @@ export default {
                     ...this.latestMessages,
                     [match.chatName]: {
                         body: 'No messages yet',
-                        sender: ''
+                        sender: '',
+                        receiverProfile: "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
                     }
                 };
             }
@@ -229,7 +242,6 @@ export default {
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 // User is signed in
-                
                 this.uid = user.uid
                 axios.get('/user/'+user.uid)
                     .then(response =>{
@@ -289,8 +301,29 @@ export default {
 }
 
 #chat {
-    background: linear-gradient(to bottom, #B0190F, #c58550);
+ background: linear-gradient(180deg, #ffa578, rgb(255, 128, 192), #a67bf5);
+  background-size: 400% 400%;
+  animation: spin-gradient 15s ease infinite;
+
 }
+
+@keyframes spin-gradient {
+            0% {
+                background-position: 0% 50%; /* Start from the left */
+            }
+            25% {
+                background-position: 100% 50%; /* Move to the right */
+            }
+            50% {
+                background-position: 100% 0%; /* Move to the top */
+            }
+            75% {
+                background-position: 0% 0%; /* Move to the left */
+            }
+            100% {
+                background-position: 0% 50%; /* Move back to the original position */
+            }
+        }
 
 .v-col {
     height: 100%;
@@ -435,6 +468,28 @@ export default {
     height: 50px;
     top: -25px;
     left: 0px;
+}
+
+.no-matches-message {
+    color: #fff;
+    font-size: 1.5rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; 
+    animation: stackAnimation 0.8s ease forwards;
+}
+
+@keyframes stackAnimation {
+  from {
+    transform: translateY(100%) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes beat {

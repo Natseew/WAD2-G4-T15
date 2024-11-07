@@ -198,9 +198,9 @@ const fetchQuestions = async () => {
         padding: 2rem;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
-        background: linear-gradient(to bottom, #B0190F, #c58550);
-        background-size: 600% 600%;
-        animation: gradient-animation 25s ease infinite;
+        background: linear-gradient(180deg, #ffa578, rgb(255, 128, 192), #a67bf5);
+        background-size: 400% 400%;
+        animation: spin-gradient 15s ease infinite;
         overflow: hidden;
     }
 
@@ -295,26 +295,32 @@ const fetchQuestions = async () => {
     }
 
     .option-btn {
-      padding: 17px 20px; 
-      border-radius: 15px; 
-      cursor: pointer; 
-      transition: background 0.3s, transform 0.3s, box-shadow 0.3s; /* Add transform and box-shadow to transition */
+      padding: 17px 20px;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+      background: linear-gradient(90deg, #ffa578, rgb(255, 128, 192), #a67bf5) !important; /* Matching gradient */
+      color: #fff !important;
+      border: none;
     }
 
     .option-btn:hover,
     .option-btn:focus {
-      box-shadow: 0 0.5em 1em -0.4em rgba(255, 150, 50);
+      box-shadow: 0 0.5em 1em -0.4em rgba(255, 128, 192, 0.6);
       transform: translateY(-0.25em);
+      background: linear-gradient(90deg, rgb(255, 128, 192), #ffa578, #a67bf5) !important;
     }
 
     .timer-text {
-        font-weight: bold;
-        color: #ff4747;
-        font-size: 1.2rem;
+      font-weight: bold;
+      color: rgb(255, 128, 192); /* Matching pink color */
+      font-size: 1.2rem;
     }
 
-    .btn-start{
-      border: 1px solid rgb(255,255,255,0.3);
+    .btn-start {
+      background: linear-gradient(90deg, #ffa578, rgb(255, 128, 192), #a67bf5) !important; /* Matching gradient */
+      color: #fff !important;
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     .loading-spinner {
@@ -347,7 +353,7 @@ const fetchQuestions = async () => {
       opacity: 0.4;
       position: absolute;
       left: 50%;
-      background: linear-gradient(to bottom, #B0190F, #c58550);
+      background: linear-gradient(to bottom, #ffa578, rgb(255, 128, 192));
       width: 200px;
       height: 200px;
       margin-left: -100px;

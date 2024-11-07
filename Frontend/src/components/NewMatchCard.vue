@@ -1,4 +1,5 @@
 <template>
+
     <div class="page-container">
       <div class="card-container" @click="flipCard">
         <div class= "card" :class="{ flipped: isFlipped, [swipeClass]: swipeClass }" ref="flipContainer" >
@@ -18,8 +19,40 @@
             </div>
             <div class="card-body">
               <h1 class="name">{{ name }}</h1>
-              <Chip v-if="lookingFor === 'Love'" label="Looking for love" style="height: 1.2rem; background-color: pink; color: red;" />
-              <Chip v-if="lookingFor === 'Friends'" label="Looking for friends" style="height: 1.2rem; background-color: lightblue;" />
+              <Chip 
+  v-if="lookingFor === 'Love'" 
+  label="Looking for love" 
+  style="
+    height: 1.4rem; 
+    background-color: #ffebf0; /* Softer pink for background */
+    color: #d32f2f; /* Deeper red for text */
+    font-weight: 600; /* Bold for emphasis */
+    font-size: 0.85rem;
+    border-radius: 1rem;
+    padding: 0.1rem 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  " 
+/>
+
+<Chip 
+  v-if="lookingFor === 'Friends'" 
+  label="Looking for friends" 
+  style="
+    height: 1.4rem; 
+    background-color: #e0f7fa; /* Softer blue for background */
+    color: #0288d1; /* Calmer blue for text */
+    font-weight: 600;
+    font-size: 0.85rem;
+    border-radius: 1rem;
+    padding: 0.1rem 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  " 
+/>
+
               
               <div class="quick-info">
                 <span>{{ age }} • {{ gender }} • {{ religion }}</span>
@@ -30,9 +63,9 @@
               <div class="section">
                 <p class="intro">{{ introduction }}</p>
               </div>
-              <div class="section personality">
+              <div class="section">
                 <p class="subtitle">Personality</p>
-                <p>{{personalityDescription }}</p>
+                <p class="personality">{{personalityDescription }}</p>
               </div>
               <div class="section interests">
                 <div class="interests-grid">
@@ -307,7 +340,7 @@
     position: absolute;
     width: 650px;
     height: 650px;
-    background-image: linear-gradient(to bottom left, #f5c068, #e79a5d);
+    background-image: linear-gradient(to bottom left, #ffe598, #ffac6c);
     transform: translateX(-50%);
   }
   
@@ -380,7 +413,7 @@
   .section {
     margin: 10px 0; /* Reduced margin */
     padding: 8px 0; /* Reduced padding */
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(236, 166, 166, 0.998);
   }
   
   .section:last-child {
@@ -389,23 +422,36 @@
 
   .quote{
     font-size: 24px;
-    color: #34495e;
+    color: #60afff;
     font-style:oblique;
   }
   
   .intro {
     font-size: 16px;
-    color: #34495e;
+    color: #ad4952;
     font-style: italic;
   }
   
   .subtitle {
-    font-size: 16px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #141414;
-    margin-bottom: 5px;
-  }
+    font-size: 18px; /* Slightly larger font size */
+    font-weight: 600; /* Semi-bold to emphasize the text */
+    text-transform: uppercase; /* Keeps text uppercase */
+    letter-spacing: 1px; /* Space between letters */
+    color: #f4a459; /* Subtitle color */
+    margin-bottom: 3px; /* Increased margin for spacing */
+    line-height: 1.5; /* More space between lines for readability */
+    text-align: center; /* Center align the subtitle */
+    border-radius: 5px; /* Rounded corners for the background */
+}
+
+
+.personality{
+    font-size: 12px; /* Slightly larger font size */
+    color: #f1bd6e; /* Subtitle color */
+    line-height: 1.5; /* More space between lines for readability */
+    text-align: center; /* Center align the subtitle */
+    border-radius: 5px; /* Rounded corners for the background */
+}
   
   .interests-grid {
     display: grid;
@@ -415,15 +461,20 @@
   }
   
   .interest-item h3 {
-    font-size: 14px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #141414;
+    color: #f96f6f;
+    font-size: 14px; /* Slightly larger font size */
+    font-weight: 600; /* Semi-bold to emphasize the text */
+    line-height: 1.5; /* More space between lines for readability */
+    text-align: center; /* Center align the subtitle */
+
+    border-radius: 5px; /* Rounded corners for the background */
   }
   
   .interest-item p {
     font-size: 12px;
-    color: #141414;
+    color: #ff6b6b;
   }
 
 
@@ -431,7 +482,10 @@
     font-size: 18px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #141414;
+    color: #ff8282;
+    font-weight: 600; /* Semi-bold to emphasize the text */
+    line-height: 1.5; /* More space between lines for readability */
+    text-align: center; /* Center align the subtitle */
   }
 
   .swipe-right {
