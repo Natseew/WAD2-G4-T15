@@ -379,7 +379,7 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 16rem;
+    max-width: 8.5rem;
     font-size: 15px; 
 }
 
