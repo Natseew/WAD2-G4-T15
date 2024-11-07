@@ -334,7 +334,5 @@ h3 {
   100% {
     transform: translateY(0px) translateX(0px) rotate(480deg);
   }
-
-  
 }
 </style>
