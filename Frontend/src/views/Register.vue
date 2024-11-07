@@ -37,6 +37,7 @@ import Password from 'primevue/password';
 import Button from 'primevue/button';
 import axios from 'axios';
 import {Client as ConversationsClient} from "@twilio/conversations"
+const base_url = import.meta.env.VITE_ENDPOINT ?? `http://localhost:${import.meta.env.VITE_PORT}`;
 
 const firstName = ref("");
 const lastName = ref("");
@@ -70,7 +71,7 @@ const register = () => {
 };
 
 let run = async (uid) => {
-    const response = await fetch(`http://localhost:3000/chat/auth/${uid}`)
+    const response = await fetch(`${base_url}/chat/auth/${uid}`)
     const responseJson = await response.json()
     new ConversationsClient(responseJson.token)
 } 

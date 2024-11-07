@@ -84,6 +84,7 @@ import Navbar from "../components/Navbar.vue";
 import Avatar from 'primevue/avatar';
 import "primeicons/primeicons.css";
 import axios from 'axios'
+const base_url = import.meta.env.VITE_ENDPOINT ?? `http://localhost:${import.meta.env.VITE_PORT}`;
 
 export default {
     components: { Conversation, Avatar, Navbar},
@@ -106,7 +107,7 @@ export default {
     methods: {
         // Create an access token which we will sign and return to the client,
         getToken: async function(identity) {
-            const response = await fetch(`http://localhost:3000/chat/auth/${identity}`)
+            const response = await fetch(`${base_url}/chat/auth/${identity}`)
             const responseJson = await response.json()
             return responseJson.token
         },
