@@ -93,13 +93,13 @@ const scrollToFeatures = () => {
 
 .hero-content h1 {
   font-size: 4rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .app-logo {
   width: 200px; 
   height: auto; 
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   animation: fadeIn 1s ease; 
   margin: auto;
 }
