@@ -225,6 +225,7 @@ h3 {
   width: 300px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-align: center;
+  margin:auto;
 }
 
 .feature-card:hover {
