@@ -78,7 +78,7 @@
                   <label>Age</label>
                   <input type="text" v-model="data.age" :disabled="disabled" class="profile-input" />
                 </div>
-                <div class="profile-field">
+                <div class="profile-field mt-2">
                   <label>Gender</label>
                   <v-select
                     :disabled="disabled"
@@ -93,7 +93,7 @@
                   <label>Religion</label>
                   <input type="text" v-model="data.religion" :disabled="disabled" class="profile-input" />
                 </div>
-                <div class="profile-field">
+                <div class="profile-field mt-2">
                   <label>Looking For</label>
                   <v-select
                     :disabled="disabled"
