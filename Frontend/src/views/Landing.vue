@@ -335,6 +335,6 @@ h3 {
     transform: translateY(0px) translateX(0px) rotate(480deg);
   }
 
-  /* funny comment uwu */
+  
 }
 </style>
