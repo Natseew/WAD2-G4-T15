@@ -270,6 +270,7 @@
     min-height: 100vh;
     width: 100%;
     padding: 2rem;
+    padding-bottom: 0;
   }
   
   .card-container {
