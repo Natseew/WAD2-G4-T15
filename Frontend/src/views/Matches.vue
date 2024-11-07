@@ -104,12 +104,13 @@
     flex-direction: column;
     width: 100%;
     max-width: 500px;
-    gap: 0.1rem;
+    gap: 0.01rem;
     padding-bottom: 20px;
   }
   
   .match-card {
-    width: 100%;
+    width: 24rem;
+    height: 40rem;
   }
   
   .no-matches-message {
