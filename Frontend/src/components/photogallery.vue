@@ -263,6 +263,15 @@ const savePhotos = async () => {
             }
         }
 
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 3; /* Ensure navbar stays on top */
+  padding: 1rem 2rem;
+}
+
 .photo-gallery {
   max-width: 1024px;
   margin: auto;
