@@ -214,7 +214,7 @@ h3{
   gap: 2rem; /* Space between each card */
   width: 100%;
   padding: 1rem;
-  flex-wrap: nowrap; /* Prevent cards from wrapping to the next line */
+  flex-wrap: wrap; /* Prevent cards from wrapping to the next line */
 }
 
 .feature-card {
