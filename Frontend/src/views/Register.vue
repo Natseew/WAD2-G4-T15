@@ -22,7 +22,7 @@
         <p v-if="errMsg" class="error-message">{{ errMsg }}</p>
       </div>
       <div class="logo"> 
-          NeverAlone. 
+        <img src="../assets/NeverAloneHandsOnly.png" alt="Never Alone App Logo" class="app-logo" />
       </div>
     </div>
   </div>
@@ -100,6 +100,10 @@ let run = async (uid) => {
     font-size: 20px;
     font-family: Roboto Flex;
     color: white;
+  }
+
+  .app-logo{
+    width: 50px;
   }
 
   .register-container {
@@ -183,6 +187,10 @@ let run = async (uid) => {
 
     background-size: 600% 600%;
     animation: gradient-animation 25s ease infinite;
+  }
+
+  .app-logo{
+    width: 300px;
   }
 
   .big-screen{

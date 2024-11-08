@@ -18,7 +18,7 @@
           <p v-if="errMsg" class="error-message">{{ errMsg }}</p>
         </div>
         <div class="logo"> 
-          NeverAlone. 
+          <img src="../assets/NeverAloneHandsOnly.png" alt="Never Alone App Logo" class="app-logo" />
         </div>
       </div>
     </div>
@@ -88,6 +88,10 @@
     color: white;
   }
 
+  .app-logo{
+    width: 50px;
+  }
+
   .login-container {
     display: flex;
     flex-direction: column;
@@ -137,6 +141,10 @@
     animation: gradient-animation 25s ease infinite;
   }
 
+  .app-logo{
+    width: 300px;
+  }
+
   .login-form {
     flex: 1;
     display: flex;
@@ -155,6 +163,7 @@
 
   .logo {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 97%;

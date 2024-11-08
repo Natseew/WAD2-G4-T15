@@ -4,7 +4,7 @@
   <div class="relative min-h-screen">
     <Navbar class="navbar" />
 
-    <div class="container mx-auto px-4 pt-20 pb-8 relative z-10">
+    <div class="container mx-auto px-4 pt-6 relative z-10 ">
       <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6">
         <v-overlay v-model="overlay" class="align-center justify-center">
           <v-card width="450" align-center justify-center class="pa-4">
@@ -272,10 +272,16 @@ const uploadTask = () => {
   ::v-deep .main-content {
         display:none;
     }
+  
+  .container{
+    padding-bottom: 100px;
+  }
 }
 
-.container{
-  padding: 30px;
+@media (min-width: 768px) {
+  .container{
+    padding-bottom: 32px;
+  }
 }
 
 .background {
