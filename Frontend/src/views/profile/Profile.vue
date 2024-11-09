@@ -149,7 +149,7 @@
           :timeout="3000" 
           rounded="pill"
           color="deep-orange-darken-2"
-        multi-line>
+          multi-line>
           {{ snackbarMessage }}
           <template #action>
             <v-btn color="pink" text @click="snackbar = false">Close</v-btn>
@@ -244,6 +244,10 @@ const submit = (() => {
         .then(function (response) {
           console.log(response);
         });
+
+      snackbarMessage.value = "Profile updated successfully!";
+      snackbar.value = true;
+
     } catch (error) {
       console.log(error);
     }
