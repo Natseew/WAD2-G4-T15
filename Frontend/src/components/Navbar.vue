@@ -22,14 +22,6 @@
             </span>
             <span
               class="nav-link"
-              :class="{ active: isActive('Matches') }"
-              @click="navigateTo('Matches')"
-            >
-              <HeartIcon class="nav-icon" style="width: 1.2rem; height: 1.2rem;"/>
-              <span class="ml-0.5 link-text">Matches</span>
-            </span>
-            <span
-              class="nav-link"
               :class="{ active: isActive('chat') }"
               @click="navigateTo('chat')"
             >
