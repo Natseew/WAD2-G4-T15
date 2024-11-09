@@ -25,7 +25,7 @@
               </div>
             </div>
             <div class="flex items-end chat-profile" v-if="!shouldHideAvatar(message, index)">
-              <v-avatar color="surface-variant" rounded="1"  @click.stop="goToMatchProfile(message?.state?.author)">
+              <v-avatar color="surface-variant" rounded="1"  @click.stop="goToMatchProfile(message?.state?.author)" class="clickable-avatar">
                 <v-img v-if="message?.state?.author === name"
                   :src="userImage" 
                 >
@@ -177,6 +177,16 @@ methods: {
   padding: 15px 16px 5px 0;
   font-weight: bold;
   font-size: 20px;
+}
+
+.clickable-avatar {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.clickable-avatar:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Bubble container with alignment for sent vs received messages */

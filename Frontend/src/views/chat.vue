@@ -19,7 +19,7 @@
                                                     <!--:label="item.name[0].toUpperCase()"-->
                                                     <Avatar 
                                                         shape="circle"
-                                                        class="mr-5" 
+                                                        class="mr-5 clickable-avatar" 
                                                         size="large" 
                                                         @click.stop="goToMatchProfile(item.uid)"
                                                     >
@@ -382,6 +382,16 @@ export default {
     white-space: nowrap;
     max-width: 16em;
     font-size: 15px; 
+}
+
+.clickable-avatar {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.clickable-avatar:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 1323px) {
