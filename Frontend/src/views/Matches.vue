@@ -54,7 +54,8 @@ onAuthStateChanged(auth, (user) => {
 
 <style scoped>
 .background {
-  background: linear-gradient(to bottom, rgba(255, 118, 118, 0.1), rgba(245, 78, 162, 0.1));
+  /* background: linear-gradient(to bottom, rgba(255, 118, 118, 0.1), rgba(245, 78, 162, 0.1)); */
+  background: white;
   height: 100vh;
   width: 100%;
   position: fixed;
