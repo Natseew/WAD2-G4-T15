@@ -124,7 +124,7 @@ export default {
 
                 if (messages.items.length > 0) {
                     const latestMessage = messages.items[0];
-                    const senderName = latestMessage.author === this.uid ? "You" : this.receiverName; 
+                    const senderName = latestMessage.author === this.uid ? "You" : match.name; 
 
                     // Update the latestMessages object with both sender and message body
                     this.latestMessages = {
@@ -280,7 +280,7 @@ export default {
 
 <style scoped>
 
-@media (max-width: 769px){
+@media (max-width: 768px){
     ::v-deep .main-content {
         display:none;
     }
@@ -380,8 +380,20 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 8.5rem;
+    max-width: 16em;
     font-size: 15px; 
+}
+
+@media (max-width: 1323px) {
+    .chat-list .v-list-item .message-text {
+        max-width: 8.5em; 
+    }
+}
+
+@media (max-width: 769px) {
+    .chat-list .v-list-item .message-text {
+        max-width: 12em; 
+    }
 }
 
 .chat-list .v-list-item:hover {
