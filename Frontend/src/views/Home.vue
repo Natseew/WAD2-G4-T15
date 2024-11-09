@@ -4,8 +4,14 @@
     <div class="red-background"></div>
     <div class="flex justify-center items-center h-full flex-col mt-8 md:mt-15 mb-28 md:mb-0">
       <div class="flex flex-col items-center w-full">
-        <div class="cards-stack relative">
 
+        <!-- Loading Spinner -->
+        <div v-if="loading" class="loading-spinner">
+          Loading matches...
+        </div>
+
+        <!-- Cards Stack -->
+        <div v-else class="cards-stack relative">
           <div v-if="showingLove && filteredMatches.length === 0" class="no-matches-message">
             No more users looking for love.
           </div>
@@ -27,6 +33,7 @@
             }"
           />
         </div>
+        
         <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" @filter-clicked="handleFilterClick" class="button-group mt-8 md:mt-15 z-10" />
       </div>
     </div>
@@ -49,6 +56,11 @@ const router = useRouter();
 const auth = getAuth();
 const store = useStore();
 
+const loading = ref(true); // Loading state
+const matches = ref([]);
+const cardRefs = ref([]);
+const showingLove = ref(true);
+
 onAuthStateChanged(auth, (user) => {
   if (user) {
     if (user.name === "newUser") {
@@ -60,10 +72,6 @@ onAuthStateChanged(auth, (user) => {
     router.push('/login');
   }
 });
-
-const matches = ref([]);
-const cardRefs = ref([]);
-const showingLove = ref(true);
 
 const filteredMatches = computed(() => {
   const result = matches.value.filter(match => {
@@ -142,11 +150,13 @@ const handleSwipeRight = (index) => {
 
 onMounted(() => {
   matches.value = store.getters.getPopulateMatches;
+  loading.value = false; // Set loading to false after data is fetched
 });
 
 store.subscribe((mutation, state) => {
   if (mutation.type === 'setPopulateMatches') {
     matches.value = state.populateMatches;
+    loading.value = false; // Set loading to false once mutation updates matches
   }
 });
 
@@ -155,7 +165,6 @@ const showNotification = computed(() => !!store.getters.getMatchNotification);
 </script>
 
 <style scoped>
-
 ::v-deep .main-content {
       display:none;
   }
@@ -248,5 +257,13 @@ const showNotification = computed(() => !!store.getters.getMatchNotification);
   left: 10%;
   transform: translate(-50%, -50%);
   z-index: 10;
+}
+
+/* Loading Spinner Styles */
+.loading-spinner {
+  font-size: 1.5rem;
+  color: #555;
+  text-align: center;
+  padding: 2rem;
 }
 </style>
