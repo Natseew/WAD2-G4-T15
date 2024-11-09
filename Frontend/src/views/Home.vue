@@ -2,7 +2,7 @@
   <div class="background">
     <Navbar class="navbar" />
     <div class="red-background"></div>
-    <div class="flex justify-center items-center flex-col mt-15">
+    <div class="flex justify-center items-center h-full flex-col mt-8 md:mt-15 mb-28 md:mb-0">
       <div class="flex flex-col items-center w-full">
         <div class="cards-stack relative">
 
@@ -27,7 +27,7 @@
             }"
           />
         </div>
-        <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" @filter-clicked="handleFilterClick" class="button-group mt-15 z-10" />
+        <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" @filter-clicked="handleFilterClick" class="button-group mt-8 md:mt-15 z-10" />
       </div>
     </div>
 
@@ -232,6 +232,7 @@ const showNotification = computed(() => !!store.getters.getMatchNotification);
 .button-group {
   position: relative;
   z-index: 20;
+ 
 }
 
 .no-matches-message {
