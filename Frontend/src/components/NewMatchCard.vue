@@ -12,7 +12,7 @@
               </div>
               <img
                 class="profile-img"
-                :src="images[0]"
+                :src="images[0] || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
                 alt="profile-picture"
                 :style="{'border': `3px solid ${ gender == 'male'? 'rgb(155, 200, 248)' : 'rgb(248, 100, 155)' }`}"
               />
