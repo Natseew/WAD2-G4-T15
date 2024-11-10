@@ -38,13 +38,13 @@
       </div>
     </div>
 
-    <div v-if="showNotification" class="confetti-container"></div>
-    <MatchNotification v-if="showNotification" />
+    <div class="confetti-container"></div>
+    <MatchNotification v-if="showNotification" @run-confetti="triggerConfetti"/>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
@@ -162,27 +162,25 @@ store.subscribe((mutation, state) => {
 
 const showNotification = computed(() => !!store.getters.getMatchNotification);
 
-watch(showNotification, (newValue) => {
-  if (newValue) {
-    triggerConfetti();  // Run the confetti animation when notification is true
-  }
-});
-
 const triggerConfetti = () => {
   const confettiContainer = document.querySelector('.confetti-container');
   
   // Clean up previous confetti before adding new ones
   confettiContainer.innerHTML = '';
 
-  for (let i = 0; i < 50; i++) {  // Adjust the number of hearts
+  for (let i = 0; i < 75; i++) {  // Adjust the number of hearts
     const heart = document.createElement('div');
     heart.classList.add('heart');
+    heart.setAttribute('data-v-2dc54a20', '');
     confettiContainer.appendChild(heart);
 
     // Optionally, randomize the falling positions or delay
     heart.style.left = `${Math.random() * 100}%`;
     heart.style.animationDelay = `${Math.random() * 2}s`; // Random delay for each heart
   }
+  setTimeout(() => {
+    confettiContainer.innerHTML = '';
+  }, 5000);
 };
 
 </script>
@@ -334,9 +332,13 @@ const triggerConfetti = () => {
 
 .confetti-container {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000; /* Higher than other elements */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
