@@ -23,13 +23,13 @@
                                                         size="large" 
                                                         @click.stop="goToMatchProfile(item.uid)"
                                                     >
-                                                        <v-img 
+                                                        <img 
                                                             :src="latestMessages[item.chatName]?.receiverProfile || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
                                                         />
                                                     </Avatar>
                                                     <div class="d-flex flex-column align-start">
                                                         <span class="font-bold">{{ item.name }}</span>
-                                                        <span v-if="latestMessages[item.chatName]" class="message-text"> 
+                                                        <span v-if="latestMessages[item.chatName]?.sender" class="message-text"> 
                                                             {{ latestMessages[item.chatName]?.sender }}: {{ latestMessages[item.chatName]?.body }} 
                                                         </span>
                                                         <span v-else class="message-text">
@@ -136,6 +136,17 @@ export default {
                         }
                     };
                 }
+                else{
+                    this.latestMessages = {
+                        ...this.latestMessages,
+                        [match.chatName]: {
+                            body: 'No messages yet',
+                            sender: '',
+                            receiverProfile: receiverProfile
+                        }
+                    };
+                }
+                console.log(this.latestMessages);
             } catch (error) {
                 console.error(`Error fetching latest message for ${match.chatName}:`, error);
                 this.latestMessages = {
@@ -143,7 +154,7 @@ export default {
                     [match.chatName]: {
                         body: 'No messages yet',
                         sender: '',
-                        receiverProfile: "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
+                        receiverProfile: receiverProfile
                     }
                 };
             }
