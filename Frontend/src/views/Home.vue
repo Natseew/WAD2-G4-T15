@@ -336,7 +336,7 @@ const triggerConfetti = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1000; /* Higher than other elements */
+  z-index: 19;
   display: flex;
   justify-content: center;
   align-items: center;
