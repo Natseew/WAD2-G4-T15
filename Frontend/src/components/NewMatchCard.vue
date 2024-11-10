@@ -489,12 +489,23 @@
     text-align: center; /* Center align the subtitle */
   }
 
-  .swipe-right {
+  
+  .card.flipped.swipe-right {
+    transform: translateX(100%) rotate(20deg) rotateY(180deg);
+    transition: transform 0.6s ease-out;
+  }
+
+  .card.flipped.swipe-left {
+    transform: translateX(-100%) rotate(-20deg) rotateY(180deg);
+    transition: transform 0.6s ease-out;
+  }
+
+  .card.swipe-right {
     transform: translateX(100%) rotate(20deg);
     transition: transform 0.6s ease-out;
   }
 
-  .swipe-left {
+  .card.swipe-left {
     transform: translateX(-100%) rotate(-20deg);
     transition: transform 0.6s ease-out;
   }
