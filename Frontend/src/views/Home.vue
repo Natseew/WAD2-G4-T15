@@ -38,12 +38,13 @@
       </div>
     </div>
 
+    <div v-if="showNotification" class="confetti-container"></div>
     <MatchNotification v-if="showNotification" />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
@@ -104,7 +105,6 @@ const handleTimesClick = () => {
 
 const handleFilterClick = () => {
   showingLove.value = !showingLove.value;
-  console.log('Showing Love:', showingLove.value); // Log state change
 };
 
 const swipeCard = (index, isRightSwipe) => {
@@ -161,6 +161,29 @@ store.subscribe((mutation, state) => {
 });
 
 const showNotification = computed(() => !!store.getters.getMatchNotification);
+
+watch(showNotification, (newValue) => {
+  if (newValue) {
+    triggerConfetti();  // Run the confetti animation when notification is true
+  }
+});
+
+const triggerConfetti = () => {
+  const confettiContainer = document.querySelector('.confetti-container');
+  
+  // Clean up previous confetti before adding new ones
+  confettiContainer.innerHTML = '';
+
+  for (let i = 0; i < 50; i++) {  // Adjust the number of hearts
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    confettiContainer.appendChild(heart);
+
+    // Optionally, randomize the falling positions or delay
+    heart.style.left = `${Math.random() * 100}%`;
+    heart.style.animationDelay = `${Math.random() * 2}s`; // Random delay for each heart
+  }
+};
 
 </script>
 
@@ -266,5 +289,54 @@ const showNotification = computed(() => !!store.getters.getMatchNotification);
   color: #555;
   text-align: center;
   padding: 2rem;
+}
+
+.heart {
+  position: absolute;
+  background-color: red;
+  height: 20px;
+  width: 20px;
+  transform: rotate(-45deg);
+  animation: fall 5s infinite forwards;
+  opacity: 0;
+}
+
+.heart:after,
+.heart:before {
+  content: "";
+  position: absolute;
+  background-color: red;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+}
+
+.heart:after {
+  top: 0;
+  left: 10px;
+}
+
+.heart:before {
+  top: -10px;
+  left: 0;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-100vh) rotate(-45deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+.confetti-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 </style>
