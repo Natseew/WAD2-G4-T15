@@ -366,7 +366,7 @@ const savePhotos = async () => {
   font-weight: bold;
   text-align: center;
   color: #fff;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   flex-shrink: 0;
 }
 
@@ -413,7 +413,7 @@ const savePhotos = async () => {
   border-radius: 5px;
 }
 
-.photo-box:hover {
+.photo-box {
   transform: translateY(-10px); /* Pops up by 10px */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Make shadow more prominent on hover */
 }
@@ -447,7 +447,7 @@ const savePhotos = async () => {
   transition: opacity 0.3s, transform 0.3s; 
 }
 
-.photo-box:hover .upload-help{
+.photo-box .upload-help{
   opacity: 1;
   transform: translateY(0);
 }
@@ -478,7 +478,7 @@ const savePhotos = async () => {
   transition: background-color 0.2s;
 }
 
-.delete-button:hover {
+.delete-button {
   background-color: rgba(0, 0, 0, 0.7);
 }
 
@@ -503,11 +503,11 @@ const savePhotos = async () => {
   margin-bottom: 0.5rem;
 }
 
-.photo-box:hover .photo-overlay {
+.photo-box .photo-overlay {
   opacity: 1;
 }
 
-.photo-box:hover .overlay-content{
+.photo-box .overlay-content{
   opacity: 1;
   transform: translateY(0);
 }
@@ -565,8 +565,8 @@ const savePhotos = async () => {
   transition: background-color 0.2s;
 }
 
-.upload-button:hover,
-.overwrite-button:hover {
+.upload-button,
+.overwrite-button {
   background-color: rgb(300, 115, 132);
 }
 
@@ -602,7 +602,7 @@ const savePhotos = async () => {
   transition: background-color 0.2s;
 }
 
-.save-button:hover {
+.save-button{
   background-color: #00e1ff;
 }
 
