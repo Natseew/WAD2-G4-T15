@@ -22,7 +22,7 @@
         <p v-if="errMsg" class="error-message">{{ errMsg }}</p>
       </div>
       <div class="logo"> 
-          NeverAlone. 
+        <img src="../assets/NeverAloneHandsOnly.png" alt="Never Alone App Logo" class="app-logo" />
       </div>
     </div>
   </div>
@@ -37,6 +37,7 @@ import Password from 'primevue/password';
 import Button from 'primevue/button';
 import axios from 'axios';
 import {Client as ConversationsClient} from "@twilio/conversations"
+const base_url = import.meta.env.VITE_ENDPOINT ?? `http://localhost:${import.meta.env.VITE_PORT}`;
 
 const firstName = ref("");
 const lastName = ref("");
@@ -70,7 +71,7 @@ const register = () => {
 };
 
 let run = async (uid) => {
-    const response = await fetch(`http://localhost:3000/chat/auth/${uid}`)
+    const response = await fetch(`${base_url}/chat/auth/${uid}`)
     const responseJson = await response.json()
     new ConversationsClient(responseJson.token)
 } 
@@ -99,6 +100,10 @@ let run = async (uid) => {
     font-size: 20px;
     font-family: Roboto Flex;
     color: white;
+  }
+
+  .app-logo{
+    width: 50px;
   }
 
   .register-container {
@@ -182,6 +187,10 @@ let run = async (uid) => {
 
     background-size: 600% 600%;
     animation: gradient-animation 25s ease infinite;
+  }
+
+  .app-logo{
+    width: 300px;
   }
 
   .big-screen{

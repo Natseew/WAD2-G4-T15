@@ -4,7 +4,7 @@
   <div class="relative min-h-screen">
     <Navbar class="navbar" />
 
-    <div class="container mx-auto px-4 pt-20 pb-8 relative z-10">
+    <div class="container mx-auto px-4 pt-6 relative z-10 ">
       <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6">
         <v-overlay v-model="overlay" class="align-center justify-center">
           <v-card width="450" align-center justify-center class="pa-4">
@@ -32,6 +32,7 @@
         </v-overlay>
 
         <!-- Profile Header -->
+        <div class="header"> Profile </div>
         <div v-if="loading">
           <v-progress-circular color="blue-lighten-3" indeterminate :size="56"></v-progress-circular>
         </div>
@@ -148,8 +149,8 @@
         <v-snackbar v-model="snackbar" 
           :timeout="3000" 
           rounded="pill"
-          color="deep-orange-darken-2"
-        multi-line>
+          color="green-darken-2"
+          multi-line>
           {{ snackbarMessage }}
           <template #action>
             <v-btn color="pink" text @click="snackbar = false">Close</v-btn>
@@ -244,6 +245,10 @@ const submit = (() => {
         .then(function (response) {
           console.log(response);
         });
+
+      snackbarMessage.value = "Profile updated successfully!";
+      snackbar.value = true;
+
     } catch (error) {
       console.log(error);
     }
@@ -272,14 +277,36 @@ const uploadTask = () => {
   ::v-deep .main-content {
         display:none;
     }
+  
+  .container{
+    padding-bottom: 100px;
+  }
 }
 
-.container{
-  padding: 30px;
+@media (min-width: 768px) {
+  .container{
+    padding-bottom: 32px;
+  }
 }
+
+.header {
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    padding: 0px 0px 5px 0px;
+    margin: 0px 0px 20px 0px;
+    border-bottom: 1px solid #ffa578;
+    background: linear-gradient(180deg, #ffa578, rgb(255, 128, 192), #a67bf5);
+    background-size: 500% 500%; 
+    color: transparent; 
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: move-gradient 5s ease infinite;
+  }
 
 .background {
-  background: linear-gradient(to bottom, rgba(255, 118, 118, 0.1), rgba(245, 78, 162, 0.1));
+  /* background: linear-gradient(to bottom, rgba(255, 118, 118, 0.1), rgba(245, 78, 162, 0.1)); */
+  background: white;
   height: 100vh;
   width: 100%;
   position: fixed;

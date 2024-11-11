@@ -8,7 +8,9 @@ const store = createStore({
       user: {},
       populateMatches: [],
       matchedUsers: [],
-      matchNotification: null
+      matchNotification: null,
+      selectedMatchUid: null,
+      isLoading: false,
     }
   },
   getters: {
@@ -23,7 +25,8 @@ const store = createStore({
     },
     getMatchNotification(state) {
       return state.matchNotification;
-    }
+    },
+    isLoading: state => state.isLoading,
   },
   mutations: {
     setUser(state, userData) {
@@ -40,6 +43,12 @@ const store = createStore({
     },
     setMatchedUsers(state, matchedUsersData) {
       state.matchedUsers = matchedUsersData;
+    },
+    setSelectedMatchUid(state, uid) {
+      state.selectedMatchUid = uid;
+    },
+    setIsLoading(state, isLoading) {
+      state.isLoading = isLoading
     },
     addLikeToUser(state, likedUser) {
       if (!state.user.likes) {
@@ -74,9 +83,11 @@ const store = createStore({
 
     async populateMatches({ commit }, uid) {
       try {
+          commit("setIsLoading", true);
           const response = await axios.post(`${base_url}/user/populate_homepage/${uid}`);
           console.log(response.data)
           commit('setPopulateMatches', response.data);
+          commit("setIsLoading", false);
       } catch (error) {
           console.error("Failed to fetch populateMatches data:", error);
       }
@@ -138,6 +149,10 @@ const store = createStore({
 
     clearMatchNotification({ commit }) {
       commit('setMatchNotification', null);
+    },
+
+    selectMatch({ commit }, uid) {
+      commit('setSelectedMatchUid', uid);
     }
   }
 });

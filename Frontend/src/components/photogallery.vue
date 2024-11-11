@@ -23,20 +23,13 @@
         class="photo-box"
         :class="{ 'is-loading': photo.isLoading }"
       >
-        <div v-if="!photo.file" class="upload-box">
+        <div v-if="!photo.file" class="upload-box" @click="() => onUploadClick(index)" :disabled="photo.isLoading">
           <div class="upload-placeholder">
-            <button
-              @click="() => onUploadClick(index)"
-              class="upload-button"
-              :disabled="photo.isLoading"
-            >
-              <span v-if="!photo.isLoading">
-                <span class="upload-icon">📸</span>
-                Upload Photo
-              </span>
-              <span v-else>Loading...</span>
-            </button>
-            <p class="upload-help">Max size: 5MB</p>
+            <p class="upload-help" v-if="!photo.isLoading">
+              <span class="pi pi-image"></span>
+              Upload Photo
+            </p>
+            <p v-else>Loading...</p>
           </div>
           <input
             :ref="el => fileInputs[index] = el"
@@ -48,21 +41,19 @@
         </div>
         
         <div v-else class="photo-container">
-          <div class="photo-overlay">
-            <button 
-              @click="() => deletePhoto(index)" 
-              class="delete-button"
-              title="Delete photo"
-            >
-              &times;
-            </button>
-          </div>
           <img
             :src="photo.preview"
             :alt="`Uploaded Photo ${index + 1}`"
             class="photo-image"
             @error="() => handleImageError(index)"
           />
+          <div class="photo-overlay" @click="() => deletePhoto(index)" :disabled="photo.isLoading">
+            <div class="overlay-content">
+              <span class="pi pi-image"></span>
+              Replace
+            </div>
+          </div>
+          <!--
           <div class="caption-box">
             <input
               type="text"
@@ -73,15 +64,15 @@
             />
             <div class="photo-actions">
               <button
-                @click="() => onUploadClick(index)"
+                @click="() => deletePhoto(index)"
                 class="overwrite-button"
                 :disabled="photo.isLoading"
               >
                 Replace
               </button>
-              <span class="caption-count">{{ photo.caption.length }}/100</span>
             </div>
           </div>
+          --> 
         </div>
       </div>
     </div>
@@ -95,20 +86,62 @@
         {{ isSaving ? 'Saving...' : 'Save Changes' }}
       </button>
     </div>
+    <v-snackbar v-model="snackbar" 
+          :timeout="3000" 
+          rounded="pill"
+          color="green-darken-2"
+          multi-line>
+          {{ snackbarMessage }}
+          <template #action>
+            <v-btn color="pink" text @click="snackbar = false">Close</v-btn>
+          </template>
+        </v-snackbar>
   </div>
 </template>
 
 <script setup>
+import "primeicons/primeicons.css";
 import { ref, reactive } from 'vue'
-import Navbar from "../components/Navbar.vue";
+import axios from 'axios';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref as firebaseRef } from "firebase/storage";
 
+
+const auth = getAuth();
+const storage = getStorage();
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const fileInputs = reactive({})
 const error = ref('')
 const isSaving = ref(false)
 const hasUnsavedChanges = ref(false)
+let isLoading = ref(true)
+let userData = ref();
+let overlay = ref(false);
 
-const photos = ref(Array(6).fill().map(() => ({
+let snackbar = ref(false);
+let snackbarMessage = ref("");
+
+
+let data = ref({
+  "name": "",
+  "age": "",
+  "gender": "",
+  "hobbies": "",
+  "religion": "",
+  "lookingFor": "",
+  "introduction": "",
+  "personalityDescription": "",
+  "loves": "",
+  "hates": "",
+  "dealbreakers": "",
+  "goals": "",
+  "images": [],
+  "likes": [],
+  "matches": []
+});
+
+let photos = ref(Array(6).fill().map(() => ({
   file: null,
   caption: '',
   preview: '',
@@ -139,14 +172,46 @@ const validateFile = (file) => {
   return true
 }
 
-const createImagePreview = (file) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = (e) => resolve(e.target.result)
-    reader.onerror = () => reject(new Error('Failed to read file'))
-    reader.readAsDataURL(file)
-  })
-}
+onAuthStateChanged(auth, (user) => {
+  isLoading.value = true;
+  if (user) {
+    userData.value = user;
+    axios.get('/user/' + user.uid)
+      .then(function (response) {
+        for(var photo in response.data.images){
+          photos.value[photo].file = response.data.images[photo]
+          photos.value[photo].preview = response.data.images[photo]
+          data.value = response.data;
+          data.value.email = user.email;
+        }
+        isLoading.value = false;
+      });
+  } else {
+    router.push('/login');
+  }
+});
+
+const submit = (() => {
+  if (userData) {
+    try {
+      axios.post('/user/' + userData.value.uid, data.value)
+        .then(function (response) {
+          console.log(response);
+        });
+
+      snackbarMessage.value = "Profile updated successfully!";
+      snackbar.value = true;
+
+    } catch (error) {
+      console.log(error);
+    }
+    overlay.value = false;
+  }
+});
+
+const metadata = {
+  contentType: 'image/jpg',
+};
 
 const handleFileUpload = async (event, index) => {
   const file = event.target.files[0]
@@ -156,21 +221,25 @@ const handleFileUpload = async (event, index) => {
 
   try {
     photos.value[index].isLoading = true
-    
+
+    console.log(file)
     // Simulate upload delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    const storageRef = firebaseRef(storage, 'gs://wad2-g4-t15.appspot.com/' + file.name);
+    uploadBytes(storageRef, file, metadata).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        const preview = url
     
-    const preview = await createImagePreview(file)
-    
-    photos.value[index] = {
-      file,
-      preview,
-      caption: photos.value[index].caption,
-      isLoading: false,
-      error: null
-    }
-    
-    hasUnsavedChanges.value = true
+        photos.value[index] = {
+          file,
+          preview,
+          caption: photos.value[index].caption,
+          isLoading: false,
+          error: null
+        }
+        
+        hasUnsavedChanges.value = true
+      });
+    });
   } catch (err) {
     handleError(err.message)
     photos.value[index].isLoading = false
@@ -205,13 +274,18 @@ const savePhotos = async () => {
     isSaving.value = true
     
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
+    let imageArray = []
+    for(var photo of photos.value){
+      imageArray.push(photo.preview)
+    }
+    data.value.images = imageArray
+    submit()
     hasUnsavedChanges.value = false
     // You can emit an event here if needed
     // emit('save', photos.value.filter(p => p.file))
   } catch (err) {
     handleError('Failed to save photos')
+    console.log(err)
   } finally {
     isSaving.value = false
   }
@@ -279,6 +353,8 @@ const savePhotos = async () => {
   font-family: 'Roboto Flex', sans-serif;
   height: 100vh;
   display: flex;
+  width: 100%;
+  height: 85%;
   flex-direction: column;
   z-index: 2; /* Ensure it appears above the background */
   position: relative;
@@ -290,8 +366,7 @@ const savePhotos = async () => {
   font-weight: bold;
   text-align: center;
   color: #fff;
-  margin-bottom: 2rem;
-  margin-top: 5rem;
+  margin-bottom: 1rem;
   flex-shrink: 0;
 }
 
@@ -320,21 +395,22 @@ const savePhotos = async () => {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: 1rem;
+  gap: 7px;
   flex: 1;
+  height: 100%;
   min-height: 0;
   margin-bottom: 1rem;
 }
 
 .photo-box {
   background-color: #fff;
-  border-radius: 0.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add transition for smooth effect */
   height: 100%;
   display: flex;
   flex-direction: column;
+  border-radius: 5px;
 }
 
 .photo-box:hover {
@@ -349,6 +425,7 @@ const savePhotos = async () => {
   justify-content: center;
   background-color: #f3f4f6;
   padding: 1rem;
+  pointer: cursor;
 }
 
 .upload-placeholder {
@@ -363,11 +440,20 @@ const savePhotos = async () => {
 
 .upload-help {
   color: #6b7280;
-  font-size: 0.875rem;
+  font-size: 1rem;
   margin-top: 0.5rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s, transform 0.3s; 
+}
+
+.photo-box:hover .upload-help{
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .photo-container {
+  position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -404,10 +490,41 @@ const savePhotos = async () => {
   min-height: 0;
 }
 
-.caption-box {
-  padding: 0.75rem;
-  background-color: white;
-  flex-shrink: 0;
+.overlay-content {
+  color: white;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.overlay-content .pi {
+  display: block;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.photo-box:hover .photo-overlay {
+  opacity: 1;
+}
+
+.photo-box:hover .overlay-content{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.photo-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
 }
 
 .caption-input {

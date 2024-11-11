@@ -6,7 +6,7 @@
       </div>
       <div class="conversation-container">
         <div 
-          v-for="(message, index) in messages" 
+          v-for="(message, index) in messages"
           :key="message.index"
           class="bubble-container"
           :class="{ 
@@ -18,10 +18,14 @@
           <div class="message-row">
             <div class="bubble">
               <div class="name" v-if="message?.state?.author !== name">{{ message?.state?.author === name ? authorName : receiverName }}</div>
-              <div class="message">{{ message?.state?.body }}</div>
+              <div v-if="message.type != 'media' "class="message">{{ message?.state?.body }}</div>
+              <img v-if="message.type === 'media'" :src="prizeImage">
+              <div v-if="message.type === 'media'">
+                <button @click="loadImage(message)" style="display: block; margin: auto; ">Show Image</button>
+              </div>
             </div>
             <div class="flex items-end chat-profile" v-if="!shouldHideAvatar(message, index)">
-              <v-avatar color="surface-variant" rounded="1">
+              <v-avatar color="surface-variant" rounded="1"  @click.stop="goToMatchProfile(message?.state?.author)" class="clickable-avatar">
                 <v-img v-if="message?.state?.author === name"
                   :src="userImage" 
                 >
@@ -52,7 +56,8 @@ export default {
             messages: [],
             messageText: "",
             isSignedInUser: false,
-            placeholderText: "Enter your message"
+            placeholderText: "Enter your message",
+            prizeImage:""
         }
     },
     mounted() {
@@ -62,9 +67,42 @@ export default {
         })
     this.activeConversation.on("messageAdded", (message) => {
         this.messages = [...this.messages, message]
+
     })
 },
 methods: {
+
+    loadImage: async function(message) {
+      const url = await message.media.getContentTemporaryUrl();
+      this.prizeImage = url
+    },
+    sendImage: async function() {
+      let fileBlob = ""
+      const file = await fetch("https://i.imgur.com/n19yokg.jpeg", {
+          mode: "cors",
+          headers: {
+              Origin: window.location.origin,
+              "Access-Control-Request-Method": "GET",
+              "Access-Control-Request-Headers": "Content-Type",
+              "sec-fetch-dest": "image",
+            },
+        })
+        .then(response => response.blob())
+        .then(blob => {
+          // Do something with the image data
+          fileBlob = blob
+          console.log(fileBlob)
+        });
+
+      const sendMediaOptions = {
+          contentType: "image/jpeg",
+          filename: "twilio-logo.svg",
+          media: fileBlob
+      };
+      console.log(sendMediaOptions)
+      this.activeConversation.sendMessage(sendMediaOptions);
+      console.log(this.activeConversation)
+    },
     sendMessage: function() {
         if(!this.messageText.trim()){
           this.placeholderText = "Message cannot be empty";
@@ -85,7 +123,11 @@ methods: {
         // Hide avatar if next message is also from the current user
         return nextMessage && nextMessage.state.author === message.state.author;
 
-    }
+    },
+    goToMatchProfile(uid) {
+        this.$store.dispatch('selectMatch', uid);
+        this.$router.push('/matches');
+    },
   }
 }
 </script>
@@ -135,6 +177,16 @@ methods: {
   padding: 15px 16px 5px 0;
   font-weight: bold;
   font-size: 20px;
+}
+
+.clickable-avatar {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.clickable-avatar:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Bubble container with alignment for sent vs received messages */

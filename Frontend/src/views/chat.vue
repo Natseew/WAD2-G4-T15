@@ -8,6 +8,7 @@
                         <v-row>
                             <transition name="slide-x-reverse-transition" mode="out-in">
                                 <v-col cols="12" md="4" sm="12" class="chat-list-col" v-if="showList()">
+                                    <div class="header"> Chat </div>
                                     <v-list lines="three">
                                         <div class="chat-list">
                                             <v-list-item 
@@ -19,16 +20,17 @@
                                                     <!--:label="item.name[0].toUpperCase()"-->
                                                     <Avatar 
                                                         shape="circle"
-                                                        class="mr-5" 
+                                                        class="mr-5 clickable-avatar" 
                                                         size="large" 
+                                                        @click.stop="goToMatchProfile(item.uid)"
                                                     >
-                                                        <v-img 
+                                                        <img 
                                                             :src="latestMessages[item.chatName]?.receiverProfile || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
                                                         />
                                                     </Avatar>
                                                     <div class="d-flex flex-column align-start">
                                                         <span class="font-bold">{{ item.name }}</span>
-                                                        <span v-if="latestMessages[item.chatName]" class="message-text"> 
+                                                        <span v-if="latestMessages[item.chatName]?.sender" class="message-text"> 
                                                             {{ latestMessages[item.chatName]?.sender }}: {{ latestMessages[item.chatName]?.body }} 
                                                         </span>
                                                         <span v-else class="message-text">
@@ -83,6 +85,7 @@ import Navbar from "../components/Navbar.vue";
 import Avatar from 'primevue/avatar';
 import "primeicons/primeicons.css";
 import axios from 'axios'
+const base_url = import.meta.env.VITE_ENDPOINT ?? `http://localhost:${import.meta.env.VITE_PORT}`;
 
 export default {
     components: { Conversation, Avatar, Navbar},
@@ -105,7 +108,7 @@ export default {
     methods: {
         // Create an access token which we will sign and return to the client,
         getToken: async function(identity) {
-            const response = await fetch(`http://localhost:3000/chat/auth/${identity}`)
+            const response = await fetch(`${base_url}/chat/auth/${identity}`)
             const responseJson = await response.json()
             return responseJson.token
         },
@@ -122,7 +125,7 @@ export default {
 
                 if (messages.items.length > 0) {
                     const latestMessage = messages.items[0];
-                    const senderName = latestMessage.author === this.uid ? "You" : this.receiverName; 
+                    const senderName = latestMessage.author === this.uid ? "You" : match.name; 
 
                     // Update the latestMessages object with both sender and message body
                     this.latestMessages = {
@@ -134,6 +137,17 @@ export default {
                         }
                     };
                 }
+                else{
+                    this.latestMessages = {
+                        ...this.latestMessages,
+                        [match.chatName]: {
+                            body: 'No messages yet',
+                            sender: '',
+                            receiverProfile: receiverProfile
+                        }
+                    };
+                }
+                console.log(this.latestMessages);
             } catch (error) {
                 console.error(`Error fetching latest message for ${match.chatName}:`, error);
                 this.latestMessages = {
@@ -141,7 +155,7 @@ export default {
                     [match.chatName]: {
                         body: 'No messages yet',
                         sender: '',
-                        receiverProfile: "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
+                        receiverProfile: receiverProfile
                     }
                 };
             }
@@ -231,7 +245,11 @@ export default {
             else{
                 this.showChatList = true;
             }
-        }
+        },
+        goToMatchProfile(uid) {
+            this.$store.dispatch('selectMatch', uid);
+            this.$router.push('/matches');
+        },
     },
     async mounted() {
 
@@ -274,7 +292,7 @@ export default {
 
 <style scoped>
 
-@media (max-width: 769px){
+@media (max-width: 768px){
     ::v-deep .main-content {
         display:none;
     }
@@ -305,6 +323,21 @@ export default {
   background-size: 400% 400%;
   animation: spin-gradient 15s ease infinite;
 
+}
+
+.header{
+    text-align: left;
+    font-size: 2em;
+    font-weight: bold;
+    padding: 20px 20px 5px 10px;
+    margin: 0px 20px 0px 20px;
+    border-bottom: 1px solid #ffa578;
+    background: linear-gradient(180deg, #ffa578, rgb(255, 128, 192), #a67bf5);
+    background-size: 500% 500%; 
+    color: transparent; /* Make text transparent */
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: move-gradient 5s ease infinite;
 }
 
 @keyframes spin-gradient {
@@ -374,8 +407,30 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 16rem;
+    max-width: 16em;
     font-size: 15px; 
+}
+
+.clickable-avatar {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.clickable-avatar:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 1323px) {
+    .chat-list .v-list-item .message-text {
+        max-width: 8.5em; 
+    }
+}
+
+@media (max-width: 769px) {
+    .chat-list .v-list-item .message-text {
+        max-width: 12em; 
+    }
 }
 
 .chat-list .v-list-item:hover {

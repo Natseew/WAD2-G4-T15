@@ -12,7 +12,7 @@
               </div>
               <img
                 class="profile-img"
-                :src="images[0]"
+                :src="images[0] || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
                 alt="profile-picture"
                 :style="{'border': `3px solid ${ gender == 'male'? 'rgb(155, 200, 248)' : 'rgb(248, 100, 155)' }`}"
               />
@@ -489,12 +489,23 @@
     text-align: center; /* Center align the subtitle */
   }
 
-  .swipe-right {
+  
+  .card.flipped.swipe-right {
+    transform: translateX(100%) rotate(20deg) rotateY(180deg);
+    transition: transform 0.6s ease-out;
+  }
+
+  .card.flipped.swipe-left {
+    transform: translateX(-100%) rotate(-20deg) rotateY(180deg);
+    transition: transform 0.6s ease-out;
+  }
+
+  .card.swipe-right {
     transform: translateX(100%) rotate(20deg);
     transition: transform 0.6s ease-out;
   }
 
-  .swipe-left {
+  .card.swipe-left {
     transform: translateX(-100%) rotate(-20deg);
     transition: transform 0.6s ease-out;
   }

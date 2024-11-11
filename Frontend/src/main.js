@@ -16,6 +16,8 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { createVuetify } from 'vuetify'
 
+const base_url = import.meta.env.VITE_ENDPOINT ?? `http://localhost:${import.meta.env.VITE_PORT}`;
+
 const MyPreset = definePreset(Aura, {
   semantic: {
     primary: {
@@ -43,7 +45,7 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.baseURL = `${base_url}`;
 axios.defaults.headers.post['Content-Type'] ='application/json';
 axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 

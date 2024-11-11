@@ -2,10 +2,14 @@
   <div class="background">
     <Navbar class="navbar" />
     <div class="red-background"></div>
-    <div class="flex justify-center items-center flex-col mt-15">
+    <div class="flex justify-center items-center h-full flex-col mt-8 md:mt-15 mb-28 md:mb-0">
       <div class="flex flex-col items-center w-full">
-        <div class="cards-stack relative">
 
+        <!-- LoadingScreen -->
+        <LoadingScreen v-if="isLoading" />
+
+        <!-- Cards Stack -->
+        <div v-else class="cards-stack relative">
           <div v-if="showingLove && filteredMatches.length === 0" class="no-matches-message">
             No more users looking for love.
           </div>
@@ -27,11 +31,13 @@
             }"
           />
         </div>
-        <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" @filter-clicked="handleFilterClick" class="button-group mt-15 z-10" />
+        
+        <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" @filter-clicked="handleFilterClick" class="button-group mt-8 md:mt-15 z-10" />
       </div>
     </div>
 
-    <MatchNotification v-if="showNotification" />
+    <div class="confetti-container"></div>
+    <MatchNotification v-if="showNotification" @run-confetti="triggerConfetti"/>
   </div>
 </template>
 
@@ -44,10 +50,16 @@ import NewMatchCard from "../components/NewMatchCard.vue";
 import ButtonGroup from "../components/ButtonGroup.vue";
 import Navbar from "../components/Navbar.vue";
 import MatchNotification from '../components/MatchNotification.vue';
+import LoadingScreen from '../components/LoadingScreen.vue';
 
 const router = useRouter();
 const auth = getAuth();
 const store = useStore();
+
+const isLoading = computed(() => store.getters.isLoading);
+const matches = ref([]);
+const cardRefs = ref([]);
+const showingLove = ref(true);
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
@@ -56,14 +68,11 @@ onAuthStateChanged(auth, (user) => {
     }
     store.dispatch('fetchMatches', user.uid);
     store.dispatch('populateMatches', user.uid);
+    
   } else {
     router.push('/login');
   }
 });
-
-const matches = ref([]);
-const cardRefs = ref([]);
-const showingLove = ref(true);
 
 const filteredMatches = computed(() => {
   const result = matches.value.filter(match => {
@@ -96,7 +105,6 @@ const handleTimesClick = () => {
 
 const handleFilterClick = () => {
   showingLove.value = !showingLove.value;
-  console.log('Showing Love:', showingLove.value); // Log state change
 };
 
 const swipeCard = (index, isRightSwipe) => {
@@ -152,18 +160,38 @@ store.subscribe((mutation, state) => {
 
 const showNotification = computed(() => !!store.getters.getMatchNotification);
 
+const triggerConfetti = () => {
+  const confettiContainer = document.querySelector('.confetti-container');
+  
+  // Clean up previous confetti before adding new ones
+  confettiContainer.style.zIndex = "19";
+
+  for (let i = 0; i < 75; i++) {  // Adjust the number of hearts
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.setAttribute('data-v-2dc54a20', '');
+    confettiContainer.appendChild(heart);
+
+    // Optionally, randomize the falling positions or delay
+    heart.style.left = `${Math.random() * 100}%`;
+    heart.style.animationDelay = `${Math.random() * 2}s`; // Random delay for each heart
+  }
+  setTimeout(() => {
+    confettiContainer.style.zIndex = "-1";
+    confettiContainer.innerHTML = '';
+  }, 5000);
+};
+
 </script>
 
 <style scoped>
-
-@media (max-width: 768px) {
-  ::v-deep .main-content {
-        display:none;
-    }
-}
+::v-deep .main-content {
+      display:none;
+  }
 
 .background {
-  background: linear-gradient(to bottom, rgba(255, 118, 118, 0.1), rgba(245, 78, 162, 0.1));
+  /* background: linear-gradient(to bottom, rgba(255, 118, 118, 0.1), rgba(245, 78, 162, 0.1)); */
+  background: white;
   height: 100vh;
   width: 100%;
   position: fixed;
@@ -234,6 +262,7 @@ const showNotification = computed(() => !!store.getters.getMatchNotification);
 .button-group {
   position: relative;
   z-index: 20;
+ 
 }
 
 .no-matches-message {
@@ -249,5 +278,66 @@ const showNotification = computed(() => !!store.getters.getMatchNotification);
   left: 10%;
   transform: translate(-50%, -50%);
   z-index: 10;
+}
+
+/* Loading Spinner Styles */
+.loading-spinner {
+  font-size: 1.5rem;
+  color: #555;
+  text-align: center;
+  padding: 2rem;
+}
+
+.heart {
+  position: absolute;
+  background-color: red;
+  height: 20px;
+  width: 20px;
+  transform: rotate(-45deg);
+  animation: fall 5s infinite forwards;
+  opacity: 0;
+}
+
+.heart:after,
+.heart:before {
+  content: "";
+  position: absolute;
+  background-color: red;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+}
+
+.heart:after {
+  top: 0;
+  left: 10px;
+}
+
+.heart:before {
+  top: -10px;
+  left: 0;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-100vh) rotate(-45deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+.confetti-container {
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

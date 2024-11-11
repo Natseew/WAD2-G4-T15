@@ -7,13 +7,13 @@
       </div>
       <div class="big-screen w-full lg:h-full">
         <div class="quiz-form">
-          <h1 class="text-3xl title-text" v-if="!quizStarted">Answer some questions for us to evaluate your preferences!</h1>
+          <h1 class="text-3xl title-text title-color" v-if="!quizStarted">Answer some questions for us to evaluate your preferences!</h1>
           <p v-if="!quizStarted">
             <Button label="Start Quiz" icon="pi pi-play" severity="warn" class="btn-start p-button-rounded w-48 start-btn" @click="startQuiz" />
           </p>
 
           <div v-if="quizStarted && currentQuestionIndex < questions.length" class="quiz-section fade-in">
-            <h2 class="question-text fade-in">{{ questions[currentQuestionIndex].text }}</h2>
+            <h2 class="question-text title-color fade-in">{{ questions[currentQuestionIndex].text }}</h2>
             <div class="circle">
               <div class='wave -one' :class="{ 'animate': isAnimating }"></div>
               <div class='wave -two' :class="{ 'animate': isAnimating }"></div>
@@ -26,7 +26,7 @@
           </div>
   
           <div v-if="quizStarted && currentQuestionIndex >= questions.length" class="quiz-complete scale-up">
-            <h1 v-if="loading">Redirecting back to your match...</h1>
+            <h1 v-if="loading" class="text-3xl title-text title-color">Redirecting back to your match...</h1>
             <div v-if="loading" class="loading-spinner"></div>
           </div>
         </div>
@@ -399,5 +399,11 @@ const fetchQuestions = async () => {
         bottom: 0px;   
         transform: rotate(360deg);
       }
+    }
+
+    .title-color{
+      font-size: 20px;
+      color:#721924;
+
     }
 </style>
