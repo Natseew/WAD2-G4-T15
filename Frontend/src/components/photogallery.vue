@@ -14,20 +14,13 @@
         class="photo-box"
         :class="{ 'is-loading': photo.isLoading }"
       >
-        <div v-if="!photo.file" class="upload-box">
+        <div v-if="!photo.file" class="upload-box" @click="() => onUploadClick(index)" :disabled="photo.isLoading">
           <div class="upload-placeholder">
-            <button
-              @click="() => onUploadClick(index)"
-              class="upload-button"
-              :disabled="photo.isLoading"
-            >
-              <span v-if="!photo.isLoading">
-                <span class="upload-icon">📸</span>
-                Upload Photo
-              </span>
-              <span v-else>Loading...</span>
-            </button>
-            <p class="upload-help">Max size: 5MB</p>
+            <p class="upload-help" v-if="!photo.isLoading">
+              <span class="pi pi-image"></span>
+              Upload Photo
+            </p>
+            <p v-else>Loading...</p>
           </div>
           <input
             :ref="el => fileInputs[index] = el"
@@ -45,14 +38,21 @@
             class="photo-image"
             @error="() => handleImageError(index)"
           />
+          <div class="photo-overlay" @click="() => deletePhoto(index)" :disabled="photo.isLoading">
+            <div class="overlay-content">
+              <span class="pi pi-image"></span>
+              Replace
+            </div>
+          </div>
+          <!--
           <div class="caption-box">
-            <!-- <input
+            <input
               type="text"
               :placeholder="'Add a caption (optional)'"
               v-model="photo.caption"
               class="caption-input"
               maxlength="100"
-            /> -->
+            />
             <div class="photo-actions">
               <button
                 @click="() => deletePhoto(index)"
@@ -63,6 +63,7 @@
               </button>
             </div>
           </div>
+          --> 
         </div>
       </div>
     </div>
@@ -90,6 +91,7 @@
 </template>
 
 <script setup>
+import "primeicons/primeicons.css";
 import { ref, reactive } from 'vue'
 import axios from 'axios';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -289,6 +291,8 @@ const savePhotos = async () => {
   font-family: system-ui, -apple-system, sans-serif;
   height: 100vh;
   display: flex;
+  width: 100%;
+  height: 90%;
   flex-direction: column;
 }
 
@@ -326,21 +330,22 @@ const savePhotos = async () => {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: 1rem;
+  gap: 7px;
   flex: 1;
+  height: 100%;
   min-height: 0;
   margin-bottom: 1rem;
 }
 
 .photo-box {
   background-color: #fff;
-  border-radius: 0.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: all 0.2s ease-in-out;
   height: 100%;
   display: flex;
   flex-direction: column;
+  border-radius: 10px;
 }
 
 .photo-box:hover {
@@ -354,6 +359,7 @@ const savePhotos = async () => {
   justify-content: center;
   background-color: #f3f4f6;
   padding: 1rem;
+  pointer: cursor;
 }
 
 .upload-placeholder {
@@ -368,11 +374,20 @@ const savePhotos = async () => {
 
 .upload-help {
   color: #6b7280;
-  font-size: 0.875rem;
+  font-size: 1rem;
   margin-top: 0.5rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s, transform 0.3s; 
+}
+
+.photo-box:hover .upload-help{
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .photo-container {
+  position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -409,10 +424,41 @@ const savePhotos = async () => {
   min-height: 0;
 }
 
-.caption-box {
-  padding: 0.75rem;
-  background-color: white;
-  flex-shrink: 0;
+.overlay-content {
+  color: white;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.overlay-content .pi {
+  display: block;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.photo-box:hover .photo-overlay {
+  opacity: 1;
+}
+
+.photo-box:hover .overlay-content{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.photo-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
 }
 
 .caption-input {

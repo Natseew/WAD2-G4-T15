@@ -41,7 +41,7 @@
         <template #end>
           <div class="flex items-center gap-2">
             <v-avatar>
-              <v-img :src="photo"
+              <v-img :src="photo || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
               v-on:click="router.push('/profile')">
               </v-img>
             </v-avatar>
