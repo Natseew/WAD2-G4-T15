@@ -5,10 +5,8 @@
     <div class="flex justify-center items-center h-full flex-col mt-8 md:mt-15 mb-28 md:mb-0">
       <div class="flex flex-col items-center w-full">
 
-        <!-- Loading Spinner -->
-        <div v-if="loading" class="loading-spinner">
-          Loading matches...
-        </div>
+        <!-- LoadingScreen -->
+        <LoadingScreen v-if="isLoading" />
 
         <!-- Cards Stack -->
         <div v-else class="cards-stack relative">
@@ -52,12 +50,13 @@ import NewMatchCard from "../components/NewMatchCard.vue";
 import ButtonGroup from "../components/ButtonGroup.vue";
 import Navbar from "../components/Navbar.vue";
 import MatchNotification from '../components/MatchNotification.vue';
+import LoadingScreen from '../components/LoadingScreen.vue';
 
 const router = useRouter();
 const auth = getAuth();
 const store = useStore();
 
-const loading = ref(true); // Loading state
+const isLoading = computed(() => store.getters.isLoading);
 const matches = ref([]);
 const cardRefs = ref([]);
 const showingLove = ref(true);
@@ -69,6 +68,7 @@ onAuthStateChanged(auth, (user) => {
     }
     store.dispatch('fetchMatches', user.uid);
     store.dispatch('populateMatches', user.uid);
+    
   } else {
     router.push('/login');
   }
@@ -150,13 +150,11 @@ const handleSwipeRight = (index) => {
 
 onMounted(() => {
   matches.value = store.getters.getPopulateMatches;
-  loading.value = false; // Set loading to false after data is fetched
 });
 
 store.subscribe((mutation, state) => {
   if (mutation.type === 'setPopulateMatches') {
     matches.value = state.populateMatches;
-    loading.value = false; // Set loading to false once mutation updates matches
   }
 });
 
