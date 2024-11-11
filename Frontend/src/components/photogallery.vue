@@ -246,22 +246,22 @@ const savePhotos = async () => {
 }
 
 @keyframes spin-gradient {
-            0% {
-                background-position: 0% 50%; /* Start from the left */
-            }
-            25% {
-                background-position: 100% 50%; /* Move to the right */
-            }
-            50% {
-                background-position: 100% 0%; /* Move to the top */
-            }
-            75% {
-                background-position: 0% 0%; /* Move to the left */
-            }
-            100% {
-                background-position: 0% 50%; /* Move back to the original position */
-            }
-        }
+  0% {
+    background-position: 0% 50%; /* Start from the left */
+  }
+  25% {
+    background-position: 100% 50%; /* Move to the right */
+  }
+  50% {
+    background-position: 100% 0%; /* Move to the top */
+  }
+  75% {
+    background-position: 0% 0%; /* Move to the left */
+  }
+  100% {
+    background-position: 0% 50%; /* Move back to the original position */
+  }
+}
 
 .navbar {
   position: fixed;
@@ -275,8 +275,8 @@ const savePhotos = async () => {
 .photo-gallery {
   max-width: 1024px;
   margin: auto;
-  padding:10px;
-  font-family: 'Roboto Flex', sans-serif;;
+  padding: 10px;
+  font-family: 'Roboto Flex', sans-serif;
   height: 100vh;
   display: flex;
   flex-direction: column;
