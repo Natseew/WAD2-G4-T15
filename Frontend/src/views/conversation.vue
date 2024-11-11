@@ -48,9 +48,10 @@
 
 <script>
 import "primeicons/primeicons.css";
+import axios from 'axios'
 
 export default {
-  props: ["activeConversation", "name", "shownName", "authorName", "receiverName", "userImage", "receiverImage", "receiverGallery"],
+  props: ["activeConversation", "name", "shownName", "authorName", "receiverName", "userImage", "receiverImage", "matchUid"],
   data() {
       return {
           messages: [],
@@ -75,10 +76,13 @@ methods: {
       message.img = url
     },
     sendImage: async function() {
-      console.log("triggers Send")
       if(this.$store.getters.getScore){
+        const userResponse = await axios.get('/user/' + this.matchUid)
+        const userGallery = userResponse.data.images.length > 0 ? userResponse.data.images: ["https://i.imgur.com/9sCDuxN.png"];
+        var nonBlankImages = userGallery.filter(image => image !== "");
+        var item = nonBlankImages[Math.floor(Math.random() * nonBlankImages.length)];
         let fileBlob = ""
-        const file = await fetch("https://i.imgur.com/1GaxPRo_d.webp?maxwidth=520&shape=thumb&fidelity=high", {
+        const file = await fetch(item, {
             mode: "cors",
             headers: {
                 Origin: window.location.origin,
