@@ -9,7 +9,6 @@
     </div>
 
   <div class="photo-gallery">
-    <h2 class="title">My Photo Gallery</h2>
     
     <div v-if="error" class="error-alert">
       {{ error }}
@@ -82,6 +81,7 @@
         @click="savePhotos" 
         class="save-button"
         :disabled="!hasUnsavedChanges || isSaving"
+        v-if="hasUnsavedChanges && !isSaving"
       >
         {{ isSaving ? 'Saving...' : 'Save Changes' }}
       </button>
@@ -302,7 +302,6 @@ const savePhotos = async () => {
   top: 0;
   left: 0;
   z-index: 1;
-  overflow: auto;
 }
 
 .red-background {
@@ -348,7 +347,7 @@ const savePhotos = async () => {
 
 .photo-gallery {
   max-width: 1024px;
-  margin: auto;
+  margin: 0px auto;
   padding: 10px;
   font-family: 'Roboto Flex', sans-serif;
   height: 100vh;
@@ -358,16 +357,7 @@ const savePhotos = async () => {
   flex-direction: column;
   z-index: 2; /* Ensure it appears above the background */
   position: relative;
-}
-
-.title {
-  font-family: 'Roboto Flex', sans-serif;
-  font-size: 2rem;
-  font-weight: bold;
-  text-align: center;
-  color: #fff;
-  margin-bottom: 2rem;
-  flex-shrink: 0;
+  overflow-y: auto;
 }
 
 .error-alert {
@@ -416,6 +406,60 @@ const savePhotos = async () => {
 .photo-box {
   transform: translateY(-10px); /* Pops up by 10px */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Make shadow more prominent on hover */
+}
+
+@media (max-width: 960px) {
+  .photo-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    width: 70%;
+    margin: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .photo-gallery{
+    margin: 20px auto 106px auto;
+  }
+  .photo-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, 1fr);
+  }
+  .photo-box{
+    height: 250px;
+    width: 200px;
+    margin: auto;
+  }
+}
+
+@media (max-width: 960px) {
+  .save-container {
+    position: fixed;
+    bottom: 1%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    padding: 1rem;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  .save-button {
+    pointer-events: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .save-container {
+    position: fixed;
+    bottom: 9%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    padding: 1rem;
+    z-index: 100;
+    pointer-events: none;
+  }
 }
 
 .upload-box {

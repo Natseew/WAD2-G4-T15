@@ -1,7 +1,8 @@
 <template>
+    <h2 class="title">My Photo Gallery</h2>
     <div id="app" style="overflow:scroll">
       <Navbar class="navbar" />
-      <PhotoGalleryPage class="mt-15 mb-15 z-2" />
+      <PhotoGalleryPage class=" mb-15 z-2" />
       <div class="background"></div>
     </div>
   </template>
@@ -20,8 +21,25 @@
   </script>
 
 <style scoped>
+
+.title {
+  font-family: 'Roboto Flex', sans-serif;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  color: #fff;
+  margin-top: 3em;
+  margin-bottom: -30px;
+  flex-shrink: 0;
+  z-index: 100;
+}
+
 .navbar {
   z-index: 10;
+}
+
+::v-deep .main-content{
+  display: none;
 }
 
 .background {
@@ -33,6 +51,17 @@
   position: fixed;
   top: 0;
   left: 0;
+}
+
+.photo-gallery{
+  margin-top: 60px;
+}
+
+@media (max-width: 768px) {
+  .title{
+    margin-top: 20px;
+    margin-bottom: 5px;
+  }
 }
 
 @keyframes spin-gradient {

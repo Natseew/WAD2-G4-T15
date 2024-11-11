@@ -150,7 +150,8 @@
           :timeout="3000" 
           rounded="pill"
           color="green-darken-2"
-          multi-line>
+          multi-line
+        >
           {{ snackbarMessage }}
           <template #action>
             <v-btn color="pink" text @click="snackbar = false">Close</v-btn>
@@ -295,13 +296,7 @@ const uploadTask = () => {
     font-weight: bold;
     padding: 0px 0px 5px 0px;
     margin: 0px 0px 20px 0px;
-    border-bottom: 1px solid #ffa578;
-    background: linear-gradient(180deg, #ffa578, rgb(255, 128, 192), #a67bf5);
-    background-size: 500% 500%; 
-    color: transparent; 
-    background-clip: text;
-    -webkit-background-clip: text;
-    animation: move-gradient 5s ease infinite;
+    border-bottom: 1px solid black;
   }
 
 .background {

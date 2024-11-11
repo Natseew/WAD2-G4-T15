@@ -331,32 +331,8 @@ export default {
     font-weight: bold;
     padding: 20px 20px 5px 10px;
     margin: 0px 20px 0px 20px;
-    border-bottom: 1px solid #ffa578;
-    background: linear-gradient(180deg, #ffa578, rgb(255, 128, 192), #a67bf5);
-    background-size: 500% 500%; 
-    color: transparent; /* Make text transparent */
-    background-clip: text;
-    -webkit-background-clip: text;
-    animation: move-gradient 5s ease infinite;
+    border-bottom: 1px solid black;
 }
-
-@keyframes spin-gradient {
-            0% {
-                background-position: 0% 50%; /* Start from the left */
-            }
-            25% {
-                background-position: 100% 50%; /* Move to the right */
-            }
-            50% {
-                background-position: 100% 0%; /* Move to the top */
-            }
-            75% {
-                background-position: 0% 0%; /* Move to the left */
-            }
-            100% {
-                background-position: 0% 50%; /* Move back to the original position */
-            }
-        }
 
 .v-col {
     height: 100%;
