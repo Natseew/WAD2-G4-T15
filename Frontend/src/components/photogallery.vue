@@ -39,15 +39,6 @@
         </div>
         
         <div v-else class="photo-container">
-          <div class="photo-overlay">
-            <button 
-              @click="() => deletePhoto(index)" 
-              class="delete-button"
-              title="Delete photo"
-            >
-              &times;
-            </button>
-          </div>
           <img
             :src="photo.preview"
             :alt="`Uploaded Photo ${index + 1}`"
@@ -55,22 +46,21 @@
             @error="() => handleImageError(index)"
           />
           <div class="caption-box">
-            <input
+            <!-- <input
               type="text"
               :placeholder="'Add a caption (optional)'"
               v-model="photo.caption"
               class="caption-input"
               maxlength="100"
-            />
+            /> -->
             <div class="photo-actions">
               <button
-                @click="() => onUploadClick(index)"
+                @click="() => deletePhoto(index)"
                 class="overwrite-button"
                 :disabled="photo.isLoading"
               >
                 Replace
               </button>
-              <span class="caption-count">{{ photo.caption.length }}/100</span>
             </div>
           </div>
         </div>
@@ -86,19 +76,61 @@
         {{ isSaving ? 'Saving...' : 'Save Changes' }}
       </button>
     </div>
+    <v-snackbar v-model="snackbar" 
+          :timeout="3000" 
+          rounded="pill"
+          color="green-darken-2"
+          multi-line>
+          {{ snackbarMessage }}
+          <template #action>
+            <v-btn color="pink" text @click="snackbar = false">Close</v-btn>
+          </template>
+        </v-snackbar>
   </div>
 </template>
 
 <script setup>
 import { ref, reactive } from 'vue'
+import axios from 'axios';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref as firebaseRef } from "firebase/storage";
 
+
+const auth = getAuth();
+const storage = getStorage();
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const fileInputs = reactive({})
 const error = ref('')
 const isSaving = ref(false)
 const hasUnsavedChanges = ref(false)
+let isLoading = ref(true)
+let userData = ref();
+let overlay = ref(false);
 
-const photos = ref(Array(6).fill().map(() => ({
+let snackbar = ref(false);
+let snackbarMessage = ref("");
+
+
+let data = ref({
+  "name": "",
+  "age": "",
+  "gender": "",
+  "hobbies": "",
+  "religion": "",
+  "lookingFor": "",
+  "introduction": "",
+  "personalityDescription": "",
+  "loves": "",
+  "hates": "",
+  "dealbreakers": "",
+  "goals": "",
+  "images": [],
+  "likes": [],
+  "matches": []
+});
+
+let photos = ref(Array(6).fill().map(() => ({
   file: null,
   caption: '',
   preview: '',
@@ -129,14 +161,46 @@ const validateFile = (file) => {
   return true
 }
 
-const createImagePreview = (file) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = (e) => resolve(e.target.result)
-    reader.onerror = () => reject(new Error('Failed to read file'))
-    reader.readAsDataURL(file)
-  })
-}
+onAuthStateChanged(auth, (user) => {
+  isLoading.value = true;
+  if (user) {
+    userData.value = user;
+    axios.get('/user/' + user.uid)
+      .then(function (response) {
+        for(var photo in response.data.images){
+          photos.value[photo].file = response.data.images[photo]
+          photos.value[photo].preview = response.data.images[photo]
+          data.value = response.data;
+          data.value.email = user.email;
+        }
+        isLoading.value = false;
+      });
+  } else {
+    router.push('/login');
+  }
+});
+
+const submit = (() => {
+  if (userData) {
+    try {
+      axios.post('/user/' + userData.value.uid, data.value)
+        .then(function (response) {
+          console.log(response);
+        });
+
+      snackbarMessage.value = "Profile updated successfully!";
+      snackbar.value = true;
+
+    } catch (error) {
+      console.log(error);
+    }
+    overlay.value = false;
+  }
+});
+
+const metadata = {
+  contentType: 'image/jpg',
+};
 
 const handleFileUpload = async (event, index) => {
   const file = event.target.files[0]
@@ -146,21 +210,25 @@ const handleFileUpload = async (event, index) => {
 
   try {
     photos.value[index].isLoading = true
-    
+
+    console.log(file)
     // Simulate upload delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    const storageRef = firebaseRef(storage, 'gs://wad2-g4-t15.appspot.com/' + file.name);
+    uploadBytes(storageRef, file, metadata).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        const preview = url
     
-    const preview = await createImagePreview(file)
-    
-    photos.value[index] = {
-      file,
-      preview,
-      caption: photos.value[index].caption,
-      isLoading: false,
-      error: null
-    }
-    
-    hasUnsavedChanges.value = true
+        photos.value[index] = {
+          file,
+          preview,
+          caption: photos.value[index].caption,
+          isLoading: false,
+          error: null
+        }
+        
+        hasUnsavedChanges.value = true
+      });
+    });
   } catch (err) {
     handleError(err.message)
     photos.value[index].isLoading = false
@@ -195,13 +263,18 @@ const savePhotos = async () => {
     isSaving.value = true
     
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
+    let imageArray = []
+    for(var photo of photos.value){
+      imageArray.push(photo.preview)
+    }
+    data.value.images = imageArray
+    submit()
     hasUnsavedChanges.value = false
     // You can emit an event here if needed
     // emit('save', photos.value.filter(p => p.file))
   } catch (err) {
     handleError('Failed to save photos')
+    console.log(err)
   } finally {
     isSaving.value = false
   }

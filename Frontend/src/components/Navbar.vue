@@ -22,6 +22,14 @@
             </span>
             <span
               class="nav-link"
+              :class="{ active: isActive('Gallery') }"
+              @click="navigateTo('Gallery')"
+            >
+              <PhotoIcon class="nav-icon" style="width: 1.2rem; height: 1.2rem;"/>
+              <span class="ml-0.5 link-text">Gallery</span>
+            </span>
+            <span
+              class="nav-link"
               :class="{ active: isActive('chat') }"
               @click="navigateTo('chat')"
             >
@@ -32,11 +40,11 @@
         </template>
         <template #end>
           <div class="flex items-center gap-2">
-            <Avatar
-              v-on:click="router.push('/profile')"
-              image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
-              class="avatar"
-            />
+            <v-avatar>
+              <v-img :src="photo"
+              v-on:click="router.push('/profile')">
+              </v-img>
+            </v-avatar>
           </div>
         </template>
       </Toolbar>
@@ -50,11 +58,33 @@
 <script setup>
 import Toolbar from 'primevue/toolbar';
 import Avatar from 'primevue/avatar';
+import axios from 'axios';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter, useRoute } from 'vue-router';
-import { HomeIcon, UserIcon, ChatBubbleBottomCenterIcon, HeartIcon } from '@heroicons/vue/24/solid';
+import { HomeIcon, UserIcon, ChatBubbleBottomCenterIcon, PhotoIcon} from '@heroicons/vue/24/solid';
+import { ref} from 'vue';
+
+const auth = getAuth();
 
 const router = useRouter();
 const route = useRoute();
+let loading = ref(false);
+
+let photo = ref("https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png")
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    loading.value = true
+    axios.get('/user/' + user.uid)
+      .then(function (response) {
+
+        photo.value = response.data.images[0];
+        loading.value = false;
+      });
+  } else {
+    router.push('/login');
+  }
+});
 
 const navigateTo = (path) => {
   router.push(`/${path}`);
@@ -169,11 +199,6 @@ const isActive = (path) => {
 
   .link-text {
     font-size: 0.75rem; /* Smaller text on mobile */
-  }
-
-  .avatar {
-    width: 32px;
-    height: 32px;
   }
 
   .main-content {

@@ -149,7 +149,7 @@
         <v-snackbar v-model="snackbar" 
           :timeout="3000" 
           rounded="pill"
-          color="deep-orange-darken-2"
+          color="green-darken-2"
           multi-line>
           {{ snackbarMessage }}
           <template #action>
