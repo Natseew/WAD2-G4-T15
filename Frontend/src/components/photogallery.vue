@@ -1,6 +1,6 @@
 <template>
   <div class="photo-gallery">
-    <h2 class="title">Upload Your Photos</h2>
+    <h2 class="title">Gallery</h2>
     
     <div v-if="error" class="error-alert">
       {{ error }}
@@ -292,7 +292,7 @@ const savePhotos = async () => {
   height: 100vh;
   display: flex;
   width: 100%;
-  height: 90%;
+  height: 85%;
   flex-direction: column;
 }
 
@@ -300,7 +300,7 @@ const savePhotos = async () => {
   font-size: 2rem;
   font-weight: bold;
   text-align: center;
-  color: #374151;
+  color: #fff;
   margin-bottom: 1rem;
   flex-shrink: 0;
 }
@@ -345,7 +345,7 @@ const savePhotos = async () => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 .photo-box:hover {
