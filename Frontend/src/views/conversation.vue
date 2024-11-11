@@ -4,7 +4,7 @@
         <span class="back-button pi pi-chevron-left d-lg-none" @click="$emit('reverse-chat-list')"></span>
         <span>{{ shownName }} </span>
       </div>
-      <div class="conversation-container">
+      <div ref="conversationContainer" class="conversation-container">
         <div 
           v-for="(message, index) in messages"
           :key="message.index"
@@ -63,12 +63,18 @@ export default {
   mounted() {
     this.activeConversation.getMessages()
         .then((newMessages) => {
-            this.messages = [...this.messages, ...newMessages.items]
+            this.messages = [...this.messages, ...newMessages.items];
+            this.$nextTick(() => {
+              this.scrollToBottom();
+            });
         })
     this.activeConversation.on("messageAdded", (message) => {
-        this.messages = [...this.messages, message]
+        this.messages = [...this.messages, message];
+        this.$nextTick(() => {
+          this.scrollToBottom();
+        });
   })
-  this.sendImage()
+  this.sendImage();
 },
 methods: {
     loadImage: async function(message) {
@@ -131,6 +137,12 @@ methods: {
         return nextMessage && nextMessage.state.author === message.state.author;
 
     },
+    scrollToBottom() {
+      const container = this.$refs.conversationContainer;
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
+    },
     goToMatchProfile(uid) {
         this.$store.dispatch('selectMatch', uid);
         this.$router.push('/matches');
@@ -163,8 +175,6 @@ methods: {
 
 /* Messages container with overflow scrolling */
 .conversation-container {
-  display: flex;
-  flex-direction: column;
   overflow-y: auto;
 }
 
