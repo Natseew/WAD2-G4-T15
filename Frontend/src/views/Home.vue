@@ -164,7 +164,7 @@ const triggerConfetti = () => {
   const confettiContainer = document.querySelector('.confetti-container');
   
   // Clean up previous confetti before adding new ones
-  confettiContainer.innerHTML = '';
+  confettiContainer.style.zIndex = "19";
 
   for (let i = 0; i < 75; i++) {  // Adjust the number of hearts
     const heart = document.createElement('div');
@@ -177,6 +177,7 @@ const triggerConfetti = () => {
     heart.style.animationDelay = `${Math.random() * 2}s`; // Random delay for each heart
   }
   setTimeout(() => {
+    confettiContainer.style.zIndex = "-1";
     confettiContainer.innerHTML = '';
   }, 5000);
 };
@@ -329,12 +330,12 @@ const triggerConfetti = () => {
 }
 
 .confetti-container {
+  z-index: -1;
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 19;
   display: flex;
   justify-content: center;
   align-items: center;
