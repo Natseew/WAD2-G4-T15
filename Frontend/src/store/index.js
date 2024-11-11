@@ -11,6 +11,7 @@ const store = createStore({
       matchNotification: null,
       selectedMatchUid: null,
       isLoading: false,
+      score: false,
     }
   },
   getters: {
@@ -27,6 +28,7 @@ const store = createStore({
       return state.matchNotification;
     },
     isLoading: state => state.isLoading,
+    getScore: state => state.score,
   },
   mutations: {
     setUser(state, userData) {
@@ -68,6 +70,9 @@ const store = createStore({
         uid: dislikedUser.id,
       });
     },
+    setQuizComplete(state, score){
+      state.score = score
+    }
   },
   actions: {    
     async fetchMatches({ commit }, uid) {
@@ -153,6 +158,13 @@ const store = createStore({
 
     selectMatch({ commit }, uid) {
       commit('setSelectedMatchUid', uid);
+    },
+
+    completedQuiz({ commit }) {
+      commit('setQuizComplete', true);
+    },
+    photoSent({ commit }) {
+      commit('setQuizComplete', false);
     }
   }
 });

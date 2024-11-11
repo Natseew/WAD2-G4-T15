@@ -54,6 +54,7 @@
                                             :receiverName = "receiverName"
                                             :userImage = "userImage"
                                             :receiverImage = "latestMessages[activeConversation.uniqueName]?.receiverProfile"
+                                            :matchUid = "latestMessages[activeConversation.uniqueName]?.matchUid"
                                             @reverse-chat-list="reverseChatList()"
                                         />
                                     </div>
@@ -115,14 +116,13 @@ export default {
 
         async fetchLatestMessage(match) {
             try {
-                const userResponse = await axios.get('/user/' + match.uid);
-                const receiverProfile = userResponse.data.images?.length > 0 ? 
+                const userResponse = await axios.get('/user/' + match.uid)
+                const receiverProfile = userResponse.data.images?.length > 0 && userResponse.data.images[0] != "" ? 
                     userResponse.data.images[0] : 
                     "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png";
                 
                 const conversation = await this.conversationsClient.getConversationByUniqueName(match.chatName);
                 const messages = await conversation.getMessages(1); // Get only the latest message
-
                 if (messages.items.length > 0) {
                     const latestMessage = messages.items[0];
                     const senderName = latestMessage.author === this.uid ? "You" : match.name; 
@@ -133,9 +133,11 @@ export default {
                         [match.chatName]: {
                             body: latestMessage.body,
                             sender: senderName,
-                            receiverProfile: receiverProfile
+                            receiverProfile: receiverProfile,
+                            matchUid: match.uid
                         }
                     };
+                    this.isConnected = true
                 }
                 else{
                     this.latestMessages = {
@@ -143,9 +145,11 @@ export default {
                         [match.chatName]: {
                             body: 'No messages yet',
                             sender: '',
-                            receiverProfile: receiverProfile
+                            receiverProfile: receiverProfile,
+                            matchUid: match.uid
                         }
                     };
+                    this.isConnected = true
                 }
                 console.log(this.latestMessages);
             } catch (error) {
@@ -155,9 +159,11 @@ export default {
                     [match.chatName]: {
                         body: 'No messages yet',
                         sender: '',
-                        receiverProfile: receiverProfile
+                        receiverProfile: receiverProfile,
+                        matchUid: match.uid
                     }
                 };
+                this.isConnected = true
             }
         },
 
@@ -170,7 +176,6 @@ export default {
                 switch (state) {
                 case "connected":
                     this.statusString = "You are connected."
-                    this.isConnected = true
                     break
                 case "disconnecting":
                     this.statusString = "Disconnecting from Twilio…"
@@ -261,6 +266,7 @@ export default {
             if (user) {
                 // User is signed in
                 this.uid = user.uid
+                this.isConnected = false
                 axios.get('/user/'+user.uid)
                     .then(response =>{
                         // handle success

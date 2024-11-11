@@ -38,7 +38,8 @@
   import { ref, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
   import Button from 'primevue/button';
-  
+  import { useStore } from 'vuex';
+
   const router = useRouter();
   const quizStarted = ref(false);
   const currentQuestionIndex = ref(0);
@@ -48,6 +49,8 @@
   const loading = ref(false);
   const questions = ref([]);
   const isAnimating = ref(false);
+  const store = useStore();
+
   
   const decodeHtmlEntities = (text) => {
   const textarea = document.createElement('textarea');
@@ -114,6 +117,7 @@ const fetchQuestions = async () => {
   
   const redirectAfterQuiz = () => {
     loading.value = true;
+    store.dispatch('completedQuiz');
     setTimeout(() => {
       router.push("/chat");
     }, 2000);

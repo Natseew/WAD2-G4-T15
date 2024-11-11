@@ -12,16 +12,16 @@
           :class="{ 
             myMessage: message?.state?.author === name,
             senderMessage: message?.state?.author !== name,
-            noAvatar: shouldHideAvatar(message, index)
+            noAvatar: shouldHideAvatar(message, index) 
           }"
         >
           <div class="message-row">
             <div class="bubble">
               <div class="name" v-if="message?.state?.author !== name">{{ message?.state?.author === name ? authorName : receiverName }}</div>
               <div v-if="message.type != 'media' "class="message">{{ message?.state?.body }}</div>
-              <img v-if="message.type === 'media'" :src="prizeImage">
-              <div v-if="message.type === 'media'">
-                <button @click="loadImage(message)" style="display: block; margin: auto; ">Show Image</button>
+              <img v-if="message.type === 'media'" :src="message.img">
+              <div v-if="message.type === 'media' && !message.img">
+                <button @click="loadImage(message)" style="display: block; margin: auto;">Show Image</button>
               </div>
             </div>
             <div class="flex items-end chat-profile" v-if="!shouldHideAvatar(message, index)">
@@ -50,58 +50,61 @@
 import "primeicons/primeicons.css";
 
 export default {
-    props: ["activeConversation", "name", "shownName", "authorName", "receiverName", "userImage", "receiverImage"],
-    data() {
-        return {
-            messages: [],
-            messageText: "",
-            isSignedInUser: false,
-            placeholderText: "Enter your message",
-            prizeImage:""
-        }
-    },
-    mounted() {
+  props: ["activeConversation", "name", "shownName", "authorName", "receiverName", "userImage", "receiverImage", "receiverGallery"],
+  data() {
+      return {
+          messages: [],
+          messageText: "",
+          isSignedInUser: false,
+          placeholderText: "Enter your message",
+      }
+  },
+  mounted() {
     this.activeConversation.getMessages()
         .then((newMessages) => {
             this.messages = [...this.messages, ...newMessages.items]
         })
     this.activeConversation.on("messageAdded", (message) => {
         this.messages = [...this.messages, message]
-
-    })
+  })
+  this.sendImage()
 },
 methods: {
-
     loadImage: async function(message) {
       const url = await message.media.getContentTemporaryUrl();
-      this.prizeImage = url
+      message.img = url
     },
     sendImage: async function() {
-      let fileBlob = ""
-      const file = await fetch("https://i.imgur.com/n19yokg.jpeg", {
-          mode: "cors",
-          headers: {
-              Origin: window.location.origin,
-              "Access-Control-Request-Method": "GET",
-              "Access-Control-Request-Headers": "Content-Type",
-              "sec-fetch-dest": "image",
-            },
-        })
-        .then(response => response.blob())
-        .then(blob => {
-          // Do something with the image data
-          fileBlob = blob
-          console.log(fileBlob)
-        });
+      console.log("triggers Send")
+      if(this.$store.getters.getScore){
+        let fileBlob = ""
+        const file = await fetch("https://i.imgur.com/1GaxPRo_d.webp?maxwidth=520&shape=thumb&fidelity=high", {
+            mode: "cors",
+            headers: {
+                Origin: window.location.origin,
+                "Access-Control-Request-Method": "GET",
+                "Access-Control-Request-Headers": "Content-Type",
+                "sec-fetch-dest": "image",
+              },
+          })
+          .then(response => response.blob())
+          .then(blob => {
+            // Do something with the image data
+            fileBlob = blob
+            console.log(fileBlob)
+          });
 
-      const sendMediaOptions = {
-          contentType: "image/jpeg",
-          filename: "twilio-logo.svg",
-          media: fileBlob
-      };
-      console.log(sendMediaOptions)
-      this.activeConversation.sendMessage(sendMediaOptions);
-      console.log(this.activeConversation)
+        const sendMediaOptions = {
+            contentType: "image/jpeg",
+            filename: "twilio-logo.svg",
+            media: fileBlob
+        };
+        console.log(sendMediaOptions)
+        this.activeConversation.sendMessage(sendMediaOptions);
+        console.log(this.activeConversation)
+        this.$store.dispatch("photoSent")
+      }
+      
     },
     sendMessage: function() {
         if(!this.messageText.trim()){

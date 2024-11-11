@@ -44,12 +44,12 @@
               style="width: 1.8rem; height: 1.8rem;"
             ></PencilSquareIcon>
             <div class="relative mb-4">
-              <img
-                @click="overlay = !overlay"
-                :src="data.images[0] || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'" 
-                alt="Profile"
-                class="w-40 h-40 rounded-full object-cover border-4 border-white shadow-lg"
-              />
+                <img
+                  @click="overlay = !overlay"
+                  :src="data.images[0] || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'" 
+                  alt="Profile"
+                  class="w-40 h-40 rounded-full object-cover border-4 border-white shadow-lg"
+                >
             </div>
             <h1 class="text-2xl font-bold text-gray-800 mb-2">{{ data.name }}</h1>
             <p class="text-gray-600">{{ data.email }}</p>
