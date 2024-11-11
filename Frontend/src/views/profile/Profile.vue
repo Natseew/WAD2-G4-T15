@@ -48,7 +48,7 @@
                   @click="overlay = !overlay"
                   :src="data.images[0] || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'" 
                   alt="Profile"
-                  class="w-40 h-40 rounded-full object-cover border-4 border-white shadow-lg"
+                  class="w-40 h-40 rounded-full object-cover border-4 border-white shadow-lg cursor-pointer"
                 >
             </div>
             <h1 class="text-2xl font-bold text-gray-800 mb-2">{{ data.name }}</h1>

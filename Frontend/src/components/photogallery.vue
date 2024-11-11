@@ -469,7 +469,7 @@ const savePhotos = async () => {
   justify-content: center;
   background-color: #f3f4f6;
   padding: 1rem;
-  pointer: cursor;
+  cursor: pointer;
 }
 
 .upload-placeholder {
