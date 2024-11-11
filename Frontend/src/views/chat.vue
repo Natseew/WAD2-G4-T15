@@ -8,6 +8,7 @@
                         <v-row>
                             <transition name="slide-x-reverse-transition" mode="out-in">
                                 <v-col cols="12" md="4" sm="12" class="chat-list-col" v-if="showList()">
+                                    <div class="header"> Chat </div>
                                     <v-list lines="three">
                                         <div class="chat-list">
                                             <v-list-item 
@@ -322,6 +323,21 @@ export default {
   background-size: 400% 400%;
   animation: spin-gradient 15s ease infinite;
 
+}
+
+.header{
+    text-align: left;
+    font-size: 2em;
+    font-weight: bold;
+    padding: 20px 20px 5px 10px;
+    margin: 0px 20px 0px 20px;
+    border-bottom: 1px solid #ffa578;
+    background: linear-gradient(180deg, #ffa578, rgb(255, 128, 192), #a67bf5);
+    background-size: 500% 500%; 
+    color: transparent; /* Make text transparent */
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: move-gradient 5s ease infinite;
 }
 
 @keyframes spin-gradient {

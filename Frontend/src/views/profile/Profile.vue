@@ -32,6 +32,7 @@
         </v-overlay>
 
         <!-- Profile Header -->
+        <div class="header"> Profile </div>
         <div v-if="loading">
           <v-progress-circular color="blue-lighten-3" indeterminate :size="56"></v-progress-circular>
         </div>
@@ -287,6 +288,21 @@ const uploadTask = () => {
     padding-bottom: 32px;
   }
 }
+
+.header {
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    padding: 0px 0px 5px 0px;
+    margin: 0px 0px 20px 0px;
+    border-bottom: 1px solid #ffa578;
+    background: linear-gradient(180deg, #ffa578, rgb(255, 128, 192), #a67bf5);
+    background-size: 500% 500%; 
+    color: transparent; 
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: move-gradient 5s ease infinite;
+  }
 
 .background {
   /* background: linear-gradient(to bottom, rgba(255, 118, 118, 0.1), rgba(245, 78, 162, 0.1)); */
