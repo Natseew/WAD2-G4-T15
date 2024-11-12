@@ -52,7 +52,7 @@
         </template>
         <template #end>
           <div class="flex items-center gap-2 title">
-            <img src="../assets/NeverAloneHandsOnly.png" width="50px">
+            <img src="../assets/NeverAloneHandsOnlyColored.png" width="50px">
           </div>
         </template>
       </Toolbar>
@@ -115,7 +115,7 @@ const isActive = (path) => {
 }
 
 .title{
-  filter: invert(1);
+  /* filter: invert(1); */
   z-index: 100;
 }
 
@@ -153,7 +153,7 @@ const isActive = (path) => {
 }
 
 .nav-link-image.active .v-avatar{
-  border: 3px solid red;
+  border: 3px solid salmon;
 }
 
 .nav-link-image .v-avatar {

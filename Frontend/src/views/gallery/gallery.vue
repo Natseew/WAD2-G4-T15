@@ -1,5 +1,5 @@
 <template>
-    <h2 class="title">My Photo Gallery</h2>
+    <h2 class="title md-my-20">My Photo Gallery</h2>
     <div id="app" style="overflow:scroll">
       <Navbar class="navbar" />
       <PhotoGalleryPage class=" mb-15 z-2" />
@@ -23,13 +23,13 @@
 <style scoped>
 
 .title {
-  font-family: 'Roboto Flex', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 2rem;
   font-weight: bold;
   text-align: center;
   color: #fff;
   margin-top: 3em;
-  margin-bottom: -30px;
+  margin-bottom: -50px;
   flex-shrink: 0;
   z-index: 100;
 }
@@ -60,9 +60,11 @@
 @media (max-width: 768px) {
   .title{
     margin-top: 20px;
-    margin-bottom: 5px;
+    margin-bottom: 25px;
   }
 }
+
+
 
 @keyframes spin-gradient {
     0% {
