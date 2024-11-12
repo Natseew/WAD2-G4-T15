@@ -4,10 +4,13 @@
       <Toolbar class="custom-toolbar">
         <template #start>
           <div class="flex items-center gap-3 sm:gap-4">
-            <span class="nav-link-image">
+            <span 
+              class="nav-link-image"
+              :class="{ active: isActive('Profile') }"
+              @click="navigateTo('Profile')"
+            >
               <v-avatar style="cursor: pointer;">
-                <v-img :src="photo || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
-                v-on:click="router.push('/profile')">
+                <v-img :src="photo || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'">
                 </v-img>
               </v-avatar>
             </span>
@@ -147,6 +150,10 @@ const isActive = (path) => {
   color: black;
   display: flex;
   align-items: center;
+}
+
+.nav-link-image.active .v-avatar{
+  border: 3px solid red;
 }
 
 .nav-link-image .v-avatar {
