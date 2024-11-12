@@ -2,12 +2,6 @@
   <Navbar class="navbar" />
   <div class="red-background"></div>
 
-  <div class="floating-shapes">
-      <div class="shape shape-circle"></div>
-      <div class="shape shape-square"></div>
-      <div class="shape shape-triangle"></div>
-    </div>
-
   <div class="photo-gallery">
     
     <div v-if="error" class="error-alert">
