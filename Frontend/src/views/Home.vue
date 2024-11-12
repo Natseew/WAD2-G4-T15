@@ -2,8 +2,8 @@
   <div class="background">
     <Navbar class="navbar" />
     <div class="red-background"></div>
-    <div class="card-container flex justify-center items-center flex-col">
-      <div class="flex flex-col items-center w-full">
+    <div class="card-container flex justify-center items-center flex-col w-full">
+      <div class="flex flex-col items-center w-full overflow-hidden">
 
         <!-- LoadingScreen -->
         <LoadingScreen v-if="isLoading" />
