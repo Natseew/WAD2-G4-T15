@@ -115,6 +115,7 @@ export default {
         },
 
         async fetchLatestMessage(match) {
+            this.isConnected = false
             try {
                 const userResponse = await axios.get('/user/' + match.uid)
                 const receiverProfile = userResponse.data.images?.length > 0 && userResponse.data.images[0] != "" ? 
@@ -165,6 +166,7 @@ export default {
                 };
                 this.isConnected = true
             }
+            this.isConnected = true
         },
 
         initConversationsClient: async function() {
@@ -266,7 +268,7 @@ export default {
             if (user) {
                 // User is signed in
                 this.uid = user.uid
-                this.isConnected = false
+
                 axios.get('/user/'+user.uid)
                     .then(response =>{
                         // handle success
@@ -276,6 +278,9 @@ export default {
                         for(var item of response.data.matches){
                             this.matches.push(item)
                             this.fetchLatestMessage(item);
+                        }
+                        if(response.data.matches.length == 0){
+                            this.isConnected = true
                         }
                     })
                 this.registerName()
