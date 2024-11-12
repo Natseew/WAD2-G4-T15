@@ -153,7 +153,7 @@ const isActive = (path) => {
 }
 
 .nav-link-image.active .v-avatar{
-  border: 3px solid red;
+  border: 3px solid salmon;
 }
 
 .nav-link-image .v-avatar {

@@ -349,7 +349,7 @@ const savePhotos = async () => {
   max-width: 1024px;
   margin: 0px auto;
   padding: 10px;
-  font-family: 'Roboto Flex', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   height: 100vh;
   display: flex;
   width: 100%;
@@ -357,7 +357,50 @@ const savePhotos = async () => {
   flex-direction: column;
   z-index: 2; /* Ensure it appears above the background */
   position: relative;
-  overflow-y: auto;
+  /* overflow-y: auto; */
+}
+.save-button{
+  margin-top: 50px;
+}
+.photo-box {
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease; /* Add transition for smooth effect */
+  height: 100%;
+  margin-top:40px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+}
+
+.photo-box:hover {
+  transform: translateY(-10px) scale(1.05); /* Scale up and move slightly up */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Make shadow more prominent on hover */
+  opacity: 0.9; /* Slightly reduce opacity */
+}
+
+.upload-box:hover {
+  background-color: #f4f4f4; /* Change background color on hover */
+}
+
+.photo-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  z-index: 10;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.photo-box:hover .photo-overlay {
+  opacity: 1; /* Show overlay when hovering over the photo box */
 }
 
 .error-alert {
@@ -700,6 +743,7 @@ const savePhotos = async () => {
   animation-delay: 4s;
   transform: rotate(45deg);
 }
+
 
 @keyframes float {
   0% {
