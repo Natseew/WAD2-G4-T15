@@ -351,7 +351,6 @@ const savePhotos = async () => {
   margin: 0px auto;
   padding: 10px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  height: 100vh;
   display: flex;
   width: 100%;
   height: 85%;
@@ -463,7 +462,7 @@ const savePhotos = async () => {
 
 @media (max-width: 768px) {
   .photo-gallery{
-    margin: 20px auto 106px auto;
+    margin: 10px auto auto auto;
   }
   .photo-grid {
     grid-template-columns: 1fr;

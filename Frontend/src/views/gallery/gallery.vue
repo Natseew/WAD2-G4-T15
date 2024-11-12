@@ -53,14 +53,15 @@
   left: 0;
 }
 
-.photo-gallery{
-  margin-top: 60px;
-}
-
 @media (max-width: 768px) {
   .title{
     margin-top: 20px;
-    margin-bottom: 25px;
+    margin-bottom: 5px;
+  }
+
+  #app{
+    align-items: normal;
+    height: calc(100vh - 165px);
   }
 }
 
