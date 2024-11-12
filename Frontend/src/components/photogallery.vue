@@ -7,9 +7,10 @@
       <div class="shape shape-square"></div>
       <div class="shape shape-triangle"></div>
     </div>
+    
 
   <div class="photo-gallery">
-    
+
     <div v-if="error" class="error-alert">
       {{ error }}
       <button @click="error = ''" class="error-close">&times;</button>
@@ -704,6 +705,7 @@ const savePhotos = async () => {
   height: 100%;
   z-index: 1;
   pointer-events: none;
+  overflow: hidden;
 }
 
 .shape {
@@ -761,5 +763,9 @@ const savePhotos = async () => {
   100% {
     transform: translateY(0px) translateX(0px) rotate(480deg);
   }
+}
+
+::v-deep .v-snackbar__content {
+  text-align: center;
 }
 </style>
