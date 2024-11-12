@@ -3,7 +3,7 @@
     <div class="navbar-container">
       <Toolbar class="custom-toolbar">
         <template #start>
-          <div class="flex items-center gap-4">
+          <div class="flex items-center gap-3 sm:gap-4">
             <span
               class="nav-link"
               :class="{ active: isActive('Home') }"
@@ -222,6 +222,18 @@ const isActive = (path) => {
 
   .nav-link {
     flex-direction: row; /* Keep icon and text horizontal on desktop */
+  }
+}
+
+@media (max-width: 368px) {
+  .nav-icon {
+    scale: 0.8;
+  }
+  .link-text{
+    font-size: 0.65rem;
+  }
+  .v-avatar{
+    scale: 0.8;
   }
 }
 </style>
