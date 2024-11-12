@@ -4,6 +4,13 @@
       <Toolbar class="custom-toolbar">
         <template #start>
           <div class="flex items-center gap-3 sm:gap-4">
+            <span class="nav-link-image">
+              <v-avatar style="cursor: pointer;">
+                <v-img :src="photo || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
+                v-on:click="router.push('/profile')">
+                </v-img>
+              </v-avatar>
+            </span>
             <span
               class="nav-link"
               :class="{ active: isActive('Home') }"
@@ -12,14 +19,16 @@
               <HomeIcon class="nav-icon" style="width: 1.2rem; height: 1.2rem;"/>
               <span class="ml-0.5 link-text">Home</span>
             </span>
-            <span
-              class="nav-link"
-              :class="{ active: isActive('Profile') }"
-              @click="navigateTo('Profile')"
-            >
-              <UserIcon class="nav-icon" style="width: 1.2rem; height: 1.2rem;"/>
-              <span class="ml-0.5 link-text">Profile</span>
-            </span>
+            <!--
+              <span
+                class="nav-link"
+                :class="{ active: isActive('Profile') }"
+                @click="navigateTo('Profile')"
+              >
+                <UserIcon class="nav-icon" style="width: 1.2rem; height: 1.2rem;"/>
+                <span class="ml-0.5 link-text">Profile</span>
+              </span>
+            -->
             <span
               class="nav-link"
               :class="{ active: isActive('Gallery') }"
@@ -39,12 +48,8 @@
           </div>
         </template>
         <template #end>
-          <div class="flex items-center gap-2">
-            <v-avatar style="cursor: pointer;">
-              <v-img :src="photo || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
-              v-on:click="router.push('/profile')">
-              </v-img>
-            </v-avatar>
+          <div class="flex items-center gap-2 title">
+            <img src="../assets/NeverAloneHandsOnly.png" width="50px">
           </div>
         </template>
       </Toolbar>
@@ -106,6 +111,11 @@ const isActive = (path) => {
   top: 0;
 }
 
+.title{
+  filter: invert(1);
+  z-index: 100;
+}
+
 .custom-toolbar {
   border: none;
   background: white;
@@ -128,6 +138,24 @@ const isActive = (path) => {
   transition: color 0.3s ease;
   display: flex;
   align-items: center;
+}
+
+.nav-link-image {
+  cursor: pointer;
+  padding: 0.5rem;
+  position: relative;
+  color: black;
+  display: flex;
+  align-items: center;
+}
+
+.nav-link-image .v-avatar {
+  transition: transform 0.3s ease-in-out;
+}
+
+.nav-link-image:hover .v-avatar {
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2), 0 0 15px rgba(255, 255, 255, 0.5);
 }
 
 .nav-link .nav-icon {
@@ -234,6 +262,9 @@ const isActive = (path) => {
   }
   .v-avatar{
     scale: 0.8;
+  }
+  .title{
+    width: 25px;
   }
 }
 </style>
