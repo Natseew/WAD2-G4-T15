@@ -19,9 +19,13 @@
             <div class="bubble">
               <div class="name" v-if="message?.state?.author !== name">{{ message?.state?.author === name ? authorName : receiverName }}</div>
               <div v-if="message.type != 'media' "class="message">{{ message?.state?.body }}</div>
-              <img v-if="message.type === 'media'" :src="message.img">
+              <transition name="blur">
+                <img v-if="message.img" 
+                  :class="['message-image', {'loaded': message.img}]" 
+                  :src="message.img">
+              </transition>
               <div v-if="message.type === 'media' && !message.img">
-                <button @click="loadImage(message)" style="display: block; margin: auto;">Show Image</button>
+                <button @click="loadImage(message)" style="display: block; margin: auto;">Reveal Image</button>
               </div>
             </div>
             <div class="flex items-end chat-profile" v-if="!shouldHideAvatar(message, index)">
@@ -78,8 +82,18 @@ export default {
 },
 methods: {
     loadImage: async function(message) {
-      const url = await message.media.getContentTemporaryUrl();
-      message.img = url
+      try {
+        const url = await message.media.getContentTemporaryUrl();
+        // Create a new Image object to preload the image
+        const img = new Image();
+        img.onload = () => {
+          // Only set the image URL after it's fully loaded
+          message.img = url;
+        };
+        img.src = url;
+      } catch (error) {
+        console.error('Error loading image:', error);
+      }
     },
     sendImage: async function() {
       if(this.$store.getters.getScore){
@@ -281,6 +295,24 @@ methods: {
   padding: 5px 5px 5px 5px;
   border-radius: 10px;
   border: 2px solid #FD0E42;
+}
+
+.message-image {
+  border-radius: 15px;
+}
+
+.blur-enter-active, .blur-leave-active {
+  transition: all 2s ease;
+}
+
+.blur-enter-from, .blur-leave-to {
+  opacity: 0;
+  filter: blur(10px);
+}
+
+.blur-enter-to, .blur-leave-from {
+  opacity: 1;
+  filter: blur(0);
 }
 
 .input-container input {

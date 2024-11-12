@@ -31,7 +31,7 @@
                                                     <div class="d-flex flex-column align-start">
                                                         <span class="font-bold">{{ item.name }}</span>
                                                         <span v-if="latestMessages[item.chatName]?.sender" class="message-text"> 
-                                                            {{ latestMessages[item.chatName]?.sender }}: {{ latestMessages[item.chatName]?.body }} 
+                                                            {{ latestMessages[item.chatName]?.sender }} : {{ latestMessages[item.chatName]?.body || "Sends an Image" }} 
                                                         </span>
                                                         <span v-else class="message-text">
                                                             No Message Yet
