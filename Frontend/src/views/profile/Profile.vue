@@ -373,4 +373,8 @@ const uploadTask = () => {
 .edit-icon:active {
   color: #C30F31;
 }
+
+::v-deep .v-snackbar__content {
+  text-align: center;
+}
 </style>

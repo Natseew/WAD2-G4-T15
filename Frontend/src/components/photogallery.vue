@@ -718,4 +718,8 @@ const savePhotos = async () => {
     transform: translateY(0px) translateX(0px) rotate(480deg);
   }
 }
+
+::v-deep .v-snackbar__content {
+  text-align: center;
+}
 </style>
