@@ -208,8 +208,8 @@ let data = ref({
 });
 
 onAuthStateChanged(auth, (user) => {
-  loading.value = true;
   if (user) {
+    loading.value = true;
     userData.value = user;
     axios.get('/user/' + user.uid)
       .then(function (response) {

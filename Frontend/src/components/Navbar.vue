@@ -4,16 +4,7 @@
       <Toolbar class="custom-toolbar">
         <template #start>
           <div class="flex items-center gap-3 sm:gap-4">
-            <span 
-              class="nav-link-image"
-              :class="{ active: isActive('Profile') }"
-              @click="navigateTo('Profile')"
-            >
-              <v-avatar style="cursor: pointer;">
-                <v-img :src="photo || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'">
-                </v-img>
-              </v-avatar>
-            </span>
+            <img src="../assets/NeverAloneHandsOnlyColored.png" width="50px">
             <span
               class="nav-link"
               :class="{ active: isActive('Home') }"
@@ -52,7 +43,16 @@
         </template>
         <template #end>
           <div class="flex items-center gap-2 title">
-            <img src="../assets/NeverAloneHandsOnlyColored.png" width="50px">
+            <span 
+              class="nav-link-image"
+              :class="{ active: isActive('Profile') }"
+              @click="navigateTo('Profile')"
+            >
+              <v-avatar style="cursor: pointer;">
+                <v-img :src="photo || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'">
+                </v-img>
+              </v-avatar>
+            </span>
           </div>
         </template>
       </Toolbar>
