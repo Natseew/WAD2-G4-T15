@@ -2,7 +2,7 @@
   <div class="background">
     <Navbar class="navbar" />
     <div class="red-background"></div>
-    <div class="flex justify-center items-center h-full flex-col mt-8 md:mt-15 mb-28 md:mb-0">
+    <div class="card-container flex justify-center items-center flex-col">
       <div class="flex flex-col items-center w-full">
 
         <!-- LoadingScreen -->
@@ -32,7 +32,7 @@
           />
         </div>
         
-        <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" @filter-clicked="handleFilterClick" class="button-group mt-8 md:mt-15 z-10" />
+        <ButtonGroup @heart-clicked="handleHeartClick" @times-clicked="handleTimesClick" @filter-clicked="handleFilterClick" class="button-group z-10 mt-10 " />
       </div>
     </div>
 
@@ -262,7 +262,6 @@ const triggerConfetti = () => {
 .button-group {
   position: relative;
   z-index: 20;
- 
 }
 
 .no-matches-message {
@@ -340,4 +339,15 @@ const triggerConfetti = () => {
   justify-content: center;
   align-items: center;
 }
+
+.card-container{
+  height: calc(100% + 64px);
+}
+
+@media (max-width: 768px){
+  .card-container{
+    height: calc(100% - 64px);
+  }
+}
+
 </style>

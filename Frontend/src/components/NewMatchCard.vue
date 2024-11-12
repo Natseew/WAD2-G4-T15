@@ -272,6 +272,12 @@
     padding: 2rem;
     padding-bottom: 0;
   }
+ 
+  @media (max-width: 768px){
+    .page-container{
+      scale: 1;
+    }
+  }
   
   .card-container {
     perspective: 1000px;

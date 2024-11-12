@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-around p-4 mt-4 buttons-container">
+  <div class="flex justify-around p-4 buttons-container">
     <Button icon="pi pi-times" severity="secondary" text raised rounded class="round-button" @click="onTimesClick" />
     <Button 
       raised 
