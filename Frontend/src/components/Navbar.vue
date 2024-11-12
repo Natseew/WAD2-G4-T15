@@ -40,7 +40,7 @@
         </template>
         <template #end>
           <div class="flex items-center gap-2">
-            <v-avatar>
+            <v-avatar style="cursor: pointer;">
               <v-img :src="photo || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
               v-on:click="router.push('/profile')">
               </v-img>
