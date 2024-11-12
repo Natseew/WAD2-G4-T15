@@ -503,13 +503,6 @@ const savePhotos = async () => {
   flex-direction: column;
 }
 
-.photo-overlay {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  z-index: 10;
-}
-
 .delete-button {
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
@@ -535,15 +528,16 @@ const savePhotos = async () => {
 }
 
 .overlay-content {
-  color: white;
+  color: rgba(255,255,255,0.7);
   text-align: center;
   font-size: 1rem;
   font-weight: 500;
+  opacity: 0.5;
 }
 
 .overlay-content .pi {
-  display: block;
-  font-size: 1.5rem;
+  display: inline;
+  font-size: 1rem;
   margin-bottom: 0.5rem;
 }
 
@@ -562,11 +556,11 @@ const savePhotos = async () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
+  z-index: 10;
   transition: opacity 0.3s ease;
   cursor: pointer;
 }
