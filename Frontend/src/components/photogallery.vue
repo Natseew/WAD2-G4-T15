@@ -661,6 +661,7 @@ const savePhotos = async () => {
   height: 100%;
   z-index: 1;
   pointer-events: none;
+  overflow: hidden;
 }
 
 .shape {
