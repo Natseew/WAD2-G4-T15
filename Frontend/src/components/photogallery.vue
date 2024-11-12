@@ -2,8 +2,15 @@
   <Navbar class="navbar" />
   <div class="red-background"></div>
 
-  <div class="photo-gallery">
+  <div class="floating-shapes">
+      <div class="shape shape-circle"></div>
+      <div class="shape shape-square"></div>
+      <div class="shape shape-triangle"></div>
+    </div>
     
+
+  <div class="photo-gallery">
+
     <div v-if="error" class="error-alert">
       {{ error }}
       <button @click="error = ''" class="error-close">&times;</button>
@@ -655,6 +662,7 @@ const savePhotos = async () => {
   height: 100%;
   z-index: 1;
   pointer-events: none;
+  overflow: hidden;
 }
 
 .shape {
