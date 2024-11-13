@@ -278,11 +278,10 @@ export default {
                         // handle success
                         this.name = response.data.name
                         this.userImage = response.data.images[0]
-                        for(var item of response.data.matches){
-
+                        for(let item of response.data.matches){
+                            this.matches.push(item)
                             axios.get('/user/'+ item.uid).then(response => {
                                 item.profilePhoto = response.data.images[0]? response.data.images[0]: "";
-                                this.matches.push(item)
                                 this.fetchLatestMessage(item);
                             })
                         }
