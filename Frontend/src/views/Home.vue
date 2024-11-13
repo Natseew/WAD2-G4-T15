@@ -2,8 +2,8 @@
   <div class="background">
     <Navbar class="navbar" />
     <div class="red-background"></div>
-    <div class="card-container flex justify-center items-center flex-col">
-      <div class="flex flex-col items-center w-full">
+    <div class="card-container flex justify-center items-center flex-col w-full">
+      <div class="flex flex-col items-center w-full overflow-hidden">
 
         <!-- LoadingScreen -->
         <LoadingScreen v-if="isLoading" />
@@ -51,7 +51,7 @@ import ButtonGroup from "../components/ButtonGroup.vue";
 import Navbar from "../components/Navbar.vue";
 import MatchNotification from '../components/MatchNotification.vue';
 import LoadingScreen from '../components/LoadingScreen.vue';
-
+import axios from 'axios';
 const router = useRouter();
 const auth = getAuth();
 const store = useStore();
@@ -63,9 +63,12 @@ const showingLove = ref(true);
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    if (user.name === "newUser") {
-      router.push('/editProfile');
-    }
+    axios.get('/user/' + user.uid)
+      .then(function (response) {
+        if (response.data.name === "newUser") {
+          router.push('/profile');
+        }
+      });
     store.dispatch('fetchMatches', user.uid);
     store.dispatch('populateMatches', user.uid);
     

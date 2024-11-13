@@ -20,40 +20,39 @@
             <div class="card-body">
               <h1 class="name">{{ name }}</h1>
               <Chip 
-  v-if="lookingFor === 'Love'" 
-  label="Looking for love" 
-  style="
-    height: 1.4rem; 
-    background-color: #ffebf0; /* Softer pink for background */
-    color: #d32f2f; /* Deeper red for text */
-    font-weight: 600; /* Bold for emphasis */
-    font-size: 0.85rem;
-    border-radius: 1rem;
-    padding: 0.1rem 0.6rem;
-    display: inline-flex;
-    align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow */
-  " 
-/>
+                v-if="lookingFor === 'Love'" 
+                label="Looking for love" 
+                style="
+                  height: 1.4rem; 
+                  background-color: #ffebf0; /* Softer pink for background */
+                  color: #d32f2f; /* Deeper red for text */
+                  font-weight: 600; /* Bold for emphasis */
+                  font-size: 0.85rem;
+                  border-radius: 1rem;
+                  padding: 0.1rem 0.6rem;
+                  display: inline-flex;
+                  align-items: center;
+                  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow */
+                " 
+              />
 
-<Chip 
-  v-if="lookingFor === 'Friends'" 
-  label="Looking for friends" 
-  style="
-    height: 1.4rem; 
-    background-color: #e0f7fa; /* Softer blue for background */
-    color: #0288d1; /* Calmer blue for text */
-    font-weight: 600;
-    font-size: 0.85rem;
-    border-radius: 1rem;
-    padding: 0.1rem 0.6rem;
-    display: inline-flex;
-    align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow */
-  " 
-/>
+              <Chip 
+                v-if="lookingFor === 'Friends'" 
+                label="Looking for friends" 
+                style="
+                  height: 1.4rem; 
+                  background-color: #e0f7fa; /* Softer blue for background */
+                  color: #0288d1; /* Calmer blue for text */
+                  font-weight: 600;
+                  font-size: 0.85rem;
+                  border-radius: 1rem;
+                  padding: 0.1rem 0.6rem;
+                  display: inline-flex;
+                  align-items: center;
+                  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow */
+                " 
+              />
 
-              
               <div class="quick-info">
                 <span>{{ age }} • {{ gender }} • {{ religion }}</span>
               </div>
@@ -306,7 +305,7 @@
   .card-side {
     position: absolute;
     width: 100%;
-    height: 650px;
+    height: 600px;
     backface-visibility: hidden;
     background-color: #fff;
     border-radius: 8px;
@@ -516,19 +515,92 @@
     transition: transform 0.6s ease-out;
   }
   
-  @media (min-width: 768px) {
-    .card-container {
-      height: auto; /* Allow height to adjust based on content */
-    }
-    
-    .profile-img {
-      width: 120px;
-      height: 120px;
-    }
-  
-    .card-body {
-      padding: 20px; /* Adjusted padding */
-    }
+  @media (max-width: 768px) {
+  .page-container {
+    padding: 1rem;
   }
+
+  .card {
+    width: 20rem;
+    height: 34rem;
+    scale: 0.9; /* Adjust scale */
+  }
+
+  .profile-img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .name {
+    font-size: 1.8rem;
+  }
+
+  .quick-info {
+    font-size: 0.8rem;
+  }
+
+  .section {
+    padding: 6px 0;
+    margin: 5px 0;
+  }
+
+  .interest-item h3,
+  .back-title {
+    font-size: 0.85rem;
+  }
+
+  .intro,
+  .personality,
+  .interest-item p {
+    font-size: 0.75rem;
+  }
+}
+@media (max-width: 480px) {
+  .card {
+    width: 18rem;
+    height: 30rem;
+    scale: 0.8; /* Further scaling */
+  }
+
+  .profile-img {
+    width: 90px;
+    height: 90px;
+  }
+
+  .name {
+    font-size: 1.5rem;
+  }
+
+  .quick-info,
+  .intro,
+  .personality,
+  .interest-item h3,
+  .back-title {
+    font-size: 0.7rem;
+  }
+
+  .interest-item p {
+    font-size: 0.65rem;
+  }
+}
+
+@media (min-height: 739px) {
+  .card{
+    height: 40rem;
+  }
+}
+
+@media (max-height: 739px) {
+  .card{
+    height: 35rem;
+  }
+}
+
+@media (max-height: 719px) {
+  .card{
+    height: 30rem;
+  }
+}
+
   </style>
   

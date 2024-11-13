@@ -48,7 +48,7 @@ const errMsg = ref();
 const passwordError = ref("");
 const router = useRouter();
 
-const register = () => {
+const register = async () => {
   if (password.value !== confirmPassword.value) {
     errMsg.value = "Passwords do not match";
     return;
@@ -56,19 +56,21 @@ const register = () => {
 
   passwordError.value = "";
 
-  createUserWithEmailAndPassword(getAuth(), email.value, password.value)
-    .then((response) => {
-      console.log(response.user.uid)
-      axios.post('/user/'+ response.user.uid, {"name":"newUser", "uid":response.user.uid})
-      run(response.user.uid)
-      console.log("Successfully registered!");
-      router.push("/Profile")
-    })
-    .catch((error) => {
-      console.log(error.code);
-      errMsg.value = "Error creating account";
-    });
+  try {
+    const response = await createUserWithEmailAndPassword(getAuth(), email.value, password.value);
+    console.log(response.user.uid);
+
+    await axios.post('/user/' + response.user.uid, { name: "newUser", uid: response.user.uid });
+    await run(response.user.uid);
+
+    console.log("Successfully registered!");
+    router.push("/Profile");
+  } catch (error) {
+    console.log(error.code);
+    errMsg.value = "Error creating account";
+  }
 };
+
 
 let run = async (uid) => {
     const response = await fetch(`${base_url}/chat/auth/${uid}`)

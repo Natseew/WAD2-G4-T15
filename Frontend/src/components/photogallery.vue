@@ -7,9 +7,10 @@
       <div class="shape shape-square"></div>
       <div class="shape shape-triangle"></div>
     </div>
+    
 
   <div class="photo-gallery">
-    
+
     <div v-if="error" class="error-alert">
       {{ error }}
       <button @click="error = ''" class="error-close">&times;</button>
@@ -101,6 +102,7 @@
 
 <script setup>
 import "primeicons/primeicons.css";
+import Navbar from "../components/Navbar.vue";
 import { ref, reactive } from 'vue'
 import axios from 'axios';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -178,11 +180,11 @@ onAuthStateChanged(auth, (user) => {
     userData.value = user;
     axios.get('/user/' + user.uid)
       .then(function (response) {
+        data.value = response.data;
+        data.value.email = user.email;
         for(var photo in response.data.images){
           photos.value[photo].file = response.data.images[photo]
           photos.value[photo].preview = response.data.images[photo]
-          data.value = response.data;
-          data.value.email = user.email;
         }
         isLoading.value = false;
       });
@@ -294,6 +296,19 @@ const savePhotos = async () => {
 
 <style scoped>
 
+.navbar {
+  position: fixed;
+}
+
+/* Adjust top padding to avoid content getting hidden under the navbar */
+.photo-gallery {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  padding-top: 70px; /* Adjust based on navbar height */
+}
+
 .background {
   background: linear-gradient(to bottom, rgba(255, 118, 118, 0.1), rgba(245, 78, 162, 0.1));
   height: 10vh;
@@ -349,15 +364,57 @@ const savePhotos = async () => {
   max-width: 1024px;
   margin: 0px auto;
   padding: 10px;
-  font-family: 'Roboto Flex', sans-serif;
-  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
   width: 100%;
   height: 85%;
   flex-direction: column;
   z-index: 2; /* Ensure it appears above the background */
   position: relative;
-  overflow-y: auto;
+  /* overflow-y: auto; */
+}
+.save-button{
+  margin-top: 50px;
+}
+.photo-box {
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease; /* Add transition for smooth effect */
+  height: 100%;
+  margin-top:40px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+}
+
+.photo-box:hover {
+  transform: translateY(-10px) scale(1.05); /* Scale up and move slightly up */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Make shadow more prominent on hover */
+  opacity: 0.9; /* Slightly reduce opacity */
+}
+
+.upload-box:hover {
+  background-color: #f4f4f4; /* Change background color on hover */
+}
+
+.photo-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  z-index: 10;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.photo-box:hover .photo-overlay {
+  opacity: 1; /* Show overlay when hovering over the photo box */
 }
 
 .error-alert {
@@ -385,7 +442,7 @@ const savePhotos = async () => {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: 7px;
+  gap: 15px;
   flex: 1;
   height: 100%;
   min-height: 0;
@@ -419,7 +476,7 @@ const savePhotos = async () => {
 
 @media (max-width: 768px) {
   .photo-gallery{
-    margin: 20px auto 106px auto;
+    margin: 10px auto auto auto;
   }
   .photo-grid {
     grid-template-columns: 1fr;
@@ -702,6 +759,7 @@ const savePhotos = async () => {
   transform: rotate(45deg);
 }
 
+
 @keyframes float {
   0% {
     transform: translateY(0px) translateX(0px) rotate(0deg);
@@ -718,5 +776,9 @@ const savePhotos = async () => {
   100% {
     transform: translateY(0px) translateX(0px) rotate(480deg);
   }
+}
+
+::v-deep .v-snackbar__content {
+  text-align: center;
 }
 </style>
