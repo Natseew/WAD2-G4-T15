@@ -376,5 +376,13 @@ const uploadTask = () => {
 
 ::v-deep .v-snackbar__content {
   text-align: center;
+  bottom: 0; /* Default position for larger screens */
+}
+
+@media (max-width: 600px) {
+  ::v-deep .v-snackbar {
+    top: 0 !important;
+    bottom: auto !important; /* Override bottom to make it appear at the top */
+  }
 }
 </style>
