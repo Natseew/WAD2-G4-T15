@@ -115,60 +115,66 @@ export default {
         },
 
         async fetchLatestMessage(match) {
-            this.isConnected = false
+            this.isConnected = false;
+
             try {
-                const userResponse = await axios.get('/user/' + match.uid)
-                const receiverProfile = userResponse.data.images?.length > 0 && userResponse.data.images[0] != "" ? 
-                    userResponse.data.images[0] : 
-                    "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png";
-                
+                const userResponse = await axios.get('/user/' + match.uid);
+                const receiverProfile = userResponse.data.images?.length > 0 && userResponse.data.images[0] !== ""
+                ? userResponse.data.images[0]
+                : "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png";
+
+                try {
                 const conversation = await this.conversationsClient.getConversationByUniqueName(match.chatName);
                 const messages = await conversation.getMessages(1); // Get only the latest message
-                if (messages.items.length > 0) {
-                    const latestMessage = messages.items[0];
-                    const senderName = latestMessage.author === this.uid ? "You" : match.name; 
 
-                    // Update the latestMessages object with both sender and message body
-                    this.latestMessages = {
-                        ...this.latestMessages,
-                        [match.chatName]: {
-                            body: latestMessage.body,
-                            sender: senderName,
-                            receiverProfile: receiverProfile,
-                            matchUid: match.uid
-                        }
+                let latestMessage = {
+                    body: 'No messages yet',
+                    sender: '',
+                    receiverProfile,
+                    matchUid: match.uid
+                };
+
+                if (messages.items.length > 0) {
+                    const message = messages.items[0];
+                    latestMessage = {
+                    body: message.body,
+                    sender: message.author === this.uid ? "You" : match.name,
+                    receiverProfile,
+                    matchUid: match.uid
                     };
-                    this.isConnected = true
                 }
-                else{
-                    this.latestMessages = {
-                        ...this.latestMessages,
-                        [match.chatName]: {
-                            body: 'No messages yet',
-                            sender: '',
-                            receiverProfile: receiverProfile,
-                            matchUid: match.uid
-                        }
-                    };
-                    this.isConnected = true
-                }
-                console.log(this.latestMessages);
-            } catch (error) {
-                console.error(`Error fetching latest message for ${match.chatName}:`, error);
+
+                this.latestMessages = {
+                    ...this.latestMessages,
+                    [match.chatName]: latestMessage
+                };
+                } catch (getConversationError) {
+                console.error(`Error getting conversation for ${match.chatName}:`, getConversationError);
                 this.latestMessages = {
                     ...this.latestMessages,
                     [match.chatName]: {
-                        body: 'No messages yet',
-                        sender: '',
-                        receiverProfile: receiverProfile,
-                        matchUid: match.uid
+                    body: 'No messages yet',
+                    sender: '',
+                    receiverProfile: "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png",
+                    matchUid: match.uid
                     }
                 };
-                this.isConnected = true
+                }
+            } catch (userResponseError) {
+                console.error(`Error fetching user data for ${match.chatName}:`, userResponseError);
+                this.latestMessages = {
+                ...this.latestMessages,
+                [match.chatName]: {
+                    body: 'No messages yet',
+                    sender: '',
+                    receiverProfile: "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png",
+                    matchUid: match.uid
+                }
+                };
+            } finally {
+                this.isConnected = true;
             }
-            this.isConnected = true
         },
-
         initConversationsClient: async function() {
             window.conversationsClient = ConversationsClient;
             const token = await this.getToken(this.uid) 
