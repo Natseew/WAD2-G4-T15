@@ -124,41 +124,41 @@ export default {
                 : "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png";
 
                 try {
-                const conversation = await this.conversationsClient.getConversationByUniqueName(match.chatName);
-                const messages = await conversation.getMessages(1); // Get only the latest message
+                    const conversation = await this.conversationsClient.getConversationByUniqueName(match.chatName);
+                    const messages = await conversation.getMessages(1); // Get only the latest message
 
-                let latestMessage = {
-                    body: 'No messages yet',
-                    sender: '',
-                    receiverProfile,
-                    matchUid: match.uid
-                };
-
-                if (messages.items.length > 0) {
-                    const message = messages.items[0];
-                    latestMessage = {
-                    body: message.body,
-                    sender: message.author === this.uid ? "You" : match.name,
-                    receiverProfile,
-                    matchUid: match.uid
+                    let latestMessage = {
+                        body: 'No messages yet',
+                        sender: '',
+                        receiverProfile,
+                        matchUid: match.uid
                     };
-                }
 
-                this.latestMessages = {
-                    ...this.latestMessages,
-                    [match.chatName]: latestMessage
-                };
-                } catch (getConversationError) {
-                console.error(`Error getting conversation for ${match.chatName}:`, getConversationError);
-                this.latestMessages = {
-                    ...this.latestMessages,
-                    [match.chatName]: {
-                    body: 'No messages yet',
-                    sender: '',
-                    receiverProfile: "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png",
-                    matchUid: match.uid
+                    if (messages.items.length > 0) {
+                        const message = messages.items[0];
+                        latestMessage = {
+                        body: message.body,
+                        sender: message.author === this.uid ? "You" : match.name,
+                        receiverProfile,
+                        matchUid: match.uid
+                        };
                     }
-                };
+
+                    this.latestMessages = {
+                        ...this.latestMessages,
+                        [match.chatName]: latestMessage
+                    };
+                } catch (getConversationError) {
+                    console.error(`THIS IS NOT AN ERROR IT IS ON PURPOSE`);
+                    this.latestMessages = {
+                        ...this.latestMessages,
+                        [match.chatName]: {
+                        body: 'No messages yet',
+                        sender: '',
+                        receiverProfile: "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png",
+                        matchUid: match.uid
+                        }
+                    };
                 }
             } catch (userResponseError) {
                 console.error(`Error fetching user data for ${match.chatName}:`, userResponseError);
