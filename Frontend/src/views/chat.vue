@@ -25,7 +25,7 @@
                                                         @click.stop="goToMatchProfile(item.uid)"
                                                     >
                                                         <img 
-                                                            :src="latestMessages[item.chatName]?.receiverProfile || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
+                                                            :src="item.profilePhoto || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
                                                         />
                                                     </Avatar>
                                                     <div class="d-flex flex-column align-start">
@@ -115,8 +115,6 @@ export default {
         },
 
         async fetchLatestMessage(match) {
-            this.isConnected = false;
-
             try {
                 const userResponse = await axios.get('/user/' + match.uid);
                 const receiverProfile = userResponse.data.images?.length > 0 && userResponse.data.images[0] !== ""
@@ -149,7 +147,7 @@ export default {
                         [match.chatName]: latestMessage
                     };
                 } catch (getConversationError) {
-                    console.error(`THIS IS NOT AN ERROR IT IS ON PURPOSE`);
+                    console.error(`THIS IS NOT AN ERROR IT IS ON PURPOSE`, getConversationError);
                     this.latestMessages = {
                         ...this.latestMessages,
                         [match.chatName]: {
@@ -278,16 +276,20 @@ export default {
                 axios.get('/user/'+user.uid)
                     .then(response =>{
                         // handle success
-                        console.log(response.data)
                         this.name = response.data.name
                         this.userImage = response.data.images[0]
                         for(var item of response.data.matches){
-                            this.matches.push(item)
-                            this.fetchLatestMessage(item);
+
+                            axios.get('/user/'+ item.uid).then(response => {
+                                item.profilePhoto = response.data.images[0]? response.data.images[0]: "";
+                                this.matches.push(item)
+                                this.fetchLatestMessage(item);
+                            })
                         }
                         if(response.data.matches.length == 0){
                             this.isConnected = true
                         }
+                        console.log(response.data.matches)
                     })
                 this.registerName()
                 console.log(this.matches)
