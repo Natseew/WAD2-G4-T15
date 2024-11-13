@@ -290,7 +290,7 @@
   .card {
     position: relative;
     width: 24rem;
-    height: 40rem;
+    height: 40em;
     transform-style: preserve-3d;
     transition: transform 0.6s;
     display: flex;
@@ -515,47 +515,8 @@
     transition: transform 0.6s ease-out;
   }
   
-  @media (max-width: 768px) {
-  .page-container {
-    padding: 1rem;
-  }
-
-  .card {
-    width: 20rem;
-    height: 34rem;
-    scale: 0.9; /* Adjust scale */
-  }
-
-  .profile-img {
-    width: 100px;
-    height: 100px;
-  }
-
-  .name {
-    font-size: 1.8rem;
-  }
-
-  .quick-info {
-    font-size: 0.8rem;
-  }
-
-  .section {
-    padding: 6px 0;
-    margin: 5px 0;
-  }
-
-  .interest-item h3,
-  .back-title {
-    font-size: 0.85rem;
-  }
-
-  .intro,
-  .personality,
-  .interest-item p {
-    font-size: 0.75rem;
-  }
-}
-@media (max-width: 480px) {
+ 
+@media (max-height: 740px) {
   .card {
     width: 18rem;
     height: 30rem;
@@ -584,21 +545,21 @@
   }
 }
 
-@media (min-height: 739px) {
-  .card{
-    height: 40rem;
-  }
-}
-
 @media (max-height: 739px) {
   .card{
-    height: 35rem;
+    height: 80vh;
   }
 }
 
-@media (max-height: 719px) {
+@media (max-height: 670px) {
   .card{
-    height: 30rem;
+    height: 70vh;
+  }
+}
+
+@media (max-height: 600px) {
+  .card{
+    height: 100vh;
   }
 }
 
