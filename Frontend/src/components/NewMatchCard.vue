@@ -527,8 +527,8 @@
   }
 
   .profile-img {
-    width: 90px;
-    height: 90px;
+    width: 100px;
+    height: 100px;
   }
 
   .name {
@@ -563,8 +563,8 @@
   }
 
   .profile-img {
-    width: 70px;
-    height: 70px;
+    width: 90px;
+    height: 90px;
   }
 
   .name {
