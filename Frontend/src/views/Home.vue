@@ -351,12 +351,12 @@ const triggerConfetti = () => {
 }
 
 .card-container{
-  height: calc(100% + 64px);
+  height: calc(100% + 10vh);
 }
 
 @media (max-width: 768px){
   .card-container{
-    height: calc(100% - 64px);
+    height: calc(100% - 10vh);
   }
 }
 
