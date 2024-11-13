@@ -304,6 +304,8 @@ const savePhotos = async () => {
 .photo-gallery {
   display: flex;
   justify-content: center;
+  align-items: center;
+  margin: auto;
   padding-top: 70px; /* Adjust based on navbar height */
 }
 
@@ -379,6 +381,7 @@ const savePhotos = async () => {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease; /* Add transition for smooth effect */
+  height: 100%;
   margin-top:40px;
   display: flex;
   flex-direction: column;
@@ -441,6 +444,7 @@ const savePhotos = async () => {
   grid-template-rows: repeat(2, 1fr);
   gap: 15px;
   flex: 1;
+  height: 100%;
   min-height: 0;
   margin-bottom: 1rem;
 }
@@ -474,7 +478,10 @@ const savePhotos = async () => {
   .photo-gallery{
     margin: 10px auto auto auto;
   }
-
+  .photo-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, 1fr);
+  }
   .photo-box{
     height: 250px;
     width: 200px;
@@ -484,15 +491,16 @@ const savePhotos = async () => {
 
 @media (max-width: 960px) {
   .save-container {
-  position: absolute; /* Use absolute positioning */
-  bottom: 10px; /* Adjust as needed */
-  left: 50%;
-  transform: translateX(-50%);
-  width: auto;
-  padding: 1rem;
-  z-index: 100;
-  pointer-events: none;
-}
+    position: fixed;
+    bottom: 1%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    padding: 1rem;
+    z-index: 100;
+    pointer-events: none;
+  }
+
   .save-button {
     pointer-events: auto;
   }
@@ -770,5 +778,7 @@ const savePhotos = async () => {
   }
 }
 
-
+::v-deep .v-snackbar__content {
+  text-align: center;
+}
 </style>
