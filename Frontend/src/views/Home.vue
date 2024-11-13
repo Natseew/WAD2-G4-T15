@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
@@ -79,8 +79,9 @@ onAuthStateChanged(auth, (user) => {
 
 const filteredMatches = computed(() => {
   const result = matches.value.filter(match => {
-    console.log('Match:', match); // Log each match object
-    return showingLove.value ? match.lookingFor === 'Love' : match.lookingFor === 'Friends';
+    // console.log('Match:', match); // Log each match object
+    return match.uid !== '' &&
+    (showingLove.value ? match.lookingFor === 'Love' : match.lookingFor === 'Friends');
   });
   console.log('Filtered Matches:', result); // Log filtered matches
   return result;
@@ -163,6 +164,12 @@ store.subscribe((mutation, state) => {
 
 const showNotification = computed(() => !!store.getters.getMatchNotification);
 
+watch(showNotification, (newValue) => {
+  if (newValue) {
+    triggerConfetti();
+  }
+});
+
 const triggerConfetti = () => {
   const confettiContainer = document.querySelector('.confetti-container');
   
@@ -180,8 +187,8 @@ const triggerConfetti = () => {
     heart.style.animationDelay = `${Math.random() * 2}s`; // Random delay for each heart
   }
   setTimeout(() => {
-    confettiContainer.style.zIndex = "-1";
     confettiContainer.innerHTML = '';
+    confettiContainer.style.zIndex = "-1";
   }, 5000);
 };
 
