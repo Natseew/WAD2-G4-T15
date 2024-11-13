@@ -102,6 +102,7 @@
 
 <script setup>
 import "primeicons/primeicons.css";
+import Navbar from "../components/Navbar.vue";
 import { ref, reactive } from 'vue'
 import axios from 'axios';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
