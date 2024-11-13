@@ -296,6 +296,15 @@ const savePhotos = async () => {
 
 <style scoped>
 
+.navbar {
+  position: fixed;
+}
+
+/* Adjust top padding to avoid content getting hidden under the navbar */
+.photo-gallery {
+  padding-top: 70px; /* Adjust based on navbar height */
+}
+
 .background {
   background: linear-gradient(to bottom, rgba(255, 118, 118, 0.1), rgba(245, 78, 162, 0.1));
   height: 10vh;
