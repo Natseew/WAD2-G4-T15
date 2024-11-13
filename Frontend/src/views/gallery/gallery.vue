@@ -24,15 +24,14 @@
 
 .title {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 2.5vw + 1rem, 3rem); /* Scales between 1.5rem and 3rem */
   font-weight: bold;
   text-align: center;
   color: #fff;
-  margin-top: 3em;
+  margin-top: 2em;
   margin-bottom: -50px;
   flex-shrink: 0;
-  z-index: 100;
-}
+  z-index: 100;}
 
 .navbar {
   z-index: 10;
