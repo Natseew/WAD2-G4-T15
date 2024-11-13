@@ -288,7 +288,7 @@ export default {
                         if(response.data.matches.length == 0){
                             this.isConnected = true
                         }
-                        console.log(response.data.matches)
+                        console.log(this.matches)
                     })
                 this.registerName()
                 console.log(this.matches)

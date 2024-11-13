@@ -43,16 +43,33 @@
         </template>
         <template #end>
           <div class="flex items-center gap-2 title">
-            <span 
-              class="nav-link-image"
-              :class="{ active: isActive('Profile') }"
-              @click="navigateTo('Profile')"
-            >
-              <v-avatar style="cursor: pointer;">
-                <v-img :src="photo || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'">
-                </v-img>
-              </v-avatar>
-            </span>
+            <v-menu
+                open-on-hover
+                anchor="bottom"
+                internal-activator
+                activatorFixed
+              >
+                <template v-slot:activator="{ props }">
+                  <span 
+                    class="nav-link-image"
+                    :class="{ active: isActive('Profile') }"
+                    @click="navigateTo('Profile')"
+                  >
+                  <v-avatar style="cursor: pointer;" v-bind="props">
+                    <v-img :src="photo || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'">
+                    </v-img>
+                  </v-avatar>
+                </span>
+                </template>
+                <v-list >
+                  <v-list-item
+                    v-for="(item, index) in items"
+                    :key="index"
+                  >
+                    <v-list-item-title @click="navigateTo(item.route)">{{ item.title }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
           </div>
         </template>
       </Toolbar>
@@ -65,7 +82,6 @@
 
 <script setup>
 import Toolbar from 'primevue/toolbar';
-import Avatar from 'primevue/avatar';
 import axios from 'axios';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter, useRoute } from 'vue-router';
@@ -73,10 +89,14 @@ import { HomeIcon, UserIcon, ChatBubbleBottomCenterIcon, PhotoIcon} from '@heroi
 import { ref} from 'vue';
 
 const auth = getAuth();
-
+let props = ref();
 const router = useRouter();
 const route = useRoute();
 let loading = ref(false);
+let items = ref([
+        { title: 'Profile', route: 'Profile' },
+        { title: 'Log Out', route: '/'},
+      ])
 
 let photo = ref("https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png")
 
