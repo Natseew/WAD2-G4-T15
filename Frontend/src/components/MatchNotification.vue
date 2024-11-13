@@ -41,7 +41,6 @@
       const closeNotification = () => {
         toggleMatchColor();
         store.dispatch('clearMatchNotification');
-        emit('run-confetti');
       };
 
       const toggleMatchColor = () => {

@@ -37,7 +37,7 @@
     </div>
 
     <div class="confetti-container"></div>
-    <MatchNotification v-if="showNotification" @run-confetti="triggerConfetti"/>
+    <MatchNotification v-if="showNotification"/>
   </div>
 </template>
 
