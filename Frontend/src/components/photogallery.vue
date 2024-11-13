@@ -180,11 +180,11 @@ onAuthStateChanged(auth, (user) => {
     userData.value = user;
     axios.get('/user/' + user.uid)
       .then(function (response) {
+        data.value = response.data;
+        data.value.email = user.email;
         for(var photo in response.data.images){
           photos.value[photo].file = response.data.images[photo]
           photos.value[photo].preview = response.data.images[photo]
-          data.value = response.data;
-          data.value.email = user.email;
         }
         isLoading.value = false;
       });
