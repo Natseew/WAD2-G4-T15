@@ -39,7 +39,10 @@
   import { useRouter } from 'vue-router';
   import Button from 'primevue/button';
   import { useStore } from 'vuex';
+  import { getAuth, onAuthStateChanged } from "firebase/auth";
+  import axios from 'axios';
 
+  const auth = getAuth();
   const router = useRouter();
   const quizStarted = ref(false);
   const currentQuestionIndex = ref(0);
@@ -51,12 +54,26 @@
   const isAnimating = ref(false);
   const store = useStore();
 
-  
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      axios.get('/user/' + user.uid)
+        .then(function (response) {
+          if (response.data.name === "newUser") {
+            router.push('/profile');
+          }
+        });
+      store.dispatch('fetchMatches', user.uid);
+
+    } else {
+      router.push('/login');
+    }
+  });
+
   const decodeHtmlEntities = (text) => {
-  const textarea = document.createElement('textarea');
-  textarea.innerHTML = text;
-  return textarea.value;
-};
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = text;
+    return textarea.value;
+  };
 
 const fetchQuestions = async () => {
   try {
@@ -117,7 +134,9 @@ const fetchQuestions = async () => {
   
   const redirectAfterQuiz = () => {
     loading.value = true;
-    store.dispatch('completedQuiz');
+    const userUID = store.state.user.uid;
+    console.log(userUID);
+    store.dispatch("saveScore", { userUid: userUID, matchUid: store.state.selectedMatchUid, score: score.value });
     setTimeout(() => {
       router.push("/chat");
     }, 2000);

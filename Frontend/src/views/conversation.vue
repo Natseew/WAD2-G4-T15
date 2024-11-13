@@ -96,7 +96,9 @@ methods: {
       }
     },
     sendImage: async function() {
-      if(this.$store.getters.getScore){
+      const isWinner = this.$store.getters.isWinner;
+      console.log(isWinner);
+      if(isWinner){
         const userResponse = await axios.get('/user/' + this.matchUid)
         const userGallery = userResponse.data.images.length > 0 ? userResponse.data.images: ["https://i.imgur.com/9sCDuxN.png"];
         var nonBlankImages = userGallery.filter(image => image !== "");
@@ -140,6 +142,7 @@ methods: {
               this.messageText = ""
           })
         if(this.messageText == "!game"){
+          this.$store.dispatch("startQuiz", { matchUid: this.matchUid });
           this.$router.push('/quiz');
         }
     },

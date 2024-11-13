@@ -12,6 +12,7 @@ const store = createStore({
       selectedMatchUid: null,
       isLoading: false,
       score: false,
+      isWinner: false,
     }
   },
   getters: {
@@ -29,6 +30,7 @@ const store = createStore({
     },
     isLoading: state => state.isLoading,
     getScore: state => state.score,
+    isWinner: (state) => state.isWinner,
   },
   mutations: {
     setUser(state, userData) {
@@ -51,6 +53,9 @@ const store = createStore({
     },
     setIsLoading(state, isLoading) {
       state.isLoading = isLoading
+    },
+    setWinnerStatus(state, isWinner) {
+      state.isWinner = isWinner;
     },
     addLikeToUser(state, likedUser) {
       if (!state.user.likes) {
@@ -150,6 +155,41 @@ const store = createStore({
       } catch (error) {
         console.error("Failed to fetch matched users:", error);
       }
+    },
+
+    async startQuiz({ commit }, { matchUid }) {
+      commit("setSelectedMatchUid", matchUid);
+      commit("setQuizComplete", false);
+    },
+  
+    async saveScore({ state, commit, dispatch }, { userUid, matchUid, score }) {
+      try {
+        if (userUid) {
+          console.log(score);
+          await axios.post(`${base_url}/user/saveScore/${userUid}/${matchUid}/${score}`);
+          commit("setQuizComplete", true);
+    
+          const { data: bothCompleted } = await axios.get(`${base_url}/user/checkMatchCompletion/${matchUid}`);
+          console.log(bothCompleted);
+          if (bothCompleted) {
+            console.log("Both players completed the quiz");
+            const { data: winnerData } = await axios.get(`${base_url}/user/getMatchWinner/${userUid}/${matchUid}`);
+            console.log(winnerData);
+            commit("setWinnerStatus", winnerData.winnerUid === userUid);
+          } else {
+            console.log("Waiting for the other player to complete the quiz");
+          }
+        } else {
+          console.error("User UID is undefined");
+        }
+      } catch (error) {
+        console.error("Error saving score:", error);
+      }
+    },
+  
+    sendWinnerImage({ state, dispatch }) {
+      // Action to trigger the image sending functionality
+      dispatch("photoSent");
     },
 
     clearMatchNotification({ commit }) {

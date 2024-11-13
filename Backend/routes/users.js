@@ -14,6 +14,7 @@ initializeApp({
 const db = getFirestore();
 
 const ref = db.collection('users')
+const matchesRef = db.collection('matches');
 
 router.get('/', (req,res) => {
     res.send("test")
@@ -253,6 +254,106 @@ router.get('/matches/:uid', async (req, res) => {
   } catch (error) {
     console.error('Error retrieving matched users:', error);
     return res.sendStatus(500);
+  }
+});
+
+router.post('/saveScore/:uid/:matchuid/:score', async (req, res) => {
+  const { uid, matchuid, score } = req.params;
+  const newScore = parseInt(score, 10);
+  console.log(uid)
+  try {
+    // Fetch or create a match document in the `matches` collection
+    const matchDocRef = matchesRef.doc(uid);
+    const matchDoc = await matchDocRef.get();
+
+    // If match document doesn't exist, create it with an empty score array
+    if (!matchDoc.exists) {
+      await matchDocRef.set({ score: [] });
+    }
+
+    // Update the match document with the player's score
+    await matchDocRef.update({
+      score: FieldValue.arrayUnion({ matchuid, score: newScore })
+    });
+
+    res.status(200).send('Score saved successfully');
+  } catch (error) {
+    console.error('Error saving score:', error);
+    res.sendStatus(500);
+  }
+});
+
+// Check if both users have completed the quiz
+router.get('/checkMatchCompletion/:matchUid', async (req, res) => {
+  const { matchUid } = req.params;
+
+  try {
+    const matchDoc = await matchesRef.doc(matchUid).get();
+
+    if (!matchDoc.exists) {
+      res.status(200).send(false);
+    } else {
+      res.status(200).send(true);
+    }
+
+    // const matchData = matchDoc.data();
+    // const matchScores = matchData.score || [];
+
+    // // Ensure there are scores from two unique players
+    // const uniquePlayers = new Set(matchScores.map(score => score.uid));
+    // if (uniquePlayers.size >= 2) {
+    //   res.status(200).send(true);  // Both players have completed the quiz
+    // } else {
+    //   res.status(200).send(false); // One or both players have not completed the quiz
+    // }
+  } catch (error) {
+    console.error('Error checking match completion:', error);
+    res.sendStatus(500);
+  }
+});
+
+router.get('/getMatchWinner/:uid/:matchUid', async (req, res) => {
+  const { uid, matchUid } = req.params;
+
+  try {
+    const userDoc = await matchesRef.doc(uid).get();
+    const matchDoc = await matchesRef.doc(matchUid).get();
+
+    if (!userDoc.exists) {
+      return res.status(404).send('User not found');
+    }
+
+    if (!matchDoc.exists) {
+      return res.status(404).send('Match not found');
+    }
+
+    const userData = userDoc.data();
+    const userScores = userData.score || [];
+
+    const matchData = matchDoc.data();
+    const matchScores = matchData.score || [];
+
+    const userScore = userScores[0].score;
+    const matchScore = matchScores[0].score
+
+    console.log(userScore);
+    console.log(matchScore);
+
+    console.log(`User Score: ${userScore}, Match Score: ${matchScore}`);
+
+    let winnerUid;
+    if (userScore > matchScore) {
+      winnerUid = uid;
+    } else if (matchScore > userScore) {
+      winnerUid = matchUid;
+    } else {
+      winnerUid = null;
+    }
+
+    res.status(200).send({ winnerUid });
+  } catch (error) {
+    console.error('Error determining match winner:', error);
+    res.sendStatus(500);
   }
 });
 
