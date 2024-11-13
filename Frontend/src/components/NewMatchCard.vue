@@ -306,6 +306,7 @@
   .card-side {
     position: absolute;
     width: 100%;
+    height: 600px;
     backface-visibility: hidden;
     background-color: #fff;
     border-radius: 8px;
