@@ -584,5 +584,23 @@
   }
 }
 
+@media (min-height: 739px) {
+  .card{
+    height: 40rem;
+  }
+}
+
+@media (max-height: 739px) {
+  .card{
+    height: 35rem;
+  }
+}
+
+@media (max-height: 719px) {
+  .card{
+    height: 30rem;
+  }
+}
+
   </style>
   
