@@ -66,7 +66,7 @@
                         </v-row>
                     </div>
                     <div v-else class="no-matches-message">
-                        Keep looking for love.
+                        Keep looking for connections.
                     </div>
                 </v-col>
 
