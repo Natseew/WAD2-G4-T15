@@ -88,15 +88,17 @@
       </button>
     </div>
     <v-snackbar v-model="snackbar" 
-          :timeout="3000" 
-          rounded="pill"
-          color="green-darken-2"
-          multi-line>
-          {{ snackbarMessage }}
-          <template #action>
-            <v-btn color="pink" text @click="snackbar = false">Close</v-btn>
-          </template>
-        </v-snackbar>
+      :timeout="3000" 
+      rounded="pill"
+      location="top"
+      color="green-darken-2"
+      multi-line>
+      {{ snackbarMessage }}
+      <template #action>
+        <v-btn color="pink" text @click="snackbar = false">Close</v-btn>
+      </template>
+</v-snackbar>
+
   </div>
 </template>
 
