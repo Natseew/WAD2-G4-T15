@@ -66,7 +66,7 @@
                     v-for="(item, index) in items"
                     :key="index"
                   >
-                    <v-list-item-title @click="navigateTo(item.route)">{{ item.title }}</v-list-item-title>
+                    <v-list-item-title @click="navigateTo(item.route)" style="cursor: pointer;">{{ item.title }}</v-list-item-title>
                   </v-list-item>
                 </v-list>
               </v-menu>
