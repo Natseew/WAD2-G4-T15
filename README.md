@@ -6,17 +6,20 @@ Welcome to the **NeverAlone** GitHub repository! This project is a socially-focu
 
 The app aims to address common user pain points, such as shallow conversations, cluttered interfaces, and limited interaction opportunities. Our solution combines intuitive design, enhanced filters, engaging quiz games, and options that go beyond traditional dating to create genuine connections.
 
+## Deployed Link
+https://neveralone-frontend.vercel.app/
+
 ## Installation
 
 Install NeverAlone with npm <br>
-Open 2 terminals
 
+1. Open a terminal and run the following command:
 ```bash
   cd Backend
   npm i
   npm run start
 ```
-
+2. Open another terminal and run the following command:
 ```bash
   cd Frontned
   npm i
@@ -36,11 +39,11 @@ Open 2 terminals
 
 ### Frontend
 
-![Frontend](Frontend/src/assets/FrontendStack.png)
+<img src="Frontend/src/assets/FrontendStack.png" alt="Frontend" width="400"/>
 
 ### Backend
 
-![Backend](Frontend/src/assets/BackendStack.png)
+<img src="Frontend/src/assets/BackendStack.png" alt="Backend" width="400"/>
 
 ## APIs
 
@@ -49,9 +52,9 @@ Open 2 terminals
 - **Twilio**: Supports real-time chat and notifications.
 - **Firebase Auth**: User authentication for creating accounts and logging in
 
-![API](Frontend/src/assets/ApiStack.png)
+<img src="Frontend/src/assets/ApiStack.png" alt="API" width="400"/>
 
 ## Beyond the Lab
 
-![Beyond The Lab](Frontend/src/assets/BtlStack.png)
+<img src="Frontend/src/assets/BtlStack.png" alt="Beyond The Lab" width="400"/>
 
