@@ -55,23 +55,3 @@ Open 2 terminals
 
 ![Beyond The Lab](Frontend/src/assets/BtlStack.png)
 
-## Contributors
-
-**G4 Team 15**
-
-<div align="center">
-    <table>
-        <tr>
-            <th>Zara</th>
-            <th>Nathaniel</th>
-            <th>Kendrick</th>
-            <th>Xinyi</th>
-            <th>Farrell</th>
-        </tr>
-        <tr>
-
-        </tr>
-    </table>
-</div>
-
----
