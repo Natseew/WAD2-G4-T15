@@ -6,6 +6,23 @@ Welcome to the **NeverAlone** GitHub repository! This project is a socially-focu
 
 The app aims to address common user pain points, such as shallow conversations, cluttered interfaces, and limited interaction opportunities. Our solution combines intuitive design, enhanced filters, engaging quiz games, and options that go beyond traditional dating to create genuine connections.
 
+## Installation
+
+Install NeverAlone with npm <br>
+Open 2 terminals
+
+```bash
+  cd Backend
+  npm i
+  npm run start
+```
+
+```bash
+  cd Frontned
+  npm i
+  npm run dev
+```
+    
 ## Key Features
 
 - **Chat Functionality**: Enables users to engage in real-time conversations with their personal matches.
@@ -15,46 +32,46 @@ The app aims to address common user pain points, such as shallow conversations, 
 
 ## Solution Architecture
 
-The architecture is built to support a responsive, seamless experience on both frontend and backend platforms.
+![Solution Architecture](Frontend/src/assets/SolutionArchitecture.png)
 
 ### Frontend
 
-- Developed with a focus on simplicity and ease of navigation, aiming to deliver a clean, minimalist design that enhances user experience.
+![Frontend](Frontend/src/assets/FrontendStack.png)
 
 ### Backend
 
-- A robust backend supports real-time communication, data storage, and secure user interactions.
-
-## Tech Stack
-
-| Component      | Technology                    |
-|----------------|-----------------------------  |
-| Frontend       | Vue.js, HTML, CSS             |
-| Backend        | Node.js, Express              |
-| Database       | Firebase                      |
-| Libraries      | TailwindCSS, Primevue, Vuetify|
-| Real-Time Chat | Twilio                        |
-| Authentication | Firebase Auth                 |
+![Backend](Frontend/src/assets/BackendStack.png)
 
 ## APIs
-
-The application integrates several APIs to support its functionality:
 
 - **Google Cloud Storage**: Cloud Storage of Images
 - **Open Trivia Database**: Provides database of trivia questions
 - **Twilio**: Supports real-time chat and notifications.
 - **Firebase Auth**: User authentication for creating accounts and logging in
 
+![API](Frontend/src/assets/ApiStack.png)
+
 ## Beyond the Lab
 
+![Beyond The Lab](Frontend/src/assets/BtlStack.png)
 
+## Contributors
 
-## Team
+**G4 Team 15**
 
-- **Farrell**
-- **Kendrick**
-- **Xin Yi**
-- **Zara**
-- **Nathaniel**
+<div align="center">
+    <table>
+        <tr>
+            <th>Zara</th>
+            <th>Nathaniel</th>
+            <th>Kendrick</th>
+            <th>Xinyi</th>
+            <th>Farrell</th>
+        </tr>
+        <tr>
+
+        </tr>
+    </table>
+</div>
 
 ---
