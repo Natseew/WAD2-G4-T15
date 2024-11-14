@@ -447,7 +447,7 @@ const savePhotos = async () => {
   gap: 15px;
   flex: 1;
   height: 100%;
-  min-height: 0;
+  min-height:20;
   margin-bottom: 1rem;
 }
 
