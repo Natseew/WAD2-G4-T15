@@ -279,13 +279,14 @@ const triggerConfetti = () => {
   font-size: 1.2rem;
   text-align: center;
   padding: 2rem;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  top: 50%;
-  left: 10%;
-  transform: translate(-50%, -50%);
   z-index: 10;
 }
 
