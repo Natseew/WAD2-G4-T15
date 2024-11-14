@@ -524,8 +524,8 @@
   }
 
   .profile-img {
-    width: 90px;
-    height: 90px;
+    width: 115px;
+    height: 115px;
   }
 
   .name {

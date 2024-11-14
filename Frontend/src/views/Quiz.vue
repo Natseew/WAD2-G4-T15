@@ -7,7 +7,7 @@
       </div>
       <div class="big-screen w-full lg:h-full">
         <div class="quiz-form">
-          <h1 class="text-3xl title-text title-color" v-if="!quizStarted">Answer some questions for us to evaluate your preferences!</h1>
+          <h1 class="text-2xl title-text title-color" v-if="!quizStarted">Score higher than your Match to get a Prize Picture from their Gallery !</h1>
           <p v-if="!quizStarted">
             <Button label="Start Quiz" icon="pi pi-play" severity="warn" class="btn-start p-button-rounded w-48 start-btn" @click="startQuiz" />
           </p>
@@ -26,7 +26,7 @@
           </div>
   
           <div v-if="quizStarted && currentQuestionIndex >= questions.length" class="quiz-complete scale-up">
-            <h1 v-if="loading" class="text-3xl title-text title-color">Redirecting back to your match...</h1>
+            <h1 v-if="loading" class="text-2xl title-text title-color">Redirecting back to your match...</h1>
             <div v-if="loading" class="loading-spinner"></div>
           </div>
         </div>
