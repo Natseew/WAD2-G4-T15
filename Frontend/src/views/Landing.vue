@@ -69,6 +69,7 @@ const scrollToFeatures = () => {
 .landing-page {
   font-family: 'Roboto Flex', sans-serif;
   color: #333;
+  min-height: 100vh;
 }
 
 .hero-section {
@@ -197,7 +198,6 @@ h3 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
 }
 
 .section-title {
